@@ -1,8 +1,10 @@
 class StellarObject {
+    public size: number;
     public orbiters: StellarObject[];
 
-    public constructor(orbiters: StellarObject[]) {
-        this.orbiters = orbiters
+    public constructor(size: number, orbiters: StellarObject[]) {
+        this.size = size;
+        this.orbiters = orbiters;
     }
 }
 
