@@ -15,8 +15,8 @@ function Box(props: ThreeElements['mesh']) {
       onClick={() => setActive(!active)}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? 'blue' : 'orange'} />
+      <sphereGeometry args={[3, 64, 64]} />
+      <meshStandardMaterial roughness={0.2} color={hovered ? 'blue' : 'orange'} />
     </mesh>
   )
 }
