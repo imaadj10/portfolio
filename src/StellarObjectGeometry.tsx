@@ -6,16 +6,14 @@ import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 type StellarObjectProps = {
-  color: string;
   isStar?: boolean;
   isMoon?: boolean;
-  size: number;
   model: string;
   scale?: number;
 } & ThreeElements['mesh'];
 
 function StellarObjectGeometry(props: StellarObjectProps) {
-  const { color, isStar, isMoon, size, model, scale, ...meshProps } = props;
+  const { isStar, isMoon, model, scale, ...meshProps } = props;
   const initialPosition: number[] = meshProps.position as number[];
   const meshRef = useRef<THREE.Mesh>(null!);
   const gltf = useLoader(GLTFLoader, model);

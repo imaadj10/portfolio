@@ -4,14 +4,11 @@ import './SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
 
-const moon: StellarObject = new StellarObject(0.25, []);
-const earth: StellarObject = new StellarObject(0.5, [moon]);
-const earth2: StellarObject = new StellarObject(0.5, []);
-const sun: StellarObject = new StellarObject(1, [earth]);
+const moon: StellarObject = new StellarObject('/models/Moon.glb', 0.005,[]);
+const earth: StellarObject = new StellarObject('/models/Earth.glb', 0.001, [moon]);
+const sun: StellarObject = new StellarObject('/models/Sun.glb', 2, [earth]);
 
 function SolarSystem() {
-
-
   return (
     <Canvas>
       <OrbitControls />
@@ -19,23 +16,19 @@ function SolarSystem() {
       <ambientLight intensity={0.4} />
       <pointLight position={[0, 10, 10]} intensity={500} color="white" />
       <StellarObjectGeometry
-        size={1}
         position={[0, 0, 0]}
         isStar={true}
-        color={'yellow'}
-        model={'/models/Sun.glb'}
-        scale={2}
+        model={sun.model}
+        scale={sun.scale}
       />
       
       {sun.orbiters.map((planet, p_index) => (
         <>
           <StellarObjectGeometry
             position={[(p_index + 1) * 5, 0, (p_index + 1) * 5]}
-            color={'blue'}
-            size={planet.size}
             key={p_index}
-            model={'/models/Earth.glb'}
-            scale={0.001}
+            model={planet.model}
+            scale={planet.scale}
           />
           {planet.orbiters.map((moon, m_index) => (
             <StellarObjectGeometry
@@ -45,11 +38,9 @@ function SolarSystem() {
                 (m_index + 1) * 2,
                 (p_index + 1) * 5,
               ]}
-              color={'gray'}
               isMoon={true}
-              size={moon.size}
-              model={'/models/Moon.glb'}
-              scale={0.005}
+              model={moon.model}
+              scale={moon.scale}
             />
           ))}
         </>
