@@ -48,9 +48,9 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       <mesh ref={meshRef} {...meshProps}>
         <primitive scale={scale? scale: 1} object={gltf.scene} children-0-castShadow />
       </mesh>
-      {/* {isMoon ? null : (
+      {isMoon ? null : (
         <OrbitLine isMoon={isMoon} radius={initialPosition[0]} />
-      )} */}
+      )}
     </>
   );
 }

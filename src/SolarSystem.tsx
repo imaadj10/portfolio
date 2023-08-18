@@ -4,9 +4,16 @@ import './SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
 
-const moon: StellarObject = new StellarObject('/models/Moon.glb', 0.005,[]);
-const earth: StellarObject = new StellarObject('/models/Earth.glb', 0.001, [moon]);
-const sun: StellarObject = new StellarObject('/models/Sun.glb', 2, [earth]);
+const moon: StellarObject = new StellarObject('/models/Moon.glb', 0.015,[]);
+const earth: StellarObject = new StellarObject('/models/Earth.glb', 0.003, [moon]);
+const mercury: StellarObject = new StellarObject('/models/Mercury.glb', 3,[]);;
+const venus: StellarObject = new StellarObject('/models/Venus.glb', 3,[]);;
+const mars: StellarObject = new StellarObject('/models/Mars.glb', 3,[]);;
+const jupiter: StellarObject = new StellarObject('/models/Jupiter.glb', 0.025,[]);;
+const saturn: StellarObject = new StellarObject('/models/Saturn.glb', 3,[]);;
+const uranus: StellarObject = new StellarObject('/models/Uranus.glb', 3,[]);;
+const neptune: StellarObject = new StellarObject('/models/Neptune.glb', 0.03,[]);;
+const sun: StellarObject = new StellarObject('/models/Sun.glb', 4, [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune]);
 
 function SolarSystem() {
   return (
