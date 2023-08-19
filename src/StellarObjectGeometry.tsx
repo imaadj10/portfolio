@@ -4,6 +4,7 @@ import { ThreeElements, useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -31,7 +32,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       const planetZ = Math.sin(time * planetSpeed) * planetRadius;
 
       if (isMoon) {
-        const moonRadius = initialPosition[1] * 2;
+        const moonRadius = initialPosition[1] * 1.5;
         const moonSpeed = planetSpeed * 5;
 
         const moonY = Math.cos(time * moonSpeed) * moonRadius;
@@ -53,6 +54,9 @@ function StellarObjectGeometry(props: StellarObjectProps) {
           children-0-castShadow
         />
       </mesh>
+      {isStar && (
+        <pointLight position={[0, 0, 0]} intensity={500} color="#edd59e" />
+      )}
       <OrbitLine radius={initialPosition[0]} />
     </>
   );
