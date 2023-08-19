@@ -20,8 +20,9 @@ function StellarObjectGeometry(props: StellarObjectProps) {
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
-    mesh.rotation.y += 0.004;
+
     if (mesh && !isStar) {
+      mesh.rotation.y -= 0.004;
       const time = performance.now() * 0.001;
       const planetRadius = initialPosition[0];
       const planetSpeed = 1 / Math.sqrt(planetRadius);
@@ -30,7 +31,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       const planetZ = Math.sin(time * planetSpeed) * planetRadius;
 
       if (isMoon) {
-        const moonRadius = initialPosition[1] / 2;
+        const moonRadius = initialPosition[1] * 2;
         const moonSpeed = planetSpeed * 5;
 
         const moonY = Math.cos(time * moonSpeed) * moonRadius;
@@ -46,25 +47,24 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   return (
     <>
       <mesh ref={meshRef} {...meshProps}>
-        <primitive scale={scale? scale: 1} object={gltf.scene} children-0-castShadow />
+        <primitive
+          scale={scale ? scale : 1}
+          object={gltf.scene}
+          children-0-castShadow
+        />
       </mesh>
-      {isMoon ? null : (
-        <OrbitLine isMoon={isMoon} radius={initialPosition[0]} />
-      )}
+      <OrbitLine radius={initialPosition[0]} />
     </>
   );
 }
 
-function OrbitLine({ radius = 1, isMoon = false }) {
+function OrbitLine({ radius = 1 }) {
   const points = [];
   for (let index = 0; index < 64; index++) {
     const angle = (index / 64) * 2 * Math.PI;
     const x = radius * Math.cos(angle);
-    const y = radius * Math.cos(angle);
     const z = radius * Math.sin(angle);
-    isMoon
-      ? points.push(new THREE.Vector3(0, y, 0))
-      : points.push(new THREE.Vector3(x, 0, z));
+    points.push(new THREE.Vector3(x, 0, z));
   }
   points.push(points[0]);
 

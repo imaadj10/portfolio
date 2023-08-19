@@ -4,24 +4,24 @@ import './SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
 
-const moon: StellarObject = new StellarObject('/models/Moon.glb', 0.015,[]);
-const earth: StellarObject = new StellarObject('/models/Earth.glb', 0.003, [moon]);
-const mercury: StellarObject = new StellarObject('/models/Mercury.glb', 3,[]);;
-const venus: StellarObject = new StellarObject('/models/Venus.glb', 3,[]);;
-const mars: StellarObject = new StellarObject('/models/Mars.glb', 3,[]);;
-const jupiter: StellarObject = new StellarObject('/models/Jupiter.glb', 0.025,[]);;
-const saturn: StellarObject = new StellarObject('/models/Saturn.glb', 3,[]);;
-const uranus: StellarObject = new StellarObject('/models/Uranus.glb', 3,[]);;
-const neptune: StellarObject = new StellarObject('/models/Neptune.glb', 0.03,[]);;
-const sun: StellarObject = new StellarObject('/models/Sun.glb', 4, [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune]);
+const moon: StellarObject = new StellarObject('/planet_models/Planet_32.glb', 0.1,[]);
+const earth: StellarObject = new StellarObject('/planet_models/Planet_2.glb', 0.2, [moon]);
+const mercury: StellarObject = new StellarObject('/planet_models/Planet_3.glb', 0.2,[]);;
+const venus: StellarObject = new StellarObject('/planet_models/Planet_4.glb', 0.2,[]);;
+const mars: StellarObject = new StellarObject('/planet_models/Planet_5.glb', 0.2,[]);;
+const jupiter: StellarObject = new StellarObject('/planet_models/Planet_6.glb', 0.2,[]);;
+const saturn: StellarObject = new StellarObject('/planet_models/Planet_7.glb', 0.2,[]);;
+const uranus: StellarObject = new StellarObject('/planet_models/Planet_8.glb', 0.2,[]);;
+const neptune: StellarObject = new StellarObject('/planet_models/Planet_9.glb', 0.2,[]);;
+const sun: StellarObject = new StellarObject('/planet_models/Planet_10.glb', 0.2, [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune]);
 
 function SolarSystem() {
   return (
     <Canvas>
       <OrbitControls />
       <Stars factor={6} fade speed={0} />
-      <ambientLight intensity={0.4} />
-      <pointLight position={[0, 10, 10]} intensity={500} color="white" />
+      <ambientLight intensity={1} />
+      <pointLight position={[0, 10, 0]} intensity={500} color="white" />
       <StellarObjectGeometry
         position={[0, 0, 0]}
         isStar={true}
