@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useContext, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ThreeElements, useFrame, useThree } from '@react-three/fiber';
+import { ThreeElements, useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -21,7 +21,6 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   const initialPosition: number[] = meshProps.position as number[];
   const meshRef = useRef<THREE.Mesh>(null!);
   const gltf = useLoader(GLTFLoader, model);
-  const { gl, camera } = useThree();
   const { moving, setMoving } = useContext(OrbitContext);
   const { position, setPosition } = useContext(PositionContext);
   const [currentPosition, setCurrentPosition] = useState(initialPosition);
@@ -108,12 +107,10 @@ function OrbitLine({ radius = 1, handleClick }) {
       <Line
         points={points}
         color={'gray'}
-        onPointerUp={handleClick}
         lineWidth={lineWidth}
       />
       <Line
         points={points}
-        color={'gray'}
         onPointerOver={(e) => setLineWidth(2)}
         onPointerOut={(e) => setLineWidth(0.5)}
         onPointerUp={handleClick}
