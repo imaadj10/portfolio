@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as THREE from 'three';
-import { useContext, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { useContext } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Html } from '@react-three/drei';
 import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
@@ -75,28 +75,14 @@ const sun: StellarObject = new StellarObject(10, '/planet_models/Sun.glb', 4, [
 
 function SolarSystem() {
   const { moving, setMoving } = useContext(OrbitContext);
-  const [toDefault, setToDefault] = useState(false);
-
-  const dummy = new THREE.Vector3();
 
   const handleClick = () => {
     setMoving(true);
-    setToDefault(true);
   };
-
-  // useFrame((state, delta) => {
-  //   if(toDefault) {
-  //     const step = 0.001
-  //     //state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step)
-  //     state.camera.position.lerp(dummy.set(0, 10, 0), step)
-  //     state.camera.lookAt(0, 0, 0);
-  //     state.camera.updateProjectionMatrix()
-  //     setToDefault(false);
-  //   }
-  // })
 
   return (
     <Canvas>
+      {moving && <CameraPos />}
       <Html fullscreen>
         {!moving && (
           <button
@@ -142,6 +128,20 @@ function SolarSystem() {
       ))}
     </Canvas>
   );
+}
+
+function CameraPos() {
+  useFrame((state, delta) => {
+    const dummy = new THREE.Vector3();
+    const step = 0.01;
+    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
+    state.camera.position.lerp(
+      dummy.set(60, 25, 0),
+      step
+    );
+    state.camera.lookAt(0, 0, 0);
+    state.camera.updateProjectionMatrix();
+  });
 }
 
 export default SolarSystem;

@@ -14,8 +14,6 @@ type StellarObjectProps = {
   scale?: number;
 } & ThreeElements['mesh'];
 
-const dummy = new THREE.Vector3()
-
 function StellarObjectGeometry(props: StellarObjectProps) {
   const { isStar, isMoon, model, scale, ...meshProps } = props;
   const initialPosition: number[] = meshProps.position as number[];
@@ -62,14 +60,18 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   };
 
   useFrame((state, delta) => {
-    if(!moving) {
-      const step = 0.001
-      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step)
-      state.camera.position.lerp(dummy.set(position[0], position[1] - 5, position[2]), step)
+    if (!moving) {
+      const dummy = new THREE.Vector3();
+      const step = 0.001;
+      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
+      state.camera.position.lerp(
+        dummy.set(position[0], position[1] - 5, position[2]),
+        step
+      );
       state.camera.lookAt(position[0], 0, position[2]);
-      state.camera.updateProjectionMatrix()
+      state.camera.updateProjectionMatrix();
     }
-  })
+  });
 
   return (
     <>
@@ -84,7 +86,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       {isStar && (
         <pointLight position={[0, 0, 0]} intensity={500} color="#edd59e" />
       )}
-      {!isMoon && moving && (
+      {!isMoon && (
         <OrbitLine handleClick={handleClick} radius={initialPosition[0]} />
       )}
     </>
@@ -104,11 +106,7 @@ function OrbitLine({ radius = 1, handleClick }) {
 
   return (
     <group>
-      <Line
-        points={points}
-        color={'gray'}
-        lineWidth={lineWidth}
-      />
+      <Line points={points} color={'gray'} lineWidth={lineWidth} />
       <Line
         points={points}
         onPointerOver={(e) => setLineWidth(2)}
