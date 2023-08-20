@@ -6,23 +6,25 @@ import { useSpring, config, animated } from '@react-spring/three';
 import { Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OrbitContext, PositionContext } from '../App';
+import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 
 type StellarObjectProps = {
   isStar?: boolean;
   isMoon?: boolean;
   model: string;
   scale?: number;
+  current_page: string;
 } & ThreeElements['mesh'];
 
 function StellarObjectGeometry(props: StellarObjectProps) {
-  const { isStar, isMoon, model, scale, ...meshProps } = props;
+  const { isStar, isMoon, model, scale, current_page, ...meshProps } = props;
   const initialPosition: number[] = meshProps.position as number[];
   const meshRef = useRef<THREE.Mesh>(null!);
   const gltf = useLoader(GLTFLoader, model);
   const { moving, setMoving } = useContext(OrbitContext);
   const { position, setPosition } = useContext(PositionContext);
   const [currentPosition, setCurrentPosition] = useState(initialPosition);
+  const { page, setPage } = useContext(SelectedPageContext);
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
@@ -39,7 +41,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       const planetZ = Math.sin(time * planetSpeed) * planetRadius;
 
       if (isMoon) {
-        const moonRadius = initialPosition[1] * 1.2;
+        const moonRadius = initialPosition[1];
         const moonSpeed = (planetSpeed * 7) / Math.sqrt(moonRadius);
 
         const moonY = Math.cos(time * moonSpeed) * moonRadius;
@@ -57,6 +59,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     if (!isStar && !isMoon) {
       setMoving(false);
       setPosition(currentPosition);
+      setPage(current_page);
     }
   };
 
@@ -64,12 +67,12 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     if (!moving) {
       const dummy = new THREE.Vector3();
       const step = 0.001;
-      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
+      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
       state.camera.position.lerp(
-        dummy.set(position[0], position[1] - 5, position[2]),
+        dummy.set(position[0] - 10, 0, position[2]),
         step
       );
-      state.camera.lookAt(position[0], 0, position[2]);
+      state.camera.lookAt(position[0], 0, position[2] + 3);
       state.camera.updateProjectionMatrix();
     }
   });
@@ -90,6 +93,13 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       {!isMoon && (
         <OrbitLine handleClick={handleClick} radius={initialPosition[0]} />
       )}
+      {!moving && (
+        <pointLight
+          position={[position[0] - 10, 0, position[2]]}
+          intensity={5}
+          color="#edd59e"
+        />
+      )}
     </>
   );
 }
@@ -109,13 +119,13 @@ function OrbitLine({ radius = 1, handleClick }) {
 
   const handleHoverOver = () => {
     setHovered(true);
-    setLineWidth(2)
-  }
+    setLineWidth(2);
+  };
 
   const handleHoverOut = () => {
     setHovered(false);
-    setLineWidth(0.5)
-  }
+    setLineWidth(0.5);
+  };
 
   const points = [];
   for (let index = 0; index < 64; index++) {
@@ -128,7 +138,7 @@ function OrbitLine({ radius = 1, handleClick }) {
 
   return (
     <animated.mesh>
-      <Line points={points} color={'gray'} lineWidth={lineWidth} />
+      <Line points={points} color={'#c9c6c9'} lineWidth={lineWidth} />
       <Line
         points={points}
         onPointerOver={handleHoverOver}
