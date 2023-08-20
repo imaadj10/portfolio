@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { useContext, useRef, useState, useEffect } from 'react';
+import { useContext, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { ThreeElements, useFrame, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OrbitContext, PositionContext } from './SolarSystem';
+import { OrbitContext, PositionContext } from '../App';
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -15,7 +15,6 @@ type StellarObjectProps = {
 } & ThreeElements['mesh'];
 
 const dummy = new THREE.Vector3()
-const lookAtPos = new THREE.Vector3()
 
 function StellarObjectGeometry(props: StellarObjectProps) {
   const { isStar, isMoon, model, scale, ...meshProps } = props;
@@ -25,6 +24,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   const { gl, camera } = useThree();
   const { moving, setMoving } = useContext(OrbitContext);
   const { position, setPosition } = useContext(PositionContext);
+  const [currentPosition, setCurrentPosition] = useState(initialPosition);
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
@@ -50,26 +50,24 @@ function StellarObjectGeometry(props: StellarObjectProps) {
         mesh.position.set(planetX, moonY, moonZ);
       } else {
         mesh.position.set(planetX, initialPosition[1], planetZ);
+        setCurrentPosition([planetX, initialPosition[1] + 10, planetZ]);
       }
     }
   });
 
   const handleClick = () => {
-    if (!isStar) {
+    if (!isStar && !isMoon) {
       setMoving(false);
-      setPosition(initialPosition);
+      setPosition(currentPosition);
     }
   };
 
   useFrame((state, delta) => {
     if(!moving) {
-      const step = 0.1
-      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 42, step)
-      state.camera.position.lerp(dummy.set(position[0], position[1], position[2]), step)
-
-      lookAtPos.x = Math.sin(state.clock.getElapsedTime() * 2)
-
-      state.camera.lookAt(lookAtPos)
+      const step = 0.001
+      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step)
+      state.camera.position.lerp(dummy.set(position[0], position[1] - 5, position[2]), step)
+      state.camera.lookAt(position[0], 0, position[2]);
       state.camera.updateProjectionMatrix()
     }
   })
@@ -87,7 +85,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       {isStar && (
         <pointLight position={[0, 0, 0]} intensity={500} color="#edd59e" />
       )}
-      {!isMoon && (
+      {!isMoon && moving && (
         <OrbitLine handleClick={handleClick} radius={initialPosition[0]} />
       )}
     </>

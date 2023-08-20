@@ -1,27 +1,12 @@
-import React, { createContext, useState } from 'react';
+// @ts-nocheck
+import * as THREE from 'three';
+import { useContext, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
-import './SolarSystem.css';
+import { OrbitControls, Stars, Html } from '@react-three/drei';
+import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
-
-type OrbitContextType = {
-  moving: boolean;
-  setMoving: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-type PositionContextType = {
-  position: number[];
-  setPosition: React.Dispatch<React.SetStateAction<number[]>>;
-};
-
-export const OrbitContext = createContext<OrbitContextType | undefined>(
-  undefined
-);
-
-export const PositionContext = createContext<PositionContextType | undefined>(
-  undefined
-);
+import { OrbitContext } from '../App';
 
 const moon: StellarObject = new StellarObject(
   1,
@@ -79,7 +64,6 @@ const neptune: StellarObject = new StellarObject(
   []
 );
 const sun: StellarObject = new StellarObject(10, '/planet_models/Sun.glb', 4, [
-
   venus,
   earth,
   mars,
@@ -90,8 +74,39 @@ const sun: StellarObject = new StellarObject(10, '/planet_models/Sun.glb', 4, [
 ]);
 
 function SolarSystem() {
+  const { moving, setMoving } = useContext(OrbitContext);
+  const [toDefault, setToDefault] = useState(false);
+
+  const dummy = new THREE.Vector3();
+
+  const handleClick = () => {
+    setMoving(true);
+    setToDefault(true);
+  };
+
+  // useFrame((state, delta) => {
+  //   if(toDefault) {
+  //     const step = 0.001
+  //     //state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step)
+  //     state.camera.position.lerp(dummy.set(0, 10, 0), step)
+  //     state.camera.lookAt(0, 0, 0);
+  //     state.camera.updateProjectionMatrix()
+  //     setToDefault(false);
+  //   }
+  // })
+
   return (
     <Canvas>
+      <Html fullscreen>
+        {!moving && (
+          <button
+            style={{ position: 'absolute', zIndex: 9999 }}
+            onClick={handleClick}
+          >
+            Resume Orbits
+          </button>
+        )}
+      </Html>
       <OrbitControls />
       <Stars factor={6} fade speed={0} />
       <ambientLight intensity={1.5} />
@@ -129,20 +144,4 @@ function SolarSystem() {
   );
 }
 
-function App() {
-  const [moving, setMoving] = useState(true);
-  const [position, setPosition] = useState([0, 10, 0]);
-  const handleClick = () => {
-    setMoving(true);
-  };
-  return (
-    <OrbitContext.Provider value={{ moving, setMoving }}>
-      <PositionContext.Provider value={{position, setPosition}}>
-      {!moving && <button style={{ position: 'absolute', zIndex: 9999 }} onClick={handleClick}>Resume Orbits</button>}
-      <SolarSystem />
-      </PositionContext.Provider>
-    </OrbitContext.Provider>
-  );
-}
-
-export default App;
+export default SolarSystem;
