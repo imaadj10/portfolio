@@ -1,10 +1,11 @@
-import { useRef } from 'react';
+// @ts-nocheck
+import { useContext, useRef } from 'react';
 import * as THREE from 'three';
-import { ThreeElements, useFrame } from '@react-three/fiber';
+import { ThreeElements, useFrame, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { OrbitContext } from './SolarSystem';
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -18,12 +19,16 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   const initialPosition: number[] = meshProps.position as number[];
   const meshRef = useRef<THREE.Mesh>(null!);
   const gltf = useLoader(GLTFLoader, model);
+  const { gl, camera } = useThree();
+  const { moving, setMoving } = useContext(OrbitContext);
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
+    mesh.rotation.y -= 0.004;
+
+    if (!moving) return;
 
     if (mesh && !isStar) {
-      mesh.rotation.y -= 0.004;
       const time = performance.now() * 0.001;
       const planetRadius = initialPosition[0];
       const planetSpeed = 1 / Math.sqrt(planetRadius);
@@ -45,9 +50,16 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     }
   });
 
+  const handleClick = () => {
+    if (!isStar) {
+      setMoving(false);
+    }
+  };
+
   return (
     <>
-      <mesh ref={meshRef} {...meshProps}>
+      <mesh ref={meshRef} {...meshProps} onClick={handleClick}>
+        <meshStandardMaterial color="black" />
         <primitive
           scale={scale ? scale : 1}
           object={gltf.scene}
