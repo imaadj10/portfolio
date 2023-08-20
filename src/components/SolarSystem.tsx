@@ -7,6 +7,7 @@ import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
 import { OrbitContext, SelectedPageContext } from '../App';
+import { Button } from '@mantine/core';
 
 const about: StellarObject = new StellarObject(
   'about',
@@ -100,12 +101,12 @@ function SolarSystem() {
       {moving && <CameraPos />}
       <Html fullscreen>
         {!moving && (
-          <button
-            style={{ position: 'absolute', zIndex: 9999 }}
+          <Button
+            // style={{ position: 'absolute', zIndex: 9999 }}
             onClick={handleClick}
           >
             Resume Orbits
-          </button>
+          </Button>
         )}
       </Html>
       <Html>
