@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import './SolarSystem.css';
@@ -11,7 +10,16 @@ type OrbitContextType = {
   setMoving: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type PositionContextType = {
+  position: number[];
+  setPosition: React.Dispatch<React.SetStateAction<number[]>>;
+};
+
 export const OrbitContext = createContext<OrbitContextType | undefined>(
+  undefined
+);
+
+export const PositionContext = createContext<PositionContextType | undefined>(
   undefined
 );
 
@@ -123,13 +131,16 @@ function SolarSystem() {
 
 function App() {
   const [moving, setMoving] = useState(true);
+  const [position, setPosition] = useState([0, 10, 0]);
   const handleClick = () => {
     setMoving(true);
   };
   return (
     <OrbitContext.Provider value={{ moving, setMoving }}>
+      <PositionContext.Provider value={{position, setPosition}}>
       {!moving && <button style={{ position: 'absolute', zIndex: 9999 }} onClick={handleClick}>Resume Orbits</button>}
       <SolarSystem />
+      </PositionContext.Provider>
     </OrbitContext.Provider>
   );
 }
