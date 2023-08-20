@@ -2,6 +2,7 @@
 import { useContext, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { ThreeElements, useFrame } from '@react-three/fiber';
+import { useSpring, config, animated } from '@react-spring/three';
 import { Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -97,6 +98,11 @@ function OrbitLine({ radius = 1, handleClick }) {
   const [lineWidth, setLineWidth] = useState(0.5);
   const [hovered, setHovered] = useState(false);
 
+  // const { lineWidth } = useSpring({
+  //   lineWidth: hovered ? 2 : 0.5,
+  //   config: { tension: 500, friction: 20 }, // Adjust these values for the desired easing
+  // });
+
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
   }, [hovered]);
@@ -121,7 +127,7 @@ function OrbitLine({ radius = 1, handleClick }) {
   points.push(points[0]);
 
   return (
-    <group>
+    <animated.mesh>
       <Line points={points} color={'gray'} lineWidth={lineWidth} />
       <Line
         points={points}
@@ -131,7 +137,7 @@ function OrbitLine({ radius = 1, handleClick }) {
         visible={false}
         lineWidth={16}
       />
-    </group>
+    </animated.mesh>
   );
 }
 

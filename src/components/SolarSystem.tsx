@@ -93,7 +93,14 @@ function SolarSystem() {
           </button>
         )}
       </Html>
-      <OrbitControls />
+      <OrbitControls
+        enablePan={false}
+        enableZoom={false}
+        enableRotate={moving}
+        enableDamping
+        dampingFactor={0.1}
+        rotateSpeed={0.5}
+      />
       <Stars factor={6} fade speed={0} />
       <ambientLight intensity={1.5} />
       <StellarObjectGeometry
@@ -135,10 +142,7 @@ function CameraPos() {
     const dummy = new THREE.Vector3();
     const step = 0.01;
     state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
-    state.camera.position.lerp(
-      dummy.set(60, 25, 0),
-      step
-    );
+    state.camera.position.lerp(dummy.set(60, 25, 0), step);
     state.camera.lookAt(0, 0, 0);
     state.camera.updateProjectionMatrix();
   });
