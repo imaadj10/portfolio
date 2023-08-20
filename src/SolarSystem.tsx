@@ -21,18 +21,19 @@ const moon: StellarObject = new StellarObject(
   0.05,
   []
 );
+const mercury: StellarObject = new StellarObject(
+  1,
+  '/planet_models/Planet_3.glb',
+  0.05,
+  []
+);
 const earth: StellarObject = new StellarObject(
   2.5,
   '/planet_models/Planet_2.glb',
   0.1,
-  [moon]
+  [moon, mercury]
 );
-const mercury: StellarObject = new StellarObject(
-  1,
-  '/planet_models/Planet_3.glb',
-  0.1,
-  []
-);
+
 const venus: StellarObject = new StellarObject(
   2.5,
   '/planet_models/Planet_4.glb',
@@ -70,7 +71,7 @@ const neptune: StellarObject = new StellarObject(
   []
 );
 const sun: StellarObject = new StellarObject(10, '/planet_models/Sun.glb', 4, [
-  mercury,
+
   venus,
   earth,
   mars,
@@ -106,7 +107,7 @@ function SolarSystem() {
               key={`${p_index}-${m_index}`}
               position={[
                 (p_index + 1) * 5,
-                (m_index + 1) * 2,
+                (m_index + 1) * 1.5,
                 (p_index + 1) * 5,
               ]}
               isMoon={true}
@@ -127,7 +128,7 @@ function App() {
   };
   return (
     <OrbitContext.Provider value={{ moving, setMoving }}>
-      <button onClick={handleClick}>HELLO</button>
+      {!moving && <button style={{ position: 'absolute', zIndex: 9999 }} onClick={handleClick}>Resume Orbits</button>}
       <SolarSystem />
     </OrbitContext.Provider>
   );

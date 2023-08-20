@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { ThreeElements, useFrame, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
@@ -37,8 +37,8 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       const planetZ = Math.sin(time * planetSpeed) * planetRadius;
 
       if (isMoon) {
-        const moonRadius = initialPosition[1] * 1.5;
-        const moonSpeed = planetSpeed * 5;
+        const moonRadius = initialPosition[1] * 1.2;
+        const moonSpeed = (planetSpeed * 7) / Math.sqrt(moonRadius);
 
         const moonY = Math.cos(time * moonSpeed) * moonRadius;
         const moonZ = Math.sin(time * moonSpeed) * moonRadius + planetZ;
@@ -54,6 +54,9 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     if (!isStar) {
       setMoving(false);
     }
+    // camera.position.x = initialPosition[0];
+    // camera.position.y = initialPosition[1];
+    // camera.position.z = initialPosition[2];
   };
 
   return (
@@ -69,12 +72,13 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       {isStar && (
         <pointLight position={[0, 0, 0]} intensity={500} color="#edd59e" />
       )}
-      <OrbitLine radius={initialPosition[0]} />
+      {!isMoon && <OrbitLine onClick={handleClick} radius={initialPosition[0]} />}
     </>
   );
 }
 
 function OrbitLine({ radius = 1 }) {
+  const [lineWidth, setLineWidth] = useState(0.5);
   const points = [];
   for (let index = 0; index < 64; index++) {
     const angle = (index / 64) * 2 * Math.PI;
@@ -84,7 +88,15 @@ function OrbitLine({ radius = 1 }) {
   }
   points.push(points[0]);
 
-  return <Line points={points} color={'gray'} lineWidth={0.5} />;
+  return (
+    <Line
+      points={points}
+      color={'gray'}
+      onPointerOver={(e) => setLineWidth(4)}
+      onPointerOut={(e) => setLineWidth(0.5)}
+      lineWidth={lineWidth}
+    />
+  );
 }
 
 export default StellarObjectGeometry;
