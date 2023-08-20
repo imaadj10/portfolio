@@ -111,7 +111,7 @@ function OrbitLine({ radius = 1, handleClick }) {
         points={points}
         onPointerOver={(e) => setLineWidth(2)}
         onPointerOut={(e) => setLineWidth(0.5)}
-        onPointerUp={handleClick}
+        onClick={handleClick}
         visible={false}
         lineWidth={16}
       />
