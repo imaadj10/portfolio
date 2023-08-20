@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { ThreeElements, useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
@@ -95,6 +95,22 @@ function StellarObjectGeometry(props: StellarObjectProps) {
 
 function OrbitLine({ radius = 1, handleClick }) {
   const [lineWidth, setLineWidth] = useState(0.5);
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto';
+  }, [hovered]);
+
+  const handleHoverOver = () => {
+    setHovered(true);
+    setLineWidth(2)
+  }
+
+  const handleHoverOut = () => {
+    setHovered(false);
+    setLineWidth(0.5)
+  }
+
   const points = [];
   for (let index = 0; index < 64; index++) {
     const angle = (index / 64) * 2 * Math.PI;
@@ -109,8 +125,8 @@ function OrbitLine({ radius = 1, handleClick }) {
       <Line points={points} color={'gray'} lineWidth={lineWidth} />
       <Line
         points={points}
-        onPointerOver={(e) => setLineWidth(2)}
-        onPointerOut={(e) => setLineWidth(0.5)}
+        onPointerOver={handleHoverOver}
+        onPointerOut={handleHoverOut}
         onClick={handleClick}
         visible={false}
         lineWidth={16}
