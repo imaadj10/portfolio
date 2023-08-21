@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { useContext, useRef, useState, useEffect } from 'react';
+import { useContext, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { ThreeElements, useFrame } from '@react-three/fiber';
-import { Html, Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
+import OrbitLine from './OrbitLine';
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -104,53 +104,6 @@ function StellarObjectGeometry(props: StellarObjectProps) {
           color="#edd59e"
         />
       )}
-    </>
-  );
-}
-
-function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
-  const [lineWidth, setLineWidth] = useState(0.5);
-  const [hovered, setHovered] = useState(false);
-
-  useEffect(() => {
-    document.body.style.cursor = hovered ? 'pointer' : 'auto';
-  }, [hovered]);
-
-  const handleHoverOver = () => {
-    setHovered(true);
-    setLineWidth(2);
-  };
-
-  const handleHoverOut = () => {
-    setHovered(false);
-    setLineWidth(0.5);
-  };
-
-  const points = [];
-  for (let index = 0; index < 64; index++) {
-    const angle = (index / 64) * 2 * Math.PI;
-    const x = radius * Math.cos(angle);
-    const z = radius * Math.sin(angle);
-    points.push(new THREE.Vector3(x, 0, z));
-  }
-  points.push(points[0]);
-
-  return (
-    <>
-      {moving && (
-        <Html onPointerOver={handleHoverOver} onPointerOut={handleHoverOut} onClick={handleClick} center position={[radius, 0, 0]}>
-          <h1 style={{ fontSize: '150%',color: 'white' }}>{current_page}</h1>
-        </Html>
-      )}
-      <Line points={points} color={'#c9c6c9'} lineWidth={lineWidth} />
-      <Line
-        points={points}
-        onPointerOver={handleHoverOver}
-        onPointerOut={handleHoverOut}
-        onClick={handleClick}
-        visible={false}
-        lineWidth={20}
-      />
     </>
   );
 }

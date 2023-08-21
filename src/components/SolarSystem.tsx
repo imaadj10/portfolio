@@ -8,6 +8,10 @@ import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
 import { OrbitContext, SelectedPageContext } from '../App';
 import { CloseButton, Group } from '@mantine/core';
+import About from './About';
+import Projects from './Projects';
+import Experience from './Experience';
+import Contact from './Contact';
 
 const about: StellarObject = new StellarObject(
   'About',
@@ -104,9 +108,13 @@ function SolarSystem() {
            <CloseButton size="xl" iconSize={20} onClick={handleClick} />
         )}
       </Html>
+      {page === 'About' && <About />}
+      {page === 'Projects' && <Projects />}
+      {page === 'Experience' && <Experience />}
+      {page === 'Contact' && <Contact />}
       <OrbitControls
         enablePan={false}
-        enableZoom={false}
+        enableZoom={true}
         enableRotate={moving}
         enableDamping
         dampingFactor={0.1}
@@ -156,7 +164,7 @@ function CameraPos() {
     const dummy = new THREE.Vector3();
     const step = 0.01;
     state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
-    state.camera.position.lerp(dummy.set(85, 25, 0), step);
+    state.camera.position.lerp(dummy.set(0, 25, 85), step);
     state.camera.lookAt(0, 0, 0);
     state.camera.updateProjectionMatrix();
   });
