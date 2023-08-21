@@ -6,8 +6,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
 import { Html } from '@react-three/drei';
-import { CloseButton } from '@mantine/core';
-
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -88,7 +86,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     <>
     <Html fullscreen>
         {!moving && (
-           <CloseButton size="xl" iconSize={20} onClick={handleResume} />
+           <button iconSize={20} onClick={handleResume} />
         )}
       </Html>
       <mesh ref={meshRef} {...meshProps} onClick={handlePause}>
