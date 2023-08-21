@@ -3,7 +3,7 @@ import { useContext, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { ThreeElements, useFrame } from '@react-three/fiber';
 import { useSpring, config, animated } from '@react-spring/three';
-import { Line } from '@react-three/drei';
+import { Html, Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
@@ -56,7 +56,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   });
 
   const handleClick = () => {
-    if (!isStar && !isMoon) {
+    if (!isStar && !isMoon && moving) {
       setMoving(false);
       setPosition(currentPosition);
       setPage(current_page);
@@ -79,6 +79,11 @@ function StellarObjectGeometry(props: StellarObjectProps) {
 
   return (
     <>
+      {!isMoon && moving && (
+        <Html center position={[initialPosition[0], 0, 0]}>
+          <h1 style={{ color: 'white' }}>{current_page}</h1>
+        </Html>
+      )}
       <mesh ref={meshRef} {...meshProps} onClick={handleClick}>
         <meshStandardMaterial color="black" />
         <primitive

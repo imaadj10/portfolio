@@ -7,10 +7,10 @@ import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
 import { OrbitContext, SelectedPageContext } from '../App';
-import { Button } from '@mantine/core';
+import { CloseButton, Group } from '@mantine/core';
 
 const about: StellarObject = new StellarObject(
-  'about',
+  'About',
   2.5,
   '/planet_models/Planet_20.glb',
   0.2,
@@ -45,7 +45,7 @@ const virtual_drumset: StellarObject = new StellarObject(
   []
 );
 const projects: StellarObject = new StellarObject(
-  'projects',
+  'Projects',
   2.5,
   '/planet_models/Planet_12.glb',
   0.2,
@@ -66,14 +66,14 @@ const ubc: StellarObject = new StellarObject(
   []
 );
 const experience: StellarObject = new StellarObject(
-  'experience',
+  'Experience',
   5,
   '/planet_models/Planet_34.glb',
   0.2,
   [intel, ubc]
 );
 const contact: StellarObject = new StellarObject(
-  'contact',
+  'Contact',
   2,
   '/planet_models/Planet_43.glb',
   0.2,
@@ -101,16 +101,8 @@ function SolarSystem() {
       {moving && <CameraPos />}
       <Html fullscreen>
         {!moving && (
-          <Button
-            // style={{ position: 'absolute', zIndex: 9999 }}
-            onClick={handleClick}
-          >
-            Resume Orbits
-          </Button>
+           <CloseButton size="xl" iconSize={20} onClick={handleClick} />
         )}
-      </Html>
-      <Html>
-        <h1 class="title">{page}</h1>
       </Html>
       <OrbitControls
         enablePan={false}
@@ -121,7 +113,7 @@ function SolarSystem() {
         rotateSpeed={0.5}
       />
       <Stars factor={6} fade speed={0} />
-      <ambientLight intensity={1.5} />
+      <ambientLight intensity={1} />
       <StellarObjectGeometry
         position={[0, 0, 0]}
         isStar={true}
@@ -133,7 +125,7 @@ function SolarSystem() {
       {sun.orbiters.map((planet, p_index) => (
         <>
           <StellarObjectGeometry
-            position={[(p_index + 1) * 10, 0, (p_index + 1) * 10]}
+            position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
             key={p_index}
             model={planet.model}
             scale={planet.scale}
@@ -143,9 +135,9 @@ function SolarSystem() {
             <StellarObjectGeometry
               key={`${p_index}-${m_index}`}
               position={[
-                (p_index + 1) * 10,
+                (p_index + 1) * 10 + 10,
                 m_index + 1 + 3,
-                (p_index + 1) * 10,
+                (p_index + 1) * 10 + 10,
               ]}
               isMoon={true}
               model={moon.model}
@@ -164,7 +156,7 @@ function CameraPos() {
     const dummy = new THREE.Vector3();
     const step = 0.01;
     state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
-    state.camera.position.lerp(dummy.set(70, 25, 0), step);
+    state.camera.position.lerp(dummy.set(85, 25, 0), step);
     state.camera.lookAt(0, 0, 0);
     state.camera.updateProjectionMatrix();
   });
