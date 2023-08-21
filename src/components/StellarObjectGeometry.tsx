@@ -1,8 +1,7 @@
 // @ts-nocheck
 import { useContext, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ThreeElements, useFrame } from '@react-three/fiber';
-import { useLoader } from '@react-three/fiber';
+import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
@@ -63,17 +62,17 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   };
 
   useFrame((state, delta) => {
-    if (!moving) {
-      const dummy = new THREE.Vector3();
-      const step = 0.001;
-      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
-      state.camera.position.lerp(
-        dummy.set(position[0] - 10, 0, position[2]),
-        step
-      );
-      state.camera.lookAt(position[0], 0, position[2] + 3);
-      state.camera.updateProjectionMatrix();
-    }
+    // if (!moving) {
+    //   const dummy = new THREE.Vector3();
+    //   const step = 0.001;
+    //   state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
+    //   state.camera.position.lerp(
+    //     dummy.set(position[0] - 10, 0, position[2]),
+    //     step
+    //   );
+    //   state.camera.lookAt(position[0], 0, position[2] + 3);
+    //   state.camera.updateProjectionMatrix();
+    // }
   });
 
   return (

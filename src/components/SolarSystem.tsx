@@ -102,6 +102,7 @@ function SolarSystem() {
 
   return (
     <Canvas>
+      <axesHelper scale={12} position={[0, 0, 0]} onUpdate={(self) => self.setColors('#ff2080', '#20ff80', '#2080ff')} />
       {moving && <CameraPos />}
       <Html fullscreen>
         {!moving && (
@@ -114,7 +115,7 @@ function SolarSystem() {
       {page === 'Contact' && <Contact />}
       <OrbitControls
         enablePan={false}
-        enableZoom={true}
+        enableZoom={false}
         enableRotate={moving}
         enableDamping
         dampingFactor={0.1}

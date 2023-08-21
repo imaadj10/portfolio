@@ -1,11 +1,13 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
+import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Line, Text3D, Center } from '@react-three/drei';
 
 function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
     const [lineWidth, setLineWidth] = useState(0.5);
     const [hovered, setHovered] = useState(false);
+    const { camera } = useThree();
   
     useEffect(() => {
       document.body.style.cursor = hovered ? 'pointer' : 'auto';
