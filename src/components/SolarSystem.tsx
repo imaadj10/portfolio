@@ -2,12 +2,11 @@
 import * as THREE from 'three';
 import { useContext } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars, Html } from '@react-three/drei';
+import { OrbitControls, Stars } from '@react-three/drei';
 import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
 import { OrbitContext, SelectedPageContext } from '../App';
-import { CloseButton, Group } from '@mantine/core';
 import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
@@ -95,24 +94,20 @@ function SolarSystem() {
   const { moving, setMoving } = useContext(OrbitContext);
   const { page, setPage } = useContext(SelectedPageContext);
 
-  const handleClick = () => {
-    setMoving(true);
-    setPage('home');
-  };
-
   return (
     <Canvas>
-      <axesHelper scale={12} position={[0, 0, 0]} onUpdate={(self) => self.setColors('#ff2080', '#20ff80', '#2080ff')} />
+      <axesHelper
+        scale={12}
+        position={[0, 0, 0]}
+        onUpdate={(self) => self.setColors('#ff2080', '#20ff80', '#2080ff')}
+      />
       {moving && <CameraPos />}
-      <Html fullscreen>
-        {!moving && (
-           <CloseButton size="xl" iconSize={20} onClick={handleClick} />
-        )}
-      </Html>
+
       {page === 'About' && <About />}
       {page === 'Projects' && <Projects />}
       {page === 'Experience' && <Experience />}
       {page === 'Contact' && <Contact />}
+
       <OrbitControls
         enablePan={false}
         enableZoom={false}

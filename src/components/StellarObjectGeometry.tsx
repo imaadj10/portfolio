@@ -5,6 +5,9 @@ import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
+import { Html } from '@react-three/drei';
+import { CloseButton } from '@mantine/core';
+
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -33,7 +36,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     if (mesh && !isStar) {
       const time = performance.now() * 0.001;
       const planetRadius = initialPosition[0];
-      const planetSpeed = 1 / Math.sqrt(planetRadius);
+      const planetSpeed = 1.5 / Math.sqrt(planetRadius);
 
       const planetX = Math.cos(time * planetSpeed) * planetRadius;
       const planetZ = Math.sin(time * planetSpeed) * planetRadius;
@@ -53,7 +56,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     }
   });
 
-  const handleClick = () => {
+  const handlePause = () => {
     if (!isStar && !isMoon && moving) {
       setMoving(false);
       setPosition(currentPosition);
@@ -61,23 +64,34 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     }
   };
 
+  const handleResume = () => {
+    setMoving(true);
+    setPage('home');
+  };
+
   useFrame((state, delta) => {
-    // if (!moving) {
-    //   const dummy = new THREE.Vector3();
-    //   const step = 0.001;
-    //   state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
-    //   state.camera.position.lerp(
-    //     dummy.set(position[0] - 10, 0, position[2]),
-    //     step
-    //   );
-    //   state.camera.lookAt(position[0], 0, position[2] + 3);
-    //   state.camera.updateProjectionMatrix();
-    // }
+    if (!moving) {
+      const dummy = new THREE.Vector3();
+      const step = 0.001;
+      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
+      state.camera.position.lerp(
+        dummy.set(position[0] - 10, 0, position[2]),
+        step
+      );
+      state.camera.lookAt(position[0], 0, position[2] + 3);
+      state.camera.updateProjectionMatrix();
+    }
   });
+  
 
   return (
     <>
-      <mesh ref={meshRef} {...meshProps} onClick={handleClick}>
+    <Html fullscreen>
+        {!moving && (
+           <CloseButton size="xl" iconSize={20} onClick={handleResume} />
+        )}
+      </Html>
+      <mesh ref={meshRef} {...meshProps} onClick={handlePause}>
         <meshStandardMaterial color="black" />
         <primitive
           scale={scale ? scale : 1}
@@ -90,7 +104,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       )}
       {!isMoon && (
         <OrbitLine
-          handleClick={handleClick}
+          handleClick={handlePause}
           radius={initialPosition[0]}
           moving={moving}
           current_page={current_page}
