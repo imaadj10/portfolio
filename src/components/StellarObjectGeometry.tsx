@@ -2,7 +2,6 @@
 import { useContext, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { ThreeElements, useFrame } from '@react-three/fiber';
-import { useSpring, config, animated } from '@react-spring/three';
 import { Html, Line } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -79,11 +78,6 @@ function StellarObjectGeometry(props: StellarObjectProps) {
 
   return (
     <>
-      {!isMoon && moving && (
-        <Html center position={[initialPosition[0], 0, 0]}>
-          <h1 style={{ color: 'white' }}>{current_page}</h1>
-        </Html>
-      )}
       <mesh ref={meshRef} {...meshProps} onClick={handleClick}>
         <meshStandardMaterial color="black" />
         <primitive
@@ -93,10 +87,15 @@ function StellarObjectGeometry(props: StellarObjectProps) {
         />
       </mesh>
       {isStar && (
-        <pointLight position={[0, 0, 0]} intensity={500} color="#edd59e" />
+        <pointLight position={[0, 0, 0]} intensity={1500} color="#edd59e" />
       )}
       {!isMoon && (
-        <OrbitLine handleClick={handleClick} radius={initialPosition[0]} />
+        <OrbitLine
+          handleClick={handleClick}
+          radius={initialPosition[0]}
+          moving={moving}
+          current_page={current_page}
+        />
       )}
       {!moving && (
         <pointLight
@@ -109,14 +108,9 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   );
 }
 
-function OrbitLine({ radius = 1, handleClick }) {
+function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
   const [lineWidth, setLineWidth] = useState(0.5);
   const [hovered, setHovered] = useState(false);
-
-  // const { lineWidth } = useSpring({
-  //   lineWidth: hovered ? 2 : 0.5,
-  //   config: { tension: 500, friction: 20 }, // Adjust these values for the desired easing
-  // });
 
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
@@ -142,7 +136,12 @@ function OrbitLine({ radius = 1, handleClick }) {
   points.push(points[0]);
 
   return (
-    <animated.mesh>
+    <>
+      {moving && (
+        <Html onPointerOver={handleHoverOver} onPointerOut={handleHoverOut} onClick={handleClick} center position={[radius, 0, 0]}>
+          <h1 style={{ fontSize: '150%',color: 'white' }}>{current_page}</h1>
+        </Html>
+      )}
       <Line points={points} color={'#c9c6c9'} lineWidth={lineWidth} />
       <Line
         points={points}
@@ -150,9 +149,9 @@ function OrbitLine({ radius = 1, handleClick }) {
         onPointerOut={handleHoverOut}
         onClick={handleClick}
         visible={false}
-        lineWidth={16}
+        lineWidth={20}
       />
-    </animated.mesh>
+    </>
   );
 }
 
