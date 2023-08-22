@@ -80,14 +80,11 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       state.camera.updateProjectionMatrix();
     }
   });
-  
 
   return (
     <>
-    <Html fullscreen>
-        {!moving && (
-           <button iconSize={20} onClick={handleResume} />
-        )}
+      <Html fullscreen>
+        {!moving && <button iconSize={20} onClick={handleResume} />}
       </Html>
       <mesh ref={meshRef} {...meshProps}>
         <meshStandardMaterial color="black" />

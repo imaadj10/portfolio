@@ -13,7 +13,7 @@ import Experience from './Experience';
 import Contact from './Contact';
 
 const about: StellarObject = new StellarObject(
-  'About',
+  'About Me',
   2.5,
   '/planet_models/Planet_20.glb',
   0.2,
@@ -98,10 +98,10 @@ function SolarSystem() {
     <Canvas>
       {moving && <CameraPos />}
 
-      {/* {page === 'About' && <About />}
+      {page === 'About Me' && <About />}
       {page === 'Projects' && <Projects />}
       {page === 'Experience' && <Experience />}
-      {page === 'Contact' && <Contact />} */}
+      {page === 'Contact' && <Contact />}
 
       <OrbitControls
         enablePan={false}

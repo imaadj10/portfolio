@@ -16,10 +16,10 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
 
   useFrame(() => {
     textRef.current.material.color.lerp(
-      color.set(hovered? 'yellow': 'white'),
+      color.set(hovered ? 'yellow' : 'white'),
       1
     );
-  })
+  });
 
   useFrame(() => {
     lineRef.current.material.opacity = THREE.MathUtils.lerp(
@@ -45,7 +45,7 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
   const handleOrbitClick = () => {
     setHovered(false);
     handleClick();
-  }
+  };
 
   const points = [];
   for (let index = 0; index < 256; index++) {
@@ -58,9 +58,6 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
 
   const textMaterial = new THREE.MeshBasicMaterial({
     transparent: true,
-    onPointerOver:{handleHoverOver},
-    onPointerOut:{handleHoverOut},
-    onClick:{handleOrbitClick},
   });
 
   return (
