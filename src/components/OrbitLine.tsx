@@ -9,17 +9,20 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
   const [hovered, setHovered] = useState(false);
   const textRef = useRef();
   const lineRef = useRef();
+  const color = new THREE.Color();
 
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
   }, [hovered]);
 
   useFrame(() => {
-    // textRef.current.material.color.lerp(
-    //   textRef.current.material.color,
-    //   hovered ? new THREE.Color('yellow') : new THREE.Color(0xffffff),
-    //   0.25
-    // );
+    textRef.current.material.color.lerp(
+      color.set(hovered? 'yellow': 'white'),
+      1
+    );
+  })
+
+  useFrame(() => {
     lineRef.current.material.opacity = THREE.MathUtils.lerp(
       lineRef.current.material.opacity,
       moving ? 1 : 0,
@@ -51,7 +54,9 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
 
   const textMaterial = new THREE.MeshBasicMaterial({
     transparent: true,
-    color: new THREE.Color(0xffffff)
+    onPointerOver:{handleHoverOver},
+    onPointerOut:{handleHoverOut},
+    onClick:{handleClick},
   });
 
   return (
