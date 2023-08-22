@@ -1,5 +1,6 @@
 import { useState, createContext } from 'react';
 import SolarSystem from './components/SolarSystem';
+import { MantineProvider } from '@mantine/core';
 
 type OrbitContextType = {
   moving: boolean;
@@ -34,13 +35,15 @@ function App() {
   const [page, setPage] = useState('home');
 
   return (
-    <OrbitContext.Provider value={{ moving, setMoving }}>
-      <PositionContext.Provider value={{ position, setPosition }}>
-        <SelectedPageContext.Provider value={{ page, setPage }}>
-          <SolarSystem />
-        </SelectedPageContext.Provider>
-      </PositionContext.Provider>
-    </OrbitContext.Provider>
+    <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
+      <OrbitContext.Provider value={{ moving, setMoving }}>
+        <PositionContext.Provider value={{ position, setPosition }}>
+          <SelectedPageContext.Provider value={{ page, setPage }}>
+            <SolarSystem />
+          </SelectedPageContext.Provider>
+        </PositionContext.Provider>
+      </OrbitContext.Provider>
+    </MantineProvider>
   );
 }
 

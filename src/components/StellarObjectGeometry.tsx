@@ -89,7 +89,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
            <button iconSize={20} onClick={handleResume} />
         )}
       </Html>
-      <mesh ref={meshRef} {...meshProps} onClick={handlePause}>
+      <mesh ref={meshRef} {...meshProps}>
         <meshStandardMaterial color="black" />
         <primitive
           scale={scale ? scale : 1}

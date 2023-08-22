@@ -96,11 +96,6 @@ function SolarSystem() {
 
   return (
     <Canvas>
-      <axesHelper
-        scale={12}
-        position={[0, 0, 0]}
-        onUpdate={(self) => self.setColors('#ff2080', '#20ff80', '#2080ff')}
-      />
       {moving && <CameraPos />}
 
       {page === 'About' && <About />}
