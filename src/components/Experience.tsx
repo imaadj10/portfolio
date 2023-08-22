@@ -15,7 +15,8 @@ function Experience() {
       distanceFactor={3}
       zIndexRange={[99999999, 0]}
       sprite
-      position={dummy.set(position[0], 0, position[2] + 5)}
+      position={dummy.set(position[0], 0, position[2] + 7)}
+      style={{ width: "50%", height: "50%" }}
     >
       <Card shadow="sm" radius="md">
         <Card.Section component="a" href="https://mantine.dev/">
