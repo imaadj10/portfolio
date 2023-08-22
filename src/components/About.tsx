@@ -11,11 +11,13 @@ function About() {
 
   return (
     <Html
-      center
+      transform
+      distanceFactor={3}
+      zIndexRange={[99999999, 0]}
+      sprite
       position={dummy.set(position[0], 0, position[2] + 5)}
-      style={{ position: 'absolute' }}
     >
-      <Card style={{backgroundColor: 'black'}} shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="sm" radius="md">
         <Card.Section component="a" href="https://mantine.dev/">
           <Image
             src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
