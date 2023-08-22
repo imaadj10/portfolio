@@ -1,11 +1,10 @@
 // @ts-nocheck
 import { useState, useEffect, useRef } from 'react';
-import { useThree, useFrame } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Line, Text3D, Center } from '@react-three/drei';
 
 function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
-  const [lineWidth, setLineWidth] = useState(0.5);
   const [hovered, setHovered] = useState(false);
   const textRef = useRef();
   const lineRef = useRef();
@@ -43,6 +42,11 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
     if (moving) setHovered(false);
   };
 
+  const handleOrbitClick = () => {
+    setHovered(false);
+    handleClick();
+  }
+
   const points = [];
   for (let index = 0; index < 256; index++) {
     const angle = (index / 256) * 2 * Math.PI;
@@ -56,7 +60,7 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
     transparent: true,
     onPointerOver:{handleHoverOver},
     onPointerOut:{handleHoverOut},
-    onClick:{handleClick},
+    onClick:{handleOrbitClick},
   });
 
   return (
@@ -78,13 +82,13 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
         ref={lineRef}
         points={points}
         color={'#c9c6c9'}
-        lineWidth={lineWidth}
+        lineWidth={0.5}
       />
       <Line
         points={points}
         onPointerOver={handleHoverOver}
         onPointerOut={handleHoverOut}
-        onClick={handleClick}
+        onClick={handleOrbitClick}
         visible={false}
         lineWidth={20}
       />

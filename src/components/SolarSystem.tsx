@@ -98,15 +98,15 @@ function SolarSystem() {
     <Canvas>
       {moving && <CameraPos />}
 
-      {page === 'About' && <About />}
+      {/* {page === 'About' && <About />}
       {page === 'Projects' && <Projects />}
       {page === 'Experience' && <Experience />}
-      {page === 'Contact' && <Contact />}
+      {page === 'Contact' && <Contact />} */}
 
       <OrbitControls
         enablePan={false}
         enableZoom={false}
-        enableRotate={moving}
+        enableRotate={false}
         enableDamping
         dampingFactor={0.1}
         rotateSpeed={0.5}
