@@ -11,6 +11,8 @@ import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
 import Contact from './Contact';
+import { useDisclosure } from '@mantine/hooks';
+import { Drawer, Button, Group } from '@mantine/core';
 
 const about: StellarObject = new StellarObject(
   'About Me',
@@ -93,60 +95,68 @@ const sun: StellarObject = new StellarObject(
 function SolarSystem() {
   const { moving, setMoving } = useContext(OrbitContext);
   const { page, setPage } = useContext(SelectedPageContext);
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <Canvas>
-      {moving && <CameraPos />}
-
+    <div className="content-container">
+      <div style={{opacity: moving? 0:1, transition: 'opacity 2s ease', transitionDelay: '1.5s'}} className="info-container">
       {page === 'About Me' && <About />}
       {page === 'Projects' && <Projects />}
       {page === 'Experience' && <Experience />}
       {page === 'Contact' && <Contact />}
+      </div>
+     
+      {/* <Button z-index={999999999} onClick={() => setMoving(true)}>Open Drawer</Button> */}
+      
+      <Canvas>
+        {moving && <CameraPos />}
 
-      <OrbitControls
-        enablePan={false}
-        enableZoom={false}
-        enableRotate={false}
-        enableDamping
-        dampingFactor={0.1}
-        rotateSpeed={0.5}
-      />
-      <Stars factor={6} fade speed={0} />
-      <ambientLight intensity={1} />
-      <StellarObjectGeometry
-        position={[0, 0, 0]}
-        isStar={true}
-        model={sun.model}
-        scale={sun.scale}
-        current_page={sun.page}
-      />
+        <OrbitControls
+          enablePan={false}
+          enableZoom={false}
+          enableRotate={false}
+          enableDamping
+          dampingFactor={0.1}
+          rotateSpeed={0.5}
+        />
+        <Stars factor={6} fade speed={0} />
+        <ambientLight intensity={1} />
+        <StellarObjectGeometry
+          key={'sun'}
+          position={[0, 0, 0]}
+          isStar={true}
+          model={sun.model}
+          scale={sun.scale}
+          current_page={sun.page}
+        />
 
-      {sun.orbiters.map((planet, p_index) => (
-        <>
-          <StellarObjectGeometry
-            position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
-            key={p_index}
-            model={planet.model}
-            scale={planet.scale}
-            current_page={planet.page_name}
-          />
-          {planet.orbiters.map((moon, m_index) => (
+        {sun.orbiters.map((planet, p_index) => (
+          <>
             <StellarObjectGeometry
-              key={`${p_index}-${m_index}`}
-              position={[
-                (p_index + 1) * 10 + 10,
-                m_index + 1 + 3,
-                (p_index + 1) * 10 + 10,
-              ]}
-              isMoon={true}
-              model={moon.model}
-              scale={moon.scale}
-              current_page={moon.page_name}
+              position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
+              key={p_index}
+              model={planet.model}
+              scale={planet.scale}
+              current_page={planet.page_name}
             />
-          ))}
-        </>
-      ))}
-    </Canvas>
+            {planet.orbiters.map((moon, m_index) => (
+              <StellarObjectGeometry
+                key={`${p_index}-${m_index}`}
+                position={[
+                  (p_index + 1) * 10 + 10,
+                  m_index + 1 + 3,
+                  (p_index + 1) * 10 + 10,
+                ]}
+                isMoon={true}
+                model={moon.model}
+                scale={moon.scale}
+                current_page={moon.page_name}
+              />
+            ))}
+          </>
+        ))}
+      </Canvas>
+    </div>
   );
 }
 

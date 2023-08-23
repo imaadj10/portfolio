@@ -84,7 +84,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   return (
     <>
       <Html fullscreen>
-        {!moving && <button iconSize={20} onClick={handleResume} />}
+        {!moving && <button onClick={handleResume} />}
       </Html>
       <mesh ref={meshRef} {...meshProps}>
         <meshStandardMaterial color="black" />

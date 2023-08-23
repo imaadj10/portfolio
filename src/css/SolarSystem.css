@@ -1,6 +1,6 @@
-* {
+/* * {
   box-sizing: border-box;
-}
+} */
 
 html,
 body,
@@ -15,11 +15,28 @@ body,
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  /* overflow: hidden; */
+  overflow: hidden;
   background: #000000f6;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto,
     segoe ui, arial, sans-serif;
+}
+
+.content-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+.info-container {
+  width: 45vw; 
+  position: absolute;
+  top: 50%; 
+  left: 70%; 
+  transform: translate(-50%, -50%);
+  z-index: 2; 
 }

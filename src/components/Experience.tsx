@@ -10,14 +10,6 @@ function Experience() {
   const dummy = new THREE.Vector3();
 
   return (
-    <Html
-      transform
-      distanceFactor={3}
-      zIndexRange={[99999999, 0]}
-      sprite
-      position={dummy.set(position[0], 0, position[2] + 7)}
-      style={{ width: "50%", height: "50%" }}
-    >
       <Card shadow="sm" radius="md">
         <Card.Section component="a" href="https://mantine.dev/">
           <Image
@@ -37,13 +29,36 @@ function Experience() {
         <Text size="sm" color="dimmed">
           With Fjord Tours you can explore more of the magical fjord landscapes
           with tours and activities on and around the fjords of Norway
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+          v
+          v
+          With Fjord Tours you can explore more of the magical fjord landscapes
+          with tours and activities on and around the fjords of Norway
+          v
+          v
         </Text>
 
         <Button onClick={() => console.log('clicked')} variant="light" color="blue" fullWidth mt="md" radius="md">
           Book classic tour now
         </Button>
       </Card>
-    </Html>
   );
 }
 

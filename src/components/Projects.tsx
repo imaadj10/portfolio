@@ -11,14 +11,6 @@ function Projects() {
   const dummy = new THREE.Vector3();
 
   return (
-    <Html
-      transform
-      distanceFactor={3}
-      zIndexRange={[99999999, 0]}
-      sprite
-      position={dummy.set(position[0], 0, position[2] + 7)}
-      style={{ width: "50%", height: "50%" }}
-    >
       <Card shadow="sm" radius="md">
         <Card.Section component="a" href="https://mantine.dev/">
           <Image
@@ -44,7 +36,6 @@ function Projects() {
           Book classic tour now
         </Button>
       </Card>
-    </Html>
   );
 }
 
