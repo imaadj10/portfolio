@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as THREE from 'three';
 import { useContext } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
@@ -11,8 +11,7 @@ import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
 import Contact from './Contact';
-import { useDisclosure } from '@mantine/hooks';
-import { Drawer, Button, Group } from '@mantine/core';
+import { CloseButton } from '@mantine/core';
 
 const about: StellarObject = new StellarObject(
   'About Me',
@@ -95,19 +94,45 @@ const sun: StellarObject = new StellarObject(
 function SolarSystem() {
   const { moving, setMoving } = useContext(OrbitContext);
   const { page, setPage } = useContext(SelectedPageContext);
-  const [opened, { open, close }] = useDisclosure(false);
+
+  const handleResume = () => {
+    setMoving(true);
+    setPage('home');
+  };
 
   return (
     <div className="content-container">
-      <div style={{opacity: moving? 0:1, transition: 'opacity 2s ease', transitionDelay: '1.5s'}} className="info-container">
-      {page === 'About Me' && <About />}
-      {page === 'Projects' && <Projects />}
-      {page === 'Experience' && <Experience />}
-      {page === 'Contact' && <Contact />}
+      <div
+        style={{
+          opacity: moving ? 0 : 1,
+          transition: 'opacity 2s ease',
+          transitionDelay: '2s',
+        }}
+        class="back-button"
+      >
+        {!moving && (
+          <CloseButton
+            title="Return to Home"
+            onClick={handleResume}
+            size="xl"
+            iconSize={20}
+          />
+        )}
       </div>
-     
-      {/* <Button z-index={999999999} onClick={() => setMoving(true)}>Open Drawer</Button> */}
-      
+      <div
+        style={{
+          opacity: moving ? 0 : 1,
+          transition: 'opacity 2s ease',
+          transitionDelay: '1.5s',
+        }}
+        className="info-container"
+      >
+        {page === 'About Me' && <About />}
+        {page === 'Projects' && <Projects />}
+        {page === 'Experience' && <Experience />}
+        {page === 'Contact' && <Contact />}
+      </div>
+
       <Canvas>
         {moving && <CameraPos />}
 
