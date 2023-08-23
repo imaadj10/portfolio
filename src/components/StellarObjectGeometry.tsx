@@ -5,7 +5,6 @@ import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
-import { Html } from '@react-three/drei';
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -62,11 +61,6 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     }
   };
 
-  const handleResume = () => {
-    setMoving(true);
-    setPage('home');
-  };
-
   useFrame((state, delta) => {
     if (!moving) {
       const dummy = new THREE.Vector3();
@@ -83,9 +77,6 @@ function StellarObjectGeometry(props: StellarObjectProps) {
 
   return (
     <>
-      <Html fullscreen>
-        {!moving && <button onClick={handleResume} />}
-      </Html>
       <mesh ref={meshRef} {...meshProps}>
         <meshStandardMaterial color="black" />
         <primitive

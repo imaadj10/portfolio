@@ -1,16 +1,25 @@
 // @ts-nocheck
-import { Html } from '@react-three/drei';
-import * as THREE from 'three';
 import { useContext } from 'react';
-import { PositionContext } from '../App';
-import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
-
+import { OrbitContext, SelectedPageContext } from '../App';
+import { Card, Image, Text, Badge, Button, Group, CloseButton, } from '@mantine/core';
 
 function Projects() {
-  const { position, setPosition } = useContext(PositionContext);
-  const dummy = new THREE.Vector3();
+  const { moving, setMoving } = useContext(OrbitContext);
+  const { page, setPage } = useContext(SelectedPageContext);
+
+  const handleResume = () => {
+    setMoving(true);
+    setPage('home');
+  };
 
   return (
+    <>
+      <CloseButton
+        title="Close popover"
+        onClick={handleResume}
+        size="xl"
+        iconSize={20}
+      />
       <Card shadow="sm" radius="md">
         <Card.Section component="a" href="https://mantine.dev/">
           <Image
@@ -32,10 +41,18 @@ function Projects() {
           with tours and activities on and around the fjords of Norway
         </Text>
 
-        <Button onClick={() => console.log('clicked')} variant="light" color="blue" fullWidth mt="md" radius="md">
+        <Button
+          onClick={() => console.log('clicked')}
+          variant="light"
+          color="blue"
+          fullWidth
+          mt="md"
+          radius="md"
+        >
           Book classic tour now
         </Button>
       </Card>
+    </>
   );
 }
 
