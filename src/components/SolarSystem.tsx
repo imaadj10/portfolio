@@ -106,13 +106,18 @@ function SolarSystem() {
       <div
         style={{
           opacity: moving ? 0 : 1,
-          transition: 'opacity 0.5s',
-          transitionDelay: '2s',
+          transition: moving ? 'none' : 'opacity 0.5s ease 2s',
         }}
         class="back-button"
       >
         {!moving && (
-          <Button variant="subtle" color="gray" radius="sm" size="lg" onClick={handleResume}>
+          <Button
+            variant="subtle"
+            color="gray"
+            radius="sm"
+            size="lg"
+            onClick={handleResume}
+          >
             <Group>
               <IconArrowLeft />
               <Text>Return to Homepage</Text>
@@ -123,8 +128,7 @@ function SolarSystem() {
       <div
         style={{
           opacity: moving ? 0 : 1,
-          transition: 'opacity 1s ease',
-          transitionDelay: '1.5s',
+          transition: moving ? 'none' : 'opacity 1s ease 1.5s',
         }}
         className="info-container"
       >

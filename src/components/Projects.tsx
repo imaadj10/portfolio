@@ -178,7 +178,7 @@ function Projects() {
                     <Text mt="5px">{project.description}</Text>
                   </Flex>
                   <Flex
-                      mb="55px"
+                      mb="45px"
                       gap="sm"
                       style={{ position: 'absolute', bottom: '0' }}
                     >
