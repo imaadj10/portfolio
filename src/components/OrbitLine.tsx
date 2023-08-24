@@ -16,8 +16,8 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
 
   useFrame(() => {
     textRef.current.material.color.lerp(
-      color.set(hovered ? 'yellow' : 'white'),
-      1
+      color.set(hovered ? 'pink' : 'white'),
+      1.25
     );
   });
 
@@ -74,7 +74,11 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
         >
           {current_page}
         </Text3D>
-        <pointLight position={[0, 0, radius - 2]} intensity={175} />
+        <pointLight
+          position={[0, 0, radius - 2]}
+          intensity={175}
+          color="#edd59e"
+        />
       </Center>
 
       <Line
