@@ -11,7 +11,7 @@ import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
 import Contact from './Contact';
-import { UnstyledButton, Group, Text } from '@mantine/core';
+import { Button, Group, Text } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
 
 const about: StellarObject = new StellarObject(
@@ -112,18 +112,18 @@ function SolarSystem() {
         class="back-button"
       >
         {!moving && (
-          <UnstyledButton title="Return to Home" onClick={handleResume}>
+          <Button variant="subtle" color="gray" radius="sm" size="lg" onClick={handleResume}>
             <Group>
               <IconArrowLeft />
               <Text>Return to Homepage</Text>
             </Group>
-          </UnstyledButton>
+          </Button>
         )}
       </div>
       <div
         style={{
           opacity: moving ? 0 : 1,
-          transition: 'opacity 2s ease',
+          transition: 'opacity 1s ease',
           transitionDelay: '1.5s',
         }}
         className="info-container"
