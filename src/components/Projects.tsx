@@ -46,12 +46,8 @@ const useStyles = createStyles((theme) => ({
   },
 
   card: {
-
-    [theme.fn.smallerThan('xl')]: {
-
-    },
-
-  }
+    [theme.fn.smallerThan('xl')]: {},
+  },
 }));
 
 function Projects() {
@@ -134,82 +130,78 @@ function Projects() {
       year: 2023,
       image:
         'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
-      tech: [
-        { name: 'Java', color: 'orange', id: useId() },
-      ],
+      tech: [{ name: 'Java', color: 'orange', id: useId() }],
       id: useId(),
     },
   ];
 
   return (
-    <>
-      <Carousel
-        loop
-        withIndicators
-        draggable={false}
-        styles={{
-          indicator: {
-            width: rem(12),
-            height: rem(4),
-            transition: 'width 250ms ease',
+    <Carousel
+      loop
+      withIndicators
+      draggable={false}
+      styles={{
+        indicator: {
+          width: rem(12),
+          height: rem(4),
+          transition: 'width 250ms ease',
 
-            '&[data-active]': {
-              width: rem(40),
-            },
+          '&[data-active]': {
+            width: rem(40),
           },
-        }}
-        classNames={classes}
-      >
-        {projectArray.map((project) => (
-          <Carousel.Slide>
-            <Card key={project.id} shadow="lg" radius="lg">
-              <Flex h="100%" gap="10px" justify="space-between" mb="25px">
-                <Box pl="30px" w="70%">
-                  <Flex justify="space-between" pr="20px">
-                    <Text style={{ paddingBottom: '0', fontSize: '2rem' }}>
-                      {project.name}
-                    </Text>
-                  </Flex>
-                  <Flex
-                    h="200px"
-                    direction="column"
-                    style={{ position: 'relative' }}
-                  >
-                    <Text mt="5px">{project.description}</Text>
-                  </Flex>
-                  <Flex
-                      mb="45px"
-                      gap="sm"
-                      style={{ position: 'absolute', bottom: '0' }}
-                    >
-                      {project.tech.map((tool) => (
-                        <Badge key={tool.id} color={tool.color}>
-                          {tool.name}
-                        </Badge>
-                      ))}
-                    </Flex>
-                </Box>
-                <Box
-                  pr="30px"
-                  w="500px"
-                  h="255px"
-                  style={{ borderRadius: '10px' }}
+        },
+      }}
+      classNames={classes}
+    >
+      {projectArray.map((project) => (
+        <Carousel.Slide>
+          <Card key={project.id} shadow="lg" radius="lg">
+            <Flex h="100%" gap="10px" justify="space-between" mb="25px">
+              <Box pl="30px" w="70%">
+                <Flex justify="space-between" pr="20px">
+                  <Text style={{ paddingBottom: '0', fontSize: '2rem' }}>
+                    {project.name}
+                  </Text>
+                </Flex>
+                <Flex
+                  h="200px"
+                  direction="column"
+                  style={{ position: 'relative' }}
                 >
-                  <BackgroundImage
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                    }}
-                    radius="md"
-                    src={project.image}
-                  />
-                </Box>
-              </Flex>
-            </Card>
-          </Carousel.Slide>
-        ))}
-      </Carousel>
-    </>
+                  <Text mt="5px">{project.description}</Text>
+                </Flex>
+                <Flex
+                  mb="45px"
+                  gap="sm"
+                  style={{ position: 'absolute', bottom: '0' }}
+                >
+                  {project.tech.map((tool) => (
+                    <Badge key={tool.id} color={tool.color}>
+                      {tool.name}
+                    </Badge>
+                  ))}
+                </Flex>
+              </Box>
+              <Box
+                pr="30px"
+                w="500px"
+                h="255px"
+                style={{ borderRadius: '10px' }}
+              >
+                <BackgroundImage
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  radius="md"
+                  src={project.image}
+                />
+              </Box>
+            </Flex>
+          </Card>
+        </Carousel.Slide>
+      ))}
+    </Carousel>
   );
 }
 
