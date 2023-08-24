@@ -74,12 +74,7 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
         >
           {current_page}
         </Text3D>
-        {moving && (
-          <pointLight
-            position={[0, 0, radius -2]}
-            intensity={175}
-          />
-        )}
+        <pointLight position={[0, 0, radius - 2]} intensity={175} />
       </Center>
 
       <Line
