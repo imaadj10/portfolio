@@ -1,7 +1,35 @@
 import { Carousel } from '@mantine/carousel';
-import { Card, Image, Text, Badge, Button, Group, rem } from '@mantine/core';
+import { useId } from '@mantine/hooks';
+import {
+  Card,
+  Image,
+  Text,
+  Badge,
+  Button,
+  Group,
+  rem,
+  Flex,
+  Box,
+  BackgroundImage,
+  createStyles,
+  getStylesRef,
+} from '@mantine/core';
+import { resolveProjectReferencePath } from 'typescript';
 
-import { createStyles, getStylesRef } from '@mantine/core';
+interface tool {
+  name: string;
+  color: string;
+  id: string;
+}
+
+interface project {
+  name: string;
+  description: string;
+  year: number;
+  image: string;
+  tech: tool[];
+  id: string;
+}
 
 const useStyles = createStyles(() => ({
   controls: {
@@ -22,11 +50,103 @@ const useStyles = createStyles(() => ({
 function Projects() {
   const { classes } = useStyles();
 
+  const projectArray: project[] = [
+    {
+      name: 'Subletter',
+      description: `Amidst the ever-changing landscape of technology, my
+                  fascination for innovation continues to thrive. From crafting
+                  elegant lines of code to diving deep into complex algorithms,
+                  I find solace in the art of problem-solving. Each challenge
+                  presents an opportunity to create, learn, and grow. With an
+                  unwavering curiosity, I embrace the digital realm, driven to
+                  shape the future one algorithm at a time.`,
+      year: 2023,
+      image:
+        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+      tech: [
+        { name: 'JavaScript', color: 'yellow', id: useId() },
+        { name: 'Node.js', color: 'green', id: useId() },
+        { name: 'Express.js', color: 'teal', id: useId() },
+        { name: 'React.js', color: 'blue', id: useId() },
+        { name: 'ChakraUI', color: 'teal', id: useId() },
+        { name: 'MySQL', color: 'orange', id: useId() },
+      ],
+      id: useId(),
+    },
+    {
+      name: 'Subletter',
+      description: `Amidst the ever-changing landscape of technology, my
+                  fascination for innovation continues to thrive. From crafting
+                  elegant lines of code to diving deep into complex algorithms,
+                  I find solace in the art of problem-solving. Each challenge
+                  presents an opportunity to create, learn, and grow. With an
+                  unwavering curiosity, I embrace the digital realm, driven to
+                  shape the future one algorithm at a time.`,
+      year: 2023,
+      image:
+        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+      tech: [
+        { name: 'JavaScript', color: 'yellow', id: useId() },
+        { name: 'Node.js', color: 'green', id: useId() },
+        { name: 'Express.js', color: 'teal', id: useId() },
+        { name: 'React.js', color: 'blue', id: useId() },
+        { name: 'ChakraUI', color: 'teal', id: useId() },
+        { name: 'MySQL', color: 'orange', id: useId() },
+      ],
+      id: useId(),
+    },
+    {
+      name: 'Subletter',
+      description: `Amidst the ever-changing landscape of technology, my
+                  fascination for innovation continues to thrive. From crafting
+                  elegant lines of code to diving deep into complex algorithms,
+                  I find solace in the art of problem-solving. Each challenge
+                  presents an opportunity to create, learn, and grow. With an
+                  unwavering curiosity, I embrace the digital realm, driven to
+                  shape the future one algorithm at a time.`,
+      year: 2023,
+      image:
+        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+      tech: [
+        { name: 'JavaScript', color: 'yellow', id: useId() },
+        { name: 'Node.js', color: 'green', id: useId() },
+        { name: 'Express.js', color: 'teal', id: useId() },
+        { name: 'React.js', color: 'blue', id: useId() },
+        { name: 'ChakraUI', color: 'teal', id: useId() },
+        { name: 'MySQL', color: 'orange', id: useId() },
+      ],
+      id: useId(),
+    },
+    {
+      name: 'Subletter',
+      description: `Amidst the ever-changing landscape of technology, my
+                  fascination for innovation continues to thrive. From crafting
+                  elegant lines of code to diving deep into complex algorithms,
+                  I find solace in the art of problem-solving. Each challenge
+                  presents an opportunity to create, learn, and grow. With an
+                  unwavering curiosity, I embrace the digital realm, driven to
+                  shape the future one algorithm at a time.`,
+      year: 2023,
+      image:
+        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+      tech: [
+        { name: 'JavaScript', color: 'yellow', id: useId() },
+        { name: 'Node.js', color: 'green', id: useId() },
+        { name: 'Express.js', color: 'teal', id: useId() },
+        { name: 'React.js', color: 'blue', id: useId() },
+        { name: 'ChakraUI', color: 'teal', id: useId() },
+        { name: 'MySQL', color: 'orange', id: useId() },
+      ],
+      id: useId(),
+    },
+  ];
+
   return (
     <>
       <Carousel
         loop
         withIndicators
+        draggable={false}
         styles={{
           indicator: {
             width: rem(12),
@@ -40,146 +160,54 @@ function Projects() {
         }}
         classNames={classes}
       >
-        <Carousel.Slide>
-          <Card shadow="sm" radius="md">
-            <Card.Section component="a" href="https://mantine.dev/">
-              <Image
-                src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-                height={160}
-                alt="Norway"
-              />
-            </Card.Section>
-
-            <Group position="apart" mt="md" mb="xs">
-              <Text weight={500}>Norway Fjord Adventures</Text>
-              <Badge color="pink" variant="light">
-                On Sale
-              </Badge>
-            </Group>
-
-            <Text size="sm" color="dimmed">
-              With Fjord Tours you can explore more of the magical fjord
-              landscapes with tours and activities on and around the fjords of
-              Norway
-            </Text>
-
-            <Button
-              onClick={() => console.log('clicked')}
-              variant="light"
-              color="blue"
-              fullWidth
-              mt="md"
-              radius="md"
-            >
-              Book classic tour now
-            </Button>
-          </Card>
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <Card shadow="sm" radius="md">
-            <Card.Section component="a" href="https://mantine.dev/">
-              <Image
-                src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-                height={160}
-                alt="Norway"
-              />
-            </Card.Section>
-
-            <Group position="apart" mt="md" mb="xs">
-              <Text weight={500}>Norway Fjord Adventures</Text>
-              <Badge color="pink" variant="light">
-                On Sale
-              </Badge>
-            </Group>
-
-            <Text size="sm" color="dimmed">
-              With Fjord Tours you can explore more of the magical fjord
-              landscapes with tours and activities on and around the fjords of
-              Norway
-            </Text>
-
-            <Button
-              onClick={() => console.log('clicked')}
-              variant="light"
-              color="blue"
-              fullWidth
-              mt="md"
-              radius="md"
-            >
-              Book classic tour now
-            </Button>
-          </Card>
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <Card shadow="sm" radius="md">
-            <Card.Section component="a" href="https://mantine.dev/">
-              <Image
-                src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-                height={160}
-                alt="Norway"
-              />
-            </Card.Section>
-
-            <Group position="apart" mt="md" mb="xs">
-              <Text weight={500}>Norway Fjord Adventures</Text>
-              <Badge color="pink" variant="light">
-                On Sale
-              </Badge>
-            </Group>
-
-            <Text size="sm" color="dimmed">
-              With Fjord Tours you can explore more of the magical fjord
-              landscapes with tours and activities on and around the fjords of
-              Norway
-            </Text>
-
-            <Button
-              onClick={() => console.log('clicked')}
-              variant="light"
-              color="blue"
-              fullWidth
-              mt="md"
-              radius="md"
-            >
-              Book classic tour now
-            </Button>
-          </Card>
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <Card shadow="sm" radius="md">
-            <Card.Section component="a" href="https://mantine.dev/">
-              <Image
-                src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-                height={160}
-                alt="Norway"
-              />
-            </Card.Section>
-
-            <Group position="apart" mt="md" mb="xs">
-              <Text weight={500}>Norway Fjord Adventures</Text>
-              <Badge color="pink" variant="light">
-                On Sale
-              </Badge>
-            </Group>
-
-            <Text size="sm" color="dimmed">
-              With Fjord Tours you can explore more of the magical fjord
-              landscapes with tours and activities on and around the fjords of
-              Norway
-            </Text>
-
-            <Button
-              onClick={() => console.log('clicked')}
-              variant="light"
-              color="blue"
-              fullWidth
-              mt="md"
-              radius="md"
-            >
-              Book classic tour now
-            </Button>
-          </Card>
-        </Carousel.Slide>
+        {projectArray.map((project) => (
+          <Carousel.Slide>
+            <Card key={project.id} shadow="lg" radius="lg">
+              <Flex h="100%" gap="10px" justify="space-between" mb="100px">
+                <Box pl="30px" w="70%">
+                  <Flex justify="space-between" pr="20px">
+                    <Text style={{ paddingBottom: '0', fontSize: '2rem' }}>
+                      {project.name}
+                    </Text>
+                  </Flex>
+                  <Flex
+                    h="200px"
+                    direction="column"
+                    style={{ position: 'relative' }}
+                  >
+                    <Text mt="5px">{project.description}</Text>
+                  </Flex>
+                  <Flex
+                      mb="55px"
+                      gap="sm"
+                      style={{ position: 'absolute', bottom: '0' }}
+                    >
+                      {project.tech.map((tool) => (
+                        <Badge key={tool.id} color={tool.color}>
+                          {tool.name}
+                        </Badge>
+                      ))}
+                    </Flex>
+                </Box>
+                <Box
+                  pr="30px"
+                  w="500px"
+                  h="255px"
+                  style={{ borderRadius: '10px' }}
+                >
+                  <BackgroundImage
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    radius="md"
+                    src={project.image}
+                  />
+                </Box>
+              </Flex>
+            </Card>
+          </Carousel.Slide>
+        ))}
       </Carousel>
     </>
   );
