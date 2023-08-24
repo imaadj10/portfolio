@@ -14,7 +14,6 @@ import {
   createStyles,
   getStylesRef,
 } from '@mantine/core';
-import { resolveProjectReferencePath } from 'typescript';
 
 interface tool {
   name: string;
@@ -31,7 +30,7 @@ interface project {
   id: string;
 }
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles((theme) => ({
   controls: {
     ref: getStylesRef('controls'),
     transition: 'opacity 150ms ease',
@@ -45,6 +44,14 @@ const useStyles = createStyles(() => ({
       },
     },
   },
+
+  card: {
+
+    [theme.fn.smallerThan('xl')]: {
+
+    },
+
+  }
 }));
 
 function Projects() {
@@ -74,7 +81,7 @@ function Projects() {
       id: useId(),
     },
     {
-      name: 'Subletter',
+      name: 'Right Angle',
       description: `Amidst the ever-changing landscape of technology, my
                   fascination for innovation continues to thrive. From crafting
                   elegant lines of code to diving deep into complex algorithms,
@@ -87,16 +94,16 @@ function Projects() {
         'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
       tech: [
         { name: 'JavaScript', color: 'yellow', id: useId() },
-        { name: 'Node.js', color: 'green', id: useId() },
-        { name: 'Express.js', color: 'teal', id: useId() },
+        { name: 'Python', color: 'blue', id: useId() },
+        { name: 'Flask', color: 'teal', id: useId() },
         { name: 'React.js', color: 'blue', id: useId() },
-        { name: 'ChakraUI', color: 'teal', id: useId() },
-        { name: 'MySQL', color: 'orange', id: useId() },
+        { name: 'OpenCV', color: 'red', id: useId() },
+        { name: 'Tailwind CSS', color: 'teal', id: useId() },
       ],
       id: useId(),
     },
     {
-      name: 'Subletter',
+      name: 'Spotify Collage',
       description: `Amidst the ever-changing landscape of technology, my
                   fascination for innovation continues to thrive. From crafting
                   elegant lines of code to diving deep into complex algorithms,
@@ -108,17 +115,15 @@ function Projects() {
       image:
         'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
       tech: [
-        { name: 'JavaScript', color: 'yellow', id: useId() },
-        { name: 'Node.js', color: 'green', id: useId() },
-        { name: 'Express.js', color: 'teal', id: useId() },
-        { name: 'React.js', color: 'blue', id: useId() },
-        { name: 'ChakraUI', color: 'teal', id: useId() },
-        { name: 'MySQL', color: 'orange', id: useId() },
+        { name: 'Python', color: 'blue', id: useId() },
+        { name: 'Flask', color: 'teal', id: useId() },
+        { name: 'HTML', color: 'orange', id: useId() },
+        { name: 'CSS', color: 'purple', id: useId() },
       ],
       id: useId(),
     },
     {
-      name: 'Subletter',
+      name: 'Virtual Drumset',
       description: `Amidst the ever-changing landscape of technology, my
                   fascination for innovation continues to thrive. From crafting
                   elegant lines of code to diving deep into complex algorithms,
@@ -130,12 +135,7 @@ function Projects() {
       image:
         'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
       tech: [
-        { name: 'JavaScript', color: 'yellow', id: useId() },
-        { name: 'Node.js', color: 'green', id: useId() },
-        { name: 'Express.js', color: 'teal', id: useId() },
-        { name: 'React.js', color: 'blue', id: useId() },
-        { name: 'ChakraUI', color: 'teal', id: useId() },
-        { name: 'MySQL', color: 'orange', id: useId() },
+        { name: 'Java', color: 'orange', id: useId() },
       ],
       id: useId(),
     },
@@ -163,7 +163,7 @@ function Projects() {
         {projectArray.map((project) => (
           <Carousel.Slide>
             <Card key={project.id} shadow="lg" radius="lg">
-              <Flex h="100%" gap="10px" justify="space-between" mb="100px">
+              <Flex h="100%" gap="10px" justify="space-between" mb="25px">
                 <Box pl="30px" w="70%">
                   <Flex justify="space-between" pr="20px">
                     <Text style={{ paddingBottom: '0', fontSize: '2rem' }}>

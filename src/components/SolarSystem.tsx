@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { useContext } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
+import { OrbitControls, Stars, Text3D, Center } from '@react-three/drei';
 import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import StellarObject from './StellarObject';
@@ -139,6 +139,55 @@ function SolarSystem() {
       </div>
 
       <Canvas>
+      <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
+          <Text3D
+            curveSegments={32}
+            bevelEnabled
+            bevelSize={0.04}
+            bevelThickness={0.1}
+            height={0.5}
+            lineHeight={0.5}
+            letterSpacing={-0.06}
+            size={1.5}
+            font="/Inter_Bold.json"
+          >
+            {`Welcome to`}
+            <meshNormalMaterial />
+          </Text3D>
+        </Center>
+        <Center position={[0, 25, 0]} rotation={[-0.5, 0, 0]}>
+          <Text3D
+            curveSegments={32}
+            bevelEnabled
+            bevelSize={0.04}
+            bevelThickness={0.1}
+            height={0.5}
+            lineHeight={0.5}
+            letterSpacing={-0.06}
+            size={5}
+            font="/Inter_Bold.json"
+          >
+            {`Imaad Junaidi's`}
+            <meshNormalMaterial />
+          </Text3D>
+        </Center>
+        
+        <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
+          <Text3D
+            curveSegments={32}
+            bevelEnabled
+            bevelSize={0.04}
+            bevelThickness={0.1}
+            height={0.5}
+            lineHeight={0.5}
+            letterSpacing={-0.06}
+            size={2}
+            font="/Inter_Bold.json"
+          >
+            {`Planetary System`}
+            <meshNormalMaterial />
+          </Text3D>
+        </Center>
         {moving && <CameraPos />}
 
         <OrbitControls

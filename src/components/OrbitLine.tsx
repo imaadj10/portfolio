@@ -56,13 +56,15 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
   }
   points.push(points[0]);
 
-  const textMaterial = new THREE.MeshBasicMaterial({
+  const textMaterial = new THREE.MeshStandardMaterial({
     transparent: true,
+    metalness: 1,
+    roughness: 0.5,
   });
 
   return (
     <>
-      <Center position={[0, 0, radius]}>
+      <Center rotation={[-0.25, 0, 0]} position={[0, 0, radius]}>
         <Text3D
           ref={textRef}
           letterSpacing={-0.06}
@@ -72,6 +74,12 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
         >
           {current_page}
         </Text3D>
+        {moving && (
+          <pointLight
+            position={[0, 0, radius -2]}
+            intensity={175}
+          />
+        )}
       </Center>
 
       <Line
