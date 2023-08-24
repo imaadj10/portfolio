@@ -15,7 +15,7 @@ import { Button, Group, Text } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
 
 const about: StellarObject = new StellarObject(
-  'About Me',
+  'about me',
   2.5,
   '/planet_models/Planet_20.glb',
   0.2,
@@ -50,7 +50,7 @@ const virtual_drumset: StellarObject = new StellarObject(
   []
 );
 const projects: StellarObject = new StellarObject(
-  'Projects',
+  'projects',
   2.5,
   '/planet_models/Planet_12.glb',
   0.2,
@@ -71,14 +71,14 @@ const ubc: StellarObject = new StellarObject(
   []
 );
 const experience: StellarObject = new StellarObject(
-  'Experience',
+  'experience',
   5,
   '/planet_models/Planet_34.glb',
   0.2,
   [intel, ubc]
 );
 const contact: StellarObject = new StellarObject(
-  'Contact',
+  'contact',
   2,
   '/planet_models/Planet_43.glb',
   0.2,
@@ -132,10 +132,10 @@ function SolarSystem() {
         }}
         className="info-container"
       >
-        {page === 'About Me' && <About />}
-        {page === 'Projects' && <Projects />}
-        {page === 'Experience' && <Experience />}
-        {page === 'Contact' && <Contact />}
+        {page === 'about me' && <About />}
+        {page === 'projects' && <Projects />}
+        {page === 'experience' && <Experience />}
+        {page === 'contact' && <Contact />}
       </div>
 
       <Canvas>
@@ -149,7 +149,7 @@ function SolarSystem() {
             lineHeight={0.5}
             letterSpacing={-0.06}
             size={1.5}
-            font="/Inter_Bold.json"
+            font="/ROCKETWILDNESS_Regular.json"
           >
             {`Welcome to`}
             <meshNormalMaterial />
@@ -165,7 +165,7 @@ function SolarSystem() {
             lineHeight={0.5}
             letterSpacing={-0.06}
             size={5}
-            font="/Inter_Bold.json"
+            font="/ROCKETWILDNESS_Regular.json"
           >
             {`Imaad Junaidi's`}
             <meshNormalMaterial />
@@ -182,7 +182,7 @@ function SolarSystem() {
             lineHeight={0.5}
             letterSpacing={-0.06}
             size={2}
-            font="/Inter_Bold.json"
+            font="/ROCKETWILDNESS_Regular.json"
           >
             {`Planetary System`}
             <meshNormalMaterial />
