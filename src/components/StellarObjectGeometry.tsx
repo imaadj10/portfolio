@@ -48,7 +48,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
         mesh.position.set(planetX, moonY, moonZ);
       } else {
         mesh.position.set(planetX, initialPosition[1], planetZ);
-        setCurrentPosition([planetX, initialPosition[1] + 10, planetZ]);
+        setCurrentPosition([planetX, initialPosition[1], planetZ]);
       }
     }
   });

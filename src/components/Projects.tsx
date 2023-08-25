@@ -10,10 +10,12 @@ import {
   rem,
   Flex,
   Box,
+  ActionIcon,
   BackgroundImage,
   createStyles,
   getStylesRef,
 } from '@mantine/core';
+import { IconBrandGithubFilled } from '@tabler/icons-react';
 
 interface tool {
   name: string;
@@ -31,11 +33,11 @@ interface project {
 }
 
 const useStyles = createStyles((theme) => ({
-  controls: {
-    ref: getStylesRef('controls'),
-    transition: 'opacity 150ms ease',
-    opacity: 0,
-  },
+  // controls: {
+  //   ref: getStylesRef('controls'),
+  //   transition: 'opacity 150ms ease',
+  //   opacity: 0,
+  // },
 
   root: {
     '&:hover': {
@@ -46,7 +48,27 @@ const useStyles = createStyles((theme) => ({
   },
 
   card: {
-    [theme.fn.smallerThan('xl')]: {},
+    backgroundColor:
+      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+  },
+
+  section: {
+    borderBottom: `${rem(1)} solid ${
+      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+    }`,
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+
+  like: {
+    color: theme.colors.red[6],
+  },
+
+  label: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
   },
 }));
 
@@ -56,16 +78,17 @@ function Projects() {
   const projectArray: project[] = [
     {
       name: 'Subletter',
-      description: `Amidst the ever-changing landscape of technology, my
-                  fascination for innovation continues to thrive. From crafting
-                  elegant lines of code to diving deep into complex algorithms,
-                  I find solace in the art of problem-solving. Each challenge
-                  presents an opportunity to create, learn, and grow. With an
-                  unwavering curiosity, I embrace the digital realm, driven to
-                  shape the future one algorithm at a time.`,
+      description: `Subletter is a virtual marketplace for university students created
+                    to ensure that only fellow students
+                    respond to a student's listings. This project allowed me to branch out and 
+                    truly develop my full-stack ability, especially since it is the first project in which I 
+                    designed and implemented a databse. In this project, I implemented
+                    was the live messaging interface, designed using Socket.IO. I also fully developed
+                    the login system, leveraging tools such as JSON Web Tokens
+                    and bcrypt to securely authenticate users.`,
       year: 2023,
       image:
-        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+        '/images/subletter.png',
       tech: [
         { name: 'JavaScript', color: 'yellow', id: useId() },
         { name: 'Node.js', color: 'green', id: useId() },
@@ -81,7 +104,7 @@ function Projects() {
       description: `Amidst the ever-changing landscape of technology, my
                   fascination for innovation continues to thrive. From crafting
                   elegant lines of code to diving deep into complex algorithms,
-                  I find solace in the art of problem-solving. Each challenge
+                  I find solace in thallenge
                   presents an opportunity to create, learn, and grow. With an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
@@ -102,9 +125,7 @@ function Projects() {
       name: 'Spotify Collage',
       description: `Amidst the ever-changing landscape of technology, my
                   fascination for innovation continues to thrive. From crafting
-                  elegant lines of code to diving deep into complex algorithms,
-                  I find solace in the art of problem-solving. Each challenge
-                  presents an opportunity to create, learn, and grow. With an
+                  elegant lines h an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
       year: 2023,
@@ -121,10 +142,7 @@ function Projects() {
     {
       name: 'Virtual Drumset',
       description: `Amidst the ever-changing landscape of technology, my
-                  fascination for innovation continues to thrive. From crafting
-                  elegant lines of code to diving deep into complex algorithms,
-                  I find solace in the art of problem-solving. Each challenge
-                  presents an opportunity to create, learn, and grow. With an
+                  fascination for innovation cw. With an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
       year: 2023,
@@ -140,6 +158,7 @@ function Projects() {
       loop
       withIndicators
       draggable={false}
+      controlSize={34}
       styles={{
         indicator: {
           width: rem(12),
@@ -155,53 +174,90 @@ function Projects() {
     >
       {projectArray.map((project) => (
         <Carousel.Slide>
-          <Card key={project.id} shadow="lg" radius="lg">
-            <Flex h="100%" gap="10px" justify="space-between" mb="25px">
-              <Box pl="30px" w="70%">
-                <Flex justify="space-between" pr="20px">
-                  <Text style={{ paddingBottom: '0', fontSize: '2rem' }}>
-                    {project.name}
-                  </Text>
-                </Flex>
-                <Flex
-                  h="200px"
-                  direction="column"
-                  style={{ position: 'relative' }}
-                >
-                  <Text mt="5px">{project.description}</Text>
-                </Flex>
-                <Flex
-                  mb="45px"
-                  gap="sm"
-                  style={{ position: 'absolute', bottom: '0' }}
-                >
-                  {project.tech.map((tool) => (
-                    <Badge key={tool.id} color={tool.color}>
-                      {tool.name}
-                    </Badge>
-                  ))}
-                </Flex>
-              </Box>
-              <Box
-                pr="30px"
-                w="500px"
-                h="255px"
-                style={{ borderRadius: '10px' }}
-              >
-                <BackgroundImage
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                  radius="md"
-                  src={project.image}
-                />
-              </Box>
-            </Flex>
-          </Card>
+          <ProjectCard
+            key={project.id}
+            image={project.image}
+            name={project.name}
+            description={project.description}
+            year={project.year}
+            tools={project.tech}
+          />
         </Carousel.Slide>
       ))}
     </Carousel>
+  );
+}
+
+interface ProjectCardProps {
+  image: string;
+  name: string;
+  year: number;
+  description: string;
+  tools: tool[];
+}
+
+function ProjectCard({
+  image,
+  name,
+  description,
+  year,
+  tools,
+}: ProjectCardProps) {
+  const { classes } = useStyles();
+
+  const features = tools.map((tool) => (
+    <Badge key={tool.id} color={tool.color}>
+      {tool.name}
+    </Badge>
+  ));
+
+  return (
+    <Card
+      style={{ height: '85vh' }}
+      withBorder
+      radius="md"
+      p="md"
+      className={classes.card}
+    >
+      <Card.Section>
+        <Image src={image} alt={name} height={180} />
+      </Card.Section>
+
+      <Card.Section className={classes.section} mt="md">
+        <Group position="apart">
+          <Text fz="lg" fw={500}>
+            {name}
+          </Text>
+          <Badge size="sm">{year}</Badge>
+        </Group>
+        <Text fz="sm" mt="xs">
+          {description}
+        </Text>
+      </Card.Section>
+
+      <Card.Section
+        style={{ position: 'relative' }}
+        className={classes.section}
+      >
+        <Text mt="xs" className={classes.label} c="dimmed">
+          Tech Stack
+        </Text>
+        <Group spacing={7} mt={5}>
+          {features}
+        </Group>
+      </Card.Section>
+      <Flex w="100%" justify='center' style={{ position: 'absolute', bottom: 0 }}>
+        <Button
+          color="dark"
+          radius="md"
+          variant="default"
+          mb={15}
+        >
+          Check it out on GitHub
+          <IconBrandGithubFilled />
+        </Button>
+      </Flex>
+    </Card>
   );
 }
 
