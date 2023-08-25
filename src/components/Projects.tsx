@@ -9,9 +9,6 @@ import {
   Group,
   rem,
   Flex,
-  Box,
-  ActionIcon,
-  BackgroundImage,
   createStyles,
   getStylesRef,
 } from '@mantine/core';
@@ -29,15 +26,16 @@ interface project {
   year: number;
   image: string;
   tech: tool[];
+  link: string;
   id: string;
 }
 
 const useStyles = createStyles((theme) => ({
-  // controls: {
-  //   ref: getStylesRef('controls'),
-  //   transition: 'opacity 150ms ease',
-  //   opacity: 0,
-  // },
+  controls: {
+    ref: getStylesRef('controls'),
+    transition: 'opacity 150ms ease',
+    opacity: 0,
+  },
 
   root: {
     '&:hover': {
@@ -97,6 +95,7 @@ function Projects() {
         { name: 'ChakraUI', color: 'teal', id: useId() },
         { name: 'MySQL', color: 'orange', id: useId() },
       ],
+      link: 'https://github.com/imaadj10/subletter',
       id: useId(),
     },
     {
@@ -108,9 +107,9 @@ function Projects() {
                   presents an opportunity to create, learn, and grow. With an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
-      year: 2023,
+      year: 2022,
       image:
-        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+        '/images/right-angle.png',
       tech: [
         { name: 'JavaScript', color: 'yellow', id: useId() },
         { name: 'Python', color: 'blue', id: useId() },
@@ -119,6 +118,7 @@ function Projects() {
         { name: 'OpenCV', color: 'red', id: useId() },
         { name: 'Tailwind CSS', color: 'teal', id: useId() },
       ],
+      link: 'https://github.com/imaadj10/right-angle',
       id: useId(),
     },
     {
@@ -128,15 +128,16 @@ function Projects() {
                   elegant lines h an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
-      year: 2023,
+      year: 2022,
       image:
-        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+        '/images/spotify-collage.png',
       tech: [
         { name: 'Python', color: 'blue', id: useId() },
         { name: 'Flask', color: 'teal', id: useId() },
         { name: 'HTML', color: 'orange', id: useId() },
         { name: 'CSS', color: 'purple', id: useId() },
       ],
+      link: 'https://github.com/imaadj10/spotify-collage',
       id: useId(),
     },
     {
@@ -145,10 +146,11 @@ function Projects() {
                   fascination for innovation cw. With an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
-      year: 2023,
+      year: 2021,
       image:
-        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80',
+        '/images/virtual-drumset.png',
       tech: [{ name: 'Java', color: 'orange', id: useId() }],
+      link: 'https://github.com/imaadj10/virtual-drumset',
       id: useId(),
     },
   ];
@@ -181,6 +183,7 @@ function Projects() {
             description={project.description}
             year={project.year}
             tools={project.tech}
+            link={project.link}
           />
         </Carousel.Slide>
       ))}
@@ -194,6 +197,7 @@ interface ProjectCardProps {
   year: number;
   description: string;
   tools: tool[];
+  link: string;
 }
 
 function ProjectCard({
@@ -202,6 +206,7 @@ function ProjectCard({
   description,
   year,
   tools,
+  link,
 }: ProjectCardProps) {
   const { classes } = useStyles();
 
@@ -246,14 +251,17 @@ function ProjectCard({
           {features}
         </Group>
       </Card.Section>
-      <Flex w="100%" justify='center' style={{ position: 'absolute', bottom: 0 }}>
+      <Flex w="100%" justify='center' style={{ position: 'absolute', bottom: 30 }}>
         <Button
           color="dark"
           radius="md"
           variant="default"
-          mb={15}
+          w="%"
+          component="a"
+          href={link}
+          target="_blank"
         >
-          Check it out on GitHub
+          <Text mr="xs">Check it out on GitHub</Text>
           <IconBrandGithubFilled />
         </Button>
       </Flex>

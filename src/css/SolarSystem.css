@@ -20,9 +20,9 @@ body {
 }
 
 .info-container {
-  width: 50%; 
+  width: 30%; 
   position: absolute;
-  top: 50%; 
+  top: 52%; 
   left: 70%; 
   transform: translate(-50%, -50%);
   z-index: 99999999; 
