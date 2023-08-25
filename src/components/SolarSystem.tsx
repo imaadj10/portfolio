@@ -5,7 +5,6 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Text3D, Center } from '@react-three/drei';
 import '../css/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
-import StellarObject from './StellarObject';
 import { OrbitContext, SelectedPageContext } from '../App';
 import About from './About';
 import Projects from './Projects';
@@ -14,83 +13,79 @@ import Contact from './Contact';
 import { Button, Group, Text } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
 
-const about: StellarObject = new StellarObject(
-  'about me',
-  2.5,
-  '/planet_models/Planet_20.glb',
-  0.2,
-  []
-);
-const subletter: StellarObject = new StellarObject(
-  'subletter',
-  1,
-  '/planet_models/Planet_47.glb',
-  0.06,
-  []
-);
-const right_angle: StellarObject = new StellarObject(
-  'right_angle',
-  1,
-  '/planet_models/Planet_48.glb',
-  0.06,
-  []
-);
-const spotify_collage: StellarObject = new StellarObject(
-  'spotify_collage',
-  1,
-  '/planet_models/Planet_46.glb',
-  0.06,
-  []
-);
-const virtual_drumset: StellarObject = new StellarObject(
-  'virtual_drumset',
-  1,
-  '/planet_models/Planet_44.glb',
-  0.06,
-  []
-);
-const projects: StellarObject = new StellarObject(
-  'projects',
-  2.5,
-  '/planet_models/Planet_12.glb',
-  0.2,
-  [subletter, right_angle, spotify_collage, virtual_drumset]
-);
-const intel: StellarObject = new StellarObject(
-  'intel',
-  1,
-  '/planet_models/Planet_31.glb',
-  0.06,
-  []
-);
-const ubc: StellarObject = new StellarObject(
-  'ubc',
-  1,
-  '/planet_models/Planet_45.glb',
-  0.06,
-  []
-);
-const experience: StellarObject = new StellarObject(
-  'experience',
-  5,
-  '/planet_models/Planet_34.glb',
-  0.2,
-  [intel, ubc]
-);
-const contact: StellarObject = new StellarObject(
-  'contact',
-  2,
-  '/planet_models/Planet_43.glb',
-  0.2,
-  []
-);
-const sun: StellarObject = new StellarObject(
-  'home',
-  10,
-  '/planet_models/Sun.glb',
-  10,
-  [about, projects, experience, contact]
-);
+interface StellarObject {
+  page_name: string,
+  model: string
+  scale: number;
+  orbiters: StellarObject[];
+}
+
+const about: StellarObject = {
+  page_name: 'about me',
+  model: '/planet_models/Planet_20.glb',
+  scale: 0.2,
+  orbiters: [],
+};
+const subletter: StellarObject = {
+  page_name: 'subletter',
+  model: '/planet_models/Planet_47.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const right_angle: StellarObject = {
+  page_name: 'right_angle',
+  model: '/planet_models/Planet_48.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const spotify_collage: StellarObject = {
+  page_name: 'spotify_collage',
+  model: '/planet_models/Planet_46.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const virtual_drumset: StellarObject = {
+  page_name: 'virtual_drumset',
+  model: '/planet_models/Planet_44.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const projects: StellarObject = {
+  page_name: 'projects',
+  model: '/planet_models/Planet_12.glb',
+  scale: 0.2,
+  orbiters: [subletter, right_angle, spotify_collage, virtual_drumset],
+};
+const intel: StellarObject = {
+  page_name: 'intel',
+  model: '/planet_models/Planet_31.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const ubc: StellarObject = {
+  page_name: 'ubc',
+  model: '/planet_models/Planet_45.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const experience: StellarObject = {
+  page_name: 'experience',
+  model: '/planet_models/Planet_34.glb',
+  scale: 0.2,
+  orbiters: [intel, ubc],
+};
+const contact: StellarObject = {
+  page_name: 'contact',
+  model: '/planet_models/Planet_43.glb',
+  scale: 0.2,
+  orbiters: [],
+};
+const sun: StellarObject = {
+  page_name: 'home',
+  model: '/planet_models/Sun.glb',
+  scale: 10,
+  orbiters: [about, projects, experience, contact],
+};
 
 function SolarSystem() {
   const { moving, setMoving } = useContext(OrbitContext);

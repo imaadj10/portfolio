@@ -80,7 +80,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       <mesh ref={meshRef} {...meshProps}>
         <meshStandardMaterial color="black" />
         <primitive
-          scale={scale ? scale : 1}
+          scale={scale}
           object={gltf.scene}
           children-0-castShadow
         />
