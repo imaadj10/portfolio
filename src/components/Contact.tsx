@@ -10,15 +10,10 @@ import { IconBrandLinkedin, IconMailFilled } from '@tabler/icons-react';
 import { useStyles } from '../styles/ContactStyles';
 
 function Contact() {
-  return <ContactCard name={'Hi, I am Imaad'} description={'What is up'} />;
+  return <ContactCard />;
 }
 
-interface ContactCardProps {
-  name: string;
-  description: string;
-}
-
-function ContactCard({ name, description }: ContactCardProps) {
+function ContactCard() {
   const { classes } = useStyles();
 
   return (
