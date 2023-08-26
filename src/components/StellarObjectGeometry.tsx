@@ -70,7 +70,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
         dummy.set(position[0] - 10, 0, position[2]),
         step
       );
-      state.camera.lookAt(position[0], 0, position[2] + 3);
+      state.camera.lookAt(position[0], 0, position[2] + 2.5);
       state.camera.updateProjectionMatrix();
     }
   });

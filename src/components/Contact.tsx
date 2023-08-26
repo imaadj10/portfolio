@@ -1,41 +1,89 @@
-import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
+import {
+  Card,
+  Image,
+  Text,
+  Badge,
+  Button,
+  Group,
+  rem,
+  Flex,
+  createStyles,
+  getStylesRef,
+} from '@mantine/core';
+
+const useStyles = createStyles((theme) => ({
+  card: {
+    backgroundColor: theme.colors.dark[8],
+    height: '85vh',
+    width: '35%',
+    left: '55%',
+    [theme.fn.smallerThan('xl')]: {
+      width: '40%',
+      left: '55%',
+    },
+  },
+
+  section: {
+    borderBottom: `${rem(1)} solid ${
+      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+    }`,
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+
+  like: {
+    color: theme.colors.red[6],
+  },
+
+  label: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
+  },
+}));
 
 function Contact() {
   return (
-    <>
-      <Card shadow="sm" radius="md">
-        <Card.Section component="a" href="https://mantine.dev/">
-          <Image
-            src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-            height={160}
-            alt="Norway"
-          />
-        </Card.Section>
+    <AboutCard
+      image={'/images/imaad.jpg'}
+      name={'Hi, I am Imaad'}
+      description={'What is up'}
+    />
+  );
+}
 
-        <Group position="apart" mt="md" mb="xs">
-          <Text weight={500}>Norway Fjord Adventures</Text>
-          <Badge color="pink" variant="light">
-            On Sale
-          </Badge>
+interface AboutCardProps {
+  image: string;
+  name: string;
+  description: string;
+}
+
+function AboutCard({
+  image,
+  name,
+  description,
+}: AboutCardProps) {
+  const { classes } = useStyles();
+
+  return (
+    <Card withBorder radius="md" p="md" className={classes.card}>
+      <Card.Section>
+        <Image src={image} alt={name} height={180} fit="contain" />
+      </Card.Section>
+
+      <Card.Section className={classes.section} mt="md">
+        <Group>
+          <Text fz="lg" fw={500}>
+            {name}
+          </Text>
+          {/* <Badge size="sm">{year}</Badge> */}
         </Group>
-
-        <Text size="sm" color="dimmed">
-          With Fjord Tours you can explore more of the magical fjord landscapes
-          with tours and activities on and around the fjords of Norway
+        <Text fz="sm" mt="xs">
+          {description}
         </Text>
-
-        <Button
-          onClick={() => console.log('clicked')}
-          variant="light"
-          color="blue"
-          fullWidth
-          mt="md"
-          radius="md"
-        >
-          Book classic tour now
-        </Button>
-      </Card>
-    </>
+      </Card.Section>
+    </Card>
   );
 }
 

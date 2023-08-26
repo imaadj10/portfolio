@@ -12,7 +12,7 @@ import {
   createStyles,
   getStylesRef,
 } from '@mantine/core';
-import { IconBrandGithubFilled } from '@tabler/icons-react';
+import { IconCode, IconBrandGithub, IconBrandGithubFilled } from '@tabler/icons-react';
 
 interface tool {
   name: string;
@@ -33,8 +33,13 @@ interface project {
 const useStyles = createStyles((theme) => ({
   controls: {
     ref: getStylesRef('controls'),
-    transition: 'opacity 150ms ease',
-    opacity: 0,
+    width: '120%',
+    position: 'absolute',
+    top: '50%',
+    left: '-10%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
   root: {
@@ -45,8 +50,19 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  carousel: {
+    width: '35%',
+    left: '55%',
+    [theme.fn.smallerThan('xl')]: {
+      width: '40%',
+      left: '55%',
+    },
+  },
+
   card: {
     backgroundColor: theme.colors.dark[8],
+    height: '85vh',
+    overflowY: 'auto'
   },
 
   section: {
@@ -84,8 +100,7 @@ function Projects() {
                     the login system, leveraging tools such as JSON Web Tokens
                     and bcrypt to securely authenticate users.`,
       year: 2023,
-      image:
-        '/images/subletter.png',
+      image: '/images/subletter.png',
       tech: [
         { name: 'JavaScript', color: 'yellow', id: useId() },
         { name: 'Node.js', color: 'green', id: useId() },
@@ -105,10 +120,9 @@ function Projects() {
                   I find solace in thallenge
                   presents an opportunity to create, learn, and grow. With an
                   unwavering curiosity, I embrace the digital realm, driven to
-                  shape the future one algorithm at a time.`,
+                  shape the future one algorithm at a time.es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving `,
       year: 2022,
-      image:
-        '/images/right-angle.png',
+      image: '/images/right-angle.png',
       tech: [
         { name: 'JavaScript', color: 'yellow', id: useId() },
         { name: 'Python', color: 'blue', id: useId() },
@@ -128,8 +142,7 @@ function Projects() {
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
       year: 2022,
-      image:
-        '/images/spotify-collage.png',
+      image: '/images/spotify-collage.png',
       tech: [
         { name: 'Python', color: 'blue', id: useId() },
         { name: 'Flask', color: 'teal', id: useId() },
@@ -146,8 +159,7 @@ function Projects() {
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
       year: 2021,
-      image:
-        '/images/virtual-drumset.png',
+      image: '/images/virtual-drumset.png',
       tech: [{ name: 'Java', color: 'orange', id: useId() }],
       link: 'https://github.com/imaadj10/virtual-drumset',
       id: useId(),
@@ -171,7 +183,8 @@ function Projects() {
           },
         },
       }}
-      classNames={classes}
+      className={classes.carousel}
+      classNames={{ root: classes.root, controls: classes.controls }}
     >
       {projectArray.map((project) => (
         <Carousel.Slide>
@@ -216,15 +229,9 @@ function ProjectCard({
   ));
 
   return (
-    <Card
-      style={{ height: '85vh' }}
-      withBorder
-      radius="md"
-      p="md"
-      className={classes.card}
-    >
+    <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section>
-        <Image src={image} alt={name} height={180} />
+        <Image src={image} alt={name} height={180} fit="contain" />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">
@@ -232,7 +239,20 @@ function ProjectCard({
           <Text fz="lg" fw={500}>
             {name}
           </Text>
-          <Badge size="sm">{year}</Badge>
+          <Button
+          size="xs"
+            color="dark"
+            radius="md"
+            variant="default"
+            component="a"
+            href={link}
+            target="_blank"
+            title="Code"
+          >
+            {/* <Text mr="xs">Code</Text> */}
+            <IconCode />
+          </Button>
+          {/* <Badge size="sm">{year}</Badge> */}
         </Group>
         <Text fz="sm" mt="xs">
           {description}
@@ -250,7 +270,11 @@ function ProjectCard({
           {features}
         </Group>
       </Card.Section>
-      <Flex w="100%" justify='center' style={{ position: 'absolute', bottom: 30 }}>
+      {/* <Flex
+        w="100%"
+        justify="center"
+        // style={{ position: 'absolute', bottom: 30 }}
+      >
         <Button
           color="dark"
           radius="md"
@@ -259,11 +283,13 @@ function ProjectCard({
           component="a"
           href={link}
           target="_blank"
+          mt="md"
+          style={{bottom: 15}}
         >
           <Text mr="xs">Check it out on GitHub</Text>
           <IconBrandGithubFilled />
         </Button>
-      </Flex>
+      </Flex> */}
     </Card>
   );
 }

@@ -1,6 +1,6 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto,
-    segoe ui, arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
+    helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
 }
 
 .content-container {
@@ -14,16 +14,40 @@ body {
 
 .back-button {
   position: absolute;
-  top: 0; 
-  right: 0; 
-  z-index: 999999999; 
+  top: 0;
+  right: 0;
+  z-index: 999999999;
 }
 
 .info-container {
-  width: 30%; 
+  width: 100%;
   position: absolute;
-  top: 52%; 
-  left: 70%; 
-  transform: translate(-50%, -50%);
-  z-index: 99999999; 
+  top: 50px;
+  z-index: 99999999;
+  /* border: solid red; */
 }
+
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #d4d4d496 #141517;
+}
+
+*::-webkit-scrollbar {
+  width: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #141517;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(212, 212, 212, 0.5);
+  border-radius: 10px;
+  border: 0px none;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(212, 212, 212, 0.7);
+}
+
+
