@@ -38,6 +38,12 @@ const right_angle: StellarObject = {
   scale: 0.06,
   orbiters: [],
 };
+const spam_text_classifier: StellarObject = {
+  page_name: 'spam_text_classifier',
+  model: '/planet_models/Planet_5.glb',
+  scale: 0.06,
+  orbiters: [],
+};
 const spotify_collage: StellarObject = {
   page_name: 'spotify_collage',
   model: '/planet_models/Planet_46.glb',
@@ -54,7 +60,7 @@ const projects: StellarObject = {
   page_name: 'projects',
   model: '/planet_models/Planet_12.glb',
   scale: 0.2,
-  orbiters: [subletter, right_angle, spotify_collage, virtual_drumset],
+  orbiters: [subletter, right_angle, spam_text_classifier, spotify_collage, virtual_drumset],
 };
 const intel: StellarObject = {
   page_name: 'intel',

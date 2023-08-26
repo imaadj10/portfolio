@@ -40,6 +40,10 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    [theme.fn.smallerThan('lg')]: {
+      width: '130%',
+      left: '-15%',
+    },
   },
 
   root: {
@@ -53,15 +57,20 @@ const useStyles = createStyles((theme) => ({
   carousel: {
     width: '35%',
     left: '55%',
+    top: 155,
     [theme.fn.smallerThan('xl')]: {
       width: '40%',
-      left: '55%',
+      top: 0,
     },
   },
 
   card: {
     backgroundColor: theme.colors.dark[8],
-    height: '85vh',
+    height: '50vh',
+    overflowY: 'auto',
+    [theme.fn.smallerThan('xl')]: {
+      height: '85vh'
+    },
   },
 
   section: {
@@ -69,10 +78,6 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
-  },
-
-  like: {
-    color: theme.colors.red[6],
   },
 
   label: {

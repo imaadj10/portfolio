@@ -8,12 +8,9 @@ import {
   Button,
   Group,
   rem,
-  Flex,
   createStyles,
   getStylesRef,
-  Avatar,
 } from '@mantine/core';
-import { IconCode, IconBrandGithub, IconBrandGithubFilled } from '@tabler/icons-react';
 
 interface tool {
   name: string;
@@ -24,9 +21,9 @@ interface tool {
 interface project {
   name: string;
   description: string;
-  year: number;
+  date: string;
   image: string;
-  tech: tool[];
+  tools: tool[];
   link: string;
   color: string;
   id: string;
@@ -42,6 +39,10 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    [theme.fn.smallerThan('lg')]: {
+      width: '130%',
+      left: '-15%',
+    },
   },
 
   root: {
@@ -55,16 +56,20 @@ const useStyles = createStyles((theme) => ({
   carousel: {
     width: '35%',
     left: '55%',
+    top: 155,
     [theme.fn.smallerThan('xl')]: {
       width: '40%',
-      left: '55%',
+      top: 0,
     },
   },
 
   card: {
     backgroundColor: theme.colors.dark[8],
-    height: '85vh',
-    overflowY: 'auto'
+    height: '50vh',
+    overflowY: 'auto',
+    [theme.fn.smallerThan('xl')]: {
+      height: '85vh',
+    },
   },
 
   section: {
@@ -72,10 +77,6 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
-  },
-
-  like: {
-    color: theme.colors.red[6],
   },
 
   label: {
@@ -88,20 +89,20 @@ const useStyles = createStyles((theme) => ({
 function Projects() {
   const { classes } = useStyles();
 
-  const projectArray: project[] = [
+  const projects: project[] = [
     {
       name: 'Subletter',
       description: `Subletter is a virtual marketplace for university students created
                     to ensure that only fellow students
                     respond to a student's listings. This project allowed me to branch out and 
-                    truly develop my full-stack ability, especially since it is the first project in which I 
-                    designed and implemented a databse. In this project, I implemented
-                    was the live messaging interface, designed using Socket.IO. I also fully developed
+                    truly develop my full-stack ability, especially since it was the first project in which I 
+                    designed and implemented a database. In this project, I am most proud that I implemented
+                    a live messaging interface, designed using Socket.IO. I also fully developed
                     the login system, leveraging tools such as JSON Web Tokens
                     and bcrypt to securely authenticate users.`,
-      year: 2023,
+      date: 'Jul - Aug 2023',
       image: '/images/subletter.png',
-      tech: [
+      tools: [
         { name: 'JavaScript', color: 'yellow', id: useId() },
         { name: 'Node.js', color: 'green', id: useId() },
         { name: 'Express.js', color: 'teal', id: useId() },
@@ -115,16 +116,15 @@ function Projects() {
     },
     {
       name: 'Right Angle',
-      description: `Amidst the ever-changing landscape of technology, my
-                  fascination for innovation continues to thrive. From crafting
-                  elegant lines of code to diving deep into complex algorithms,
-                  I find solace in thallenge
-                  presents an opportunity to create, learn, and grow. With an
-                  unwavering curiosity, I embrace the digital realm, driven to
-                  shape the future one algorithm at a time.es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving es of code to diving `,
-      year: 2022,
+      description: `Born from the constant discomfort of an intern sitting at a desk
+                    for 8 hours a day, Right Angle is a web application that helps users
+                    correct their posture. It works by using OpenCV with MediaPipe to
+                    calculate whether or not a user is slouching, and if they are, the program alerts them.
+                    I worked on the backend of this application, with a special focus on enabling a
+                    livestream from OpenCV to the browser.`,
+      date: 'Oct 2022',
       image: '/images/right-angle.png',
-      tech: [
+      tools: [
         { name: 'JavaScript', color: 'yellow', id: useId() },
         { name: 'Python', color: 'blue', id: useId() },
         { name: 'Flask', color: 'teal', id: useId() },
@@ -137,15 +137,34 @@ function Projects() {
       id: useId(),
     },
     {
+      name: 'Spam Text Classifier',
+      description: `Amidst the ever-changing landscape of technology, my
+                  fascination for innovation continues to thrive. From crafting
+                  elegant lines h an
+                  unwavering curiosity, I embrace the digital realm, driven to
+                  shape the future one algorithm at a time.`,
+      date: 'Aug 2022',
+      image: '/images/spam-text-classifier.png',
+      tools: [
+        { name: 'Python', color: 'blue', id: useId() },
+        { name: 'Jupyter', color: 'orange', id: useId() },
+        { name: 'Scikit-Learn', color: 'blue', id: useId() },
+        { name: 'Pandas', color: 'gray', id: useId() },
+      ],
+      color: '#000000',
+      link: 'https://github.com/imaadj10/spam-text-classifier',
+      id: useId(),
+    },
+    {
       name: 'Spotify Collage',
       description: `Amidst the ever-changing landscape of technology, my
                   fascination for innovation continues to thrive. From crafting
                   elegant lines h an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
-      year: 2022,
+      date: 'Jan - Feb 2022',
       image: '/images/spotify-collage.png',
-      tech: [
+      tools: [
         { name: 'Python', color: 'blue', id: useId() },
         { name: 'Flask', color: 'teal', id: useId() },
         { name: 'HTML', color: 'orange', id: useId() },
@@ -161,9 +180,9 @@ function Projects() {
                   fascination for innovation cw. With an
                   unwavering curiosity, I embrace the digital realm, driven to
                   shape the future one algorithm at a time.`,
-      year: 2021,
+      date: 'Oct - Nov 2021',
       image: '/images/virtual-drumset.png',
-      tech: [{ name: 'Java', color: 'orange', id: useId() }],
+      tools: [{ name: 'Java', color: 'orange', id: useId() }],
       color: '#C0C0C0',
       link: 'https://github.com/imaadj10/virtual-drumset',
       id: useId(),
@@ -190,15 +209,15 @@ function Projects() {
       className={classes.carousel}
       classNames={{ root: classes.root, controls: classes.controls }}
     >
-      {projectArray.map((project) => (
+      {projects.map((project) => (
         <Carousel.Slide>
           <ProjectCard
             key={project.id}
             image={project.image}
             name={project.name}
             description={project.description}
-            year={project.year}
-            tools={project.tech}
+            date={project.date}
+            tools={project.tools}
             color={project.color}
             link={project.link}
           />
@@ -211,7 +230,7 @@ function Projects() {
 interface ProjectCardProps {
   image: string;
   name: string;
-  year: number;
+  date: string;
   description: string;
   tools: tool[];
   color: string;
@@ -222,7 +241,7 @@ function ProjectCard({
   image,
   name,
   description,
-  year,
+  date,
   tools,
   color,
   link,
@@ -237,19 +256,21 @@ function ProjectCard({
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
-      <Card.Section style={{backgroundColor: color}}>
+      <Card.Section style={{ backgroundColor: color }}>
         <Image src={image} alt={name} height={180} fit="contain" />
       </Card.Section>
-
       <Card.Section className={classes.section} mt="md">
         <Group position="apart">
-          <Text fz="lg" fw={500}>
-            {name}
-          </Text>
+          <Group>
+            <Text fz="lg" fw={500}>
+              {name}
+            </Text>
+            <Badge size="sm">{date}</Badge>
+          </Group>
           <Button
-          size="xs"
+            size="xs"
             color="dark"
-            radius="sm"
+            radius="md"
             variant="default"
             component="a"
             href={link}
@@ -257,9 +278,13 @@ function ProjectCard({
             title="Code"
           >
             <Text mr="xs">View Code</Text>
-            <Avatar src={'images/github.png'} size="xs" radius="xl" />
+            <Image
+              src={'images/github.png'}
+              height="20px"
+              radius="xl"
+              fit="contain"
+            />
           </Button>
-          {/* <Badge size="sm">{year}</Badge> */}
         </Group>
         <Text fz="sm" mt="xs">
           {description}
@@ -277,26 +302,6 @@ function ProjectCard({
           {features}
         </Group>
       </Card.Section>
-      {/* <Flex
-        w="100%"
-        justify="center"
-        // style={{ position: 'absolute', bottom: 30 }}
-      >
-        <Button
-          color="dark"
-          radius="md"
-          variant="default"
-          w="%"
-          component="a"
-          href={link}
-          target="_blank"
-          mt="md"
-          style={{bottom: 15}}
-        >
-          <Text mr="xs">Check it out on GitHub</Text>
-          <IconBrandGithubFilled />
-        </Button>
-      </Flex> */}
     </Card>
   );
 }
