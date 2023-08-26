@@ -10,12 +10,12 @@ import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
 import Contact from './Contact';
-import { Button, Group, Text } from '@mantine/core';
+import { Button, Group, Text, Image } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
 
 interface StellarObject {
-  page_name: string,
-  model: string
+  page_name: string;
+  model: string;
   scale: number;
   orbiters: StellarObject[];
 }
@@ -60,7 +60,13 @@ const projects: StellarObject = {
   page_name: 'projects',
   model: '/planet_models/Planet_12.glb',
   scale: 0.2,
-  orbiters: [subletter, right_angle, spam_text_classifier, spotify_collage, virtual_drumset],
+  orbiters: [
+    subletter,
+    right_angle,
+    spam_text_classifier,
+    spotify_collage,
+    virtual_drumset,
+  ],
 };
 const intel: StellarObject = {
   page_name: 'intel',
@@ -128,6 +134,23 @@ function SolarSystem() {
       </div>
       <div
         style={{
+          opacity: !moving ? 0 : 1,
+          transition: 'opacity 0.5s ease',
+        }}
+        class="repo-button"
+      >
+        <Image
+          src={'images/github.png'}
+          height="45px"
+          radius="xl"
+          fit="contain"
+          component={moving ? 'a' : ''}
+          href="https://www.github.com/imaadj10/portfolio"
+          target="_blank"
+        />
+      </div>
+      <div
+        style={{
           opacity: moving ? 0 : 1,
           transition: moving ? 'none' : 'opacity 1s ease 1.5s',
         }}
@@ -140,7 +163,7 @@ function SolarSystem() {
       </div>
 
       <Canvas>
-      <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
+        <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
           <Text3D
             curveSegments={32}
             bevelEnabled
@@ -172,7 +195,7 @@ function SolarSystem() {
             <meshNormalMaterial />
           </Text3D>
         </Center>
-        
+
         <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
           <Text3D
             curveSegments={32}

@@ -13,23 +13,6 @@ import {
   getStylesRef,
 } from '@mantine/core';
 
-interface tool {
-  name: string;
-  color: string;
-  id: string;
-}
-
-interface experience {
-  title: string;
-  company: string;
-  description: string;
-  year: number;
-  image: string;
-  tools: tool[];
-  color: string;
-  id: string;
-}
-
 const useStyles = createStyles((theme) => ({
   controls: {
     ref: getStylesRef('controls'),
@@ -69,7 +52,7 @@ const useStyles = createStyles((theme) => ({
     height: '50vh',
     overflowY: 'auto',
     [theme.fn.smallerThan('xl')]: {
-      height: '85vh'
+      height: '85vh',
     },
   },
 
@@ -87,6 +70,23 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+interface tool {
+  name: string;
+  color: string;
+  id: string;
+}
+
+interface experience {
+  title: string;
+  company: string;
+  description: string;
+  date: string;
+  image: string;
+  tools: tool[];
+  color: string;
+  id: string;
+}
+
 function Experience() {
   const { classes } = useStyles();
 
@@ -94,23 +94,22 @@ function Experience() {
     {
       title: 'Software Engineer Intern',
       company: 'Intel',
-      description: `Subletter is a virtual marketplace for university students created
-                    to ensure that only fellow students
-                    respond to a student's listings. This project allowed me to branch out and 
-                    truly develop my full-stack ability, especially since it is the first project in which I 
-                    designed and implemented a databse. In this project, I implemented
-                    was the live messaging interface, designed using Socket.IO. I also fully developed
-                    the login system, leveraging tools such as JSON Web Tokens
-                    and bcrypt to securely authenticate users.`,
-      year: 2023,
+      description: `As a software engineer intern at Intel, I had the opportunity
+                    to work on embedded software for network interface cards and
+                    infrastructure processing units. Some of my accomplishments include
+                    increasing code coverage by 40% for device reset unit tests, embedding
+                    a new manageability feature and adding over 500 tests to CI, and refactoring
+                    various tests written in C# to adhere to object-oriented design principles.`,
+      date: 'Sep 2022 - Apr 2023',
       image: '/images/intel.png',
       tools: [
-        { name: 'JavaScript', color: 'yellow', id: useId() },
-        { name: 'Node.js', color: 'green', id: useId() },
-        { name: 'Express.js', color: 'teal', id: useId() },
-        { name: 'React.js', color: 'blue', id: useId() },
-        { name: 'ChakraUI', color: 'teal', id: useId() },
-        { name: 'MySQL', color: 'orange', id: useId() },
+        { name: 'C', color: 'blue', id: useId() },
+        { name: 'C#', color: 'violet', id: useId() },
+        { name: '.NET', color: 'grape', id: useId() },
+        { name: 'Jira', color: 'blue', id: useId() },
+        { name: 'Scrum/Agile', color: 'indigo', id: useId() },
+        { name: 'Debugging', color: 'yellow', id: useId() },
+        { name: 'Problem Solving', color: 'pink', id: useId() },
       ],
       color: '#ffffff',
       id: useId(),
@@ -118,22 +117,20 @@ function Experience() {
     {
       title: 'Computer Science Teaching Assistant',
       company: 'University of British Columbia',
-      description: `Amidst the ever-changing landscape of technology, my
-                  fascination for innovation continues to thrive. From crafting
-                  elegant lines of code to diving deep into complex algorithms,
-                  I find solace in thallenge
-                  presents an opportunity to create, learn, and grow. With an
-                  unwavering curiosity, I embrace the digital realm, driven to
-                  shape the future one algorithm at a time.`,
-      year: 2022,
+      description: `Being a TA for an introductory programming course has allowed me
+                    to strengthen the foundation of my computer science education through
+                    helping others learn. As a TA I support the learning of over 30 students
+                    in weekly labs, and am available for all students in weekly office hours.
+                    I have recently taken on a more administrative role and have helped plan
+                    different elements of the course and provided assistance on redefining
+                    it's structure.`,
+      date: 'Sep 2021 - Present',
       image: '/images/ubc.png',
       tools: [
-        { name: 'JavaScript', color: 'yellow', id: useId() },
-        { name: 'Python', color: 'blue', id: useId() },
-        { name: 'Flask', color: 'teal', id: useId() },
-        { name: 'React.js', color: 'blue', id: useId() },
-        { name: 'OpenCV', color: 'red', id: useId() },
-        { name: 'Tailwind CSS', color: 'teal', id: useId() },
+        { name: 'C', color: 'blue', id: useId() },
+        { name: 'Teaching', color: 'cyan', id: useId() },
+        { name: 'Teamwork', color: 'teal', id: useId() },
+        { name: 'Communication', color: 'green', id: useId() },
       ],
       color: '#0C2344',
       id: useId(),
@@ -168,7 +165,7 @@ function Experience() {
             title={experience.title}
             company={experience.company}
             description={experience.description}
-            year={experience.year}
+            date={experience.date}
             color={experience.color}
             tools={experience.tools}
           />
@@ -182,7 +179,7 @@ interface ExperienceCardProps {
   image: string;
   title: string;
   company: string;
-  year: number;
+  date: string;
   description: string;
   color: string;
   tools: tool[];
@@ -193,7 +190,7 @@ function ExperienceCard({
   title,
   company,
   description,
-  year,
+  date,
   color,
   tools,
 }: ExperienceCardProps) {
@@ -216,8 +213,11 @@ function ExperienceCard({
           <Text fz="lg" fw={500}>
             {title}
           </Text>
-          <Badge size="sm">{year}</Badge>
+          <Badge size="sm">{date}</Badge>
         </Group>
+        <Text italic fz="sm">
+          {company}
+        </Text>
         <Text fz="sm" mt="xs">
           {description}
         </Text>
@@ -228,7 +228,7 @@ function ExperienceCard({
         className={classes.section}
       >
         <Text mt="xs" className={classes.label} c="dimmed">
-          Skills Used
+          Applicable Skills
         </Text>
         <Group spacing={7} mt={5}>
           {features}
