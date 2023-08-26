@@ -65,9 +65,9 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     if (!moving) {
       const dummy = new THREE.Vector3();
       const step = 0.001;
-      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
+      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
       state.camera.position.lerp(
-        dummy.set(position[0] - 10, 0, position[2]),
+        dummy.set(position[0] - 5, 0, position[2]),
         step
       );
       state.camera.lookAt(position[0], 0, position[2] + 2.5);
