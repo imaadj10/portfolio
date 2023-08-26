@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { useContext } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Text3D, Center } from '@react-three/drei';
-import '../css/SolarSystem.css';
+import '../styles/SolarSystem.css';
 import StellarObjectGeometry from './StellarObjectGeometry';
 import { OrbitContext, SelectedPageContext } from '../App';
 import About from './About';
@@ -141,7 +141,7 @@ function SolarSystem() {
       >
         <Image
           src={'images/github.png'}
-          height="45px"
+          height="35px"
           radius="xl"
           fit="contain"
           component={moving ? 'a' : ''}

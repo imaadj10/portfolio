@@ -2,47 +2,12 @@ import {
   Card,
   Image,
   Text,
-  Badge,
   Button,
   Group,
-  rem,
   Flex,
-  createStyles,
-  getStylesRef,
 } from '@mantine/core';
 import { IconBrandLinkedin, IconMailFilled } from '@tabler/icons-react';
-
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: theme.colors.dark[8],
-    height: '52vh',
-    width: '35%',
-    left: '55%',
-    top: 155,
-    [theme.fn.smallerThan('xl')]: {
-      width: '40%',
-      left: '55%',
-      top: 100,
-    },
-  },
-
-  section: {
-    borderBottom: `${rem(1)} solid ${theme.colors.dark[4]}`,
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-  },
-
-  like: {
-    color: theme.colors.red[6],
-  },
-
-  label: {
-    textTransform: 'uppercase',
-    fontSize: theme.fontSizes.xs,
-    fontWeight: 700,
-  },
-}));
+import { useStyles } from '../styles/ContactStyles';
 
 function Contact() {
   return <ContactCard name={'Hi, I am Imaad'} description={'What is up'} />;
