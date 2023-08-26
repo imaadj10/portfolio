@@ -11,6 +11,7 @@ import {
   Flex,
   createStyles,
   getStylesRef,
+  Avatar,
 } from '@mantine/core';
 import { IconCode, IconBrandGithub, IconBrandGithubFilled } from '@tabler/icons-react';
 
@@ -27,6 +28,7 @@ interface project {
   image: string;
   tech: tool[];
   link: string;
+  color: string;
   id: string;
 }
 
@@ -66,9 +68,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   section: {
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colors.dark[4]}`,
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
@@ -109,6 +109,7 @@ function Projects() {
         { name: 'ChakraUI', color: 'teal', id: useId() },
         { name: 'MySQL', color: 'orange', id: useId() },
       ],
+      color: '#ffffff',
       link: 'https://github.com/imaadj10/subletter',
       id: useId(),
     },
@@ -131,6 +132,7 @@ function Projects() {
         { name: 'OpenCV', color: 'red', id: useId() },
         { name: 'Tailwind CSS', color: 'teal', id: useId() },
       ],
+      color: '#B39EFC',
       link: 'https://github.com/imaadj10/right-angle',
       id: useId(),
     },
@@ -149,6 +151,7 @@ function Projects() {
         { name: 'HTML', color: 'orange', id: useId() },
         { name: 'CSS', color: 'purple', id: useId() },
       ],
+      color: '#15110E',
       link: 'https://github.com/imaadj10/spotify-collage',
       id: useId(),
     },
@@ -161,6 +164,7 @@ function Projects() {
       year: 2021,
       image: '/images/virtual-drumset.png',
       tech: [{ name: 'Java', color: 'orange', id: useId() }],
+      color: '#C0C0C0',
       link: 'https://github.com/imaadj10/virtual-drumset',
       id: useId(),
     },
@@ -195,6 +199,7 @@ function Projects() {
             description={project.description}
             year={project.year}
             tools={project.tech}
+            color={project.color}
             link={project.link}
           />
         </Carousel.Slide>
@@ -209,6 +214,7 @@ interface ProjectCardProps {
   year: number;
   description: string;
   tools: tool[];
+  color: string;
   link: string;
 }
 
@@ -218,6 +224,7 @@ function ProjectCard({
   description,
   year,
   tools,
+  color,
   link,
 }: ProjectCardProps) {
   const { classes } = useStyles();
@@ -230,7 +237,7 @@ function ProjectCard({
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
-      <Card.Section>
+      <Card.Section style={{backgroundColor: color}}>
         <Image src={image} alt={name} height={180} fit="contain" />
       </Card.Section>
 
@@ -242,15 +249,15 @@ function ProjectCard({
           <Button
           size="xs"
             color="dark"
-            radius="md"
+            radius="sm"
             variant="default"
             component="a"
             href={link}
             target="_blank"
             title="Code"
           >
-            {/* <Text mr="xs">Code</Text> */}
-            <IconCode />
+            <Text mr="xs">View Code</Text>
+            <Avatar src={'images/github.png'} size="xs" radius="xl" />
           </Button>
           {/* <Badge size="sm">{year}</Badge> */}
         </Group>

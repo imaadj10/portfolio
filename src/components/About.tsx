@@ -24,9 +24,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   section: {
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colors.dark[4]}`,
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
@@ -69,7 +67,7 @@ function AboutCard({
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section>
-        <Image src={image} alt={name} height={180} fit="contain" />
+        <Image src={image} alt={name} height={300} fit="contain" />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">

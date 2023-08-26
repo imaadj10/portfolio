@@ -24,9 +24,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   section: {
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colors.dark[4]}`,
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
@@ -45,33 +43,26 @@ const useStyles = createStyles((theme) => ({
 
 function Contact() {
   return (
-    <AboutCard
-      image={'/images/imaad.jpg'}
+    <ContactCard
       name={'Hi, I am Imaad'}
       description={'What is up'}
     />
   );
 }
 
-interface AboutCardProps {
-  image: string;
+interface ContactCardProps {
   name: string;
   description: string;
 }
 
-function AboutCard({
-  image,
+function ContactCard({
   name,
   description,
-}: AboutCardProps) {
+}: ContactCardProps) {
   const { classes } = useStyles();
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
-      <Card.Section>
-        <Image src={image} alt={name} height={180} fit="contain" />
-      </Card.Section>
-
       <Card.Section className={classes.section} mt="md">
         <Group>
           <Text fz="lg" fw={500}>
