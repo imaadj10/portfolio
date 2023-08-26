@@ -12,23 +12,6 @@ import {
   getStylesRef,
 } from '@mantine/core';
 
-interface tool {
-  name: string;
-  color: string;
-  id: string;
-}
-
-interface project {
-  name: string;
-  description: string;
-  date: string;
-  image: string;
-  tools: tool[];
-  link: string;
-  color: string;
-  id: string;
-}
-
 const useStyles = createStyles((theme) => ({
   controls: {
     ref: getStylesRef('controls'),
@@ -86,6 +69,23 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+interface tool {
+  name: string;
+  color: string;
+  id: string;
+}
+
+interface project {
+  name: string;
+  description: string;
+  date: string;
+  image: string;
+  tools: tool[];
+  link: string;
+  color: string;
+  id: string;
+}
+
 function Projects() {
   const { classes } = useStyles();
 
@@ -138,11 +138,13 @@ function Projects() {
     },
     {
       name: 'Spam Text Classifier',
-      description: `Amidst the ever-changing landscape of technology, my
-                  fascination for innovation continues to thrive. From crafting
-                  elegant lines h an
-                  unwavering curiosity, I embrace the digital realm, driven to
-                  shape the future one algorithm at a time.`,
+      description: `This was my first end-to-end machine learning project,
+                    where I trained and tested my own classification model
+                    to determine whether or not a text was spam. The project
+                    involved developing my own custom transformer to clean and process
+                    the data, refining the model with cross validation, and finally testing
+                    it on the test data. The model ended up performing with 100% precision, 94% recall, 
+                    and 97% accuracy; an impressive showing!`,
       date: 'Aug 2022',
       image: '/images/spam-text-classifier.png',
       tools: [
@@ -157,11 +159,12 @@ function Projects() {
     },
     {
       name: 'Spotify Collage',
-      description: `Amidst the ever-changing landscape of technology, my
-                  fascination for innovation continues to thrive. From crafting
-                  elegant lines h an
-                  unwavering curiosity, I embrace the digital realm, driven to
-                  shape the future one algorithm at a time.`,
+      description: `Spotify Collage is a web application I developed during a hackathon
+                    that gives users a clean and stylish interface with which they
+                    can interact with a variety of different playlists. The application
+                    makes use of the Spotify Web API and was built entirely in Flask.
+                    All styling in the application was done by me in vanilla CSS, long
+                    after the hackathon was complete so I could develop my frontend skills.`,
       date: 'Jan - Feb 2022',
       image: '/images/spotify-collage.png',
       tools: [
@@ -176,10 +179,11 @@ function Projects() {
     },
     {
       name: 'Virtual Drumset',
-      description: `Amidst the ever-changing landscape of technology, my
-                  fascination for innovation cw. With an
-                  unwavering curiosity, I embrace the digital realm, driven to
-                  shape the future one algorithm at a time.`,
+      description: `The Virtual Drumset is just as it sounds, an object-oriented virtual
+                    drumset built entirely with Java. The program features 9 instruments that
+                    make up a complete drumset, and allows users to record, save, and play tracks!
+                    JUnit testing was used throughout the development of the project to ensure
+                    code quality, and led to a streamlined design process.`,
       date: 'Oct - Nov 2021',
       image: '/images/virtual-drumset.png',
       tools: [{ name: 'Java', color: 'orange', id: useId() }],
