@@ -1,15 +1,32 @@
 import { Carousel } from '@mantine/carousel';
 import { useId } from '@mantine/hooks';
 import {
-  Card,
-  Image,
-  Text,
-  Badge,
-  Button,
+  // Card,
+  // Image,
+  // Text,
+  // Badge,
+  // Button,
   Group,
   rem,
 } from '@mantine/core';
 import { useStyles } from '../styles/ProjectsStyles';
+import {
+  Card,
+  Stack,
+  Heading,
+  Text,
+  CardBody,
+  Divider,
+  CardFooter,
+  Image,
+  Badge,
+  ButtonGroup,
+  Button,
+  Box,
+  HStack,
+  Wrap,
+  WrapItem
+} from '@chakra-ui/react';
 
 interface tool {
   name: string;
@@ -195,59 +212,26 @@ function ProjectCard({
   const { classes } = useStyles();
 
   const features = tools.map((tool) => (
-    <Badge key={tool.id} color={tool.color}>
+    <WrapItem key={tool.id}>
+    <Badge borderRadius="full" px="2" key={tool.id} colorScheme={tool.color}>
       {tool.name}
     </Badge>
+    </WrapItem>
   ));
 
   return (
-    <Card withBorder radius="md" p="md" className={classes.card}>
-      <Card.Section style={{ backgroundColor: color }}>
-        <Image src={image} alt={name} height={180} fit="contain" />
-      </Card.Section>
-      <Card.Section className={classes.section} mt="md">
-        <Group position="apart">
-          <Group>
-            <Text fz="lg" fw={500}>
-              {name}
-            </Text>
-            <Badge size="sm">{date}</Badge>
-          </Group>
-          <Button
-            size="xs"
-            color="dark"
-            radius="md"
-            variant="default"
-            component="a"
-            href={link}
-            target="_blank"
-            title="Code"
-          >
-            <Text mr="xs">View Code</Text>
-            <Image
-              src={'images/github.png'}
-              height="20px"
-              radius="xl"
-              fit="contain"
-            />
-          </Button>
-        </Group>
-        <Text fz="sm" mt="xs">
-          {description}
-        </Text>
-      </Card.Section>
-
-      <Card.Section
-        style={{ position: 'relative' }}
-        className={classes.section}
-      >
-        <Text mt="xs" className={classes.label} c="dimmed">
-          Tech Stack
-        </Text>
-        <Group spacing={7} mt={5}>
-          {features}
-        </Group>
-      </Card.Section>
+    <Card bg="#141517" style={{ overflowY: 'auto' }} height={'85vh'}>
+      <CardBody>
+        <Image src={image} alt={name} borderRadius="lg" />
+        <Stack mt="6" spacing="3">
+          <Heading color="white" size="md">{name}</Heading>
+          <Text color="white ">{description}</Text>
+        </Stack>
+      </CardBody>
+      <Divider color="white"/>
+      <CardFooter>
+        <Wrap spacing={3}>{features}</Wrap>
+      </CardFooter>
     </Card>
   );
 }
