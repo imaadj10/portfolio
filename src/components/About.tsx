@@ -13,43 +13,34 @@ import {
 import { useStyles } from '../styles/AboutStyles';
 
 function About() {
-  return (
-    <AboutCard
-      image={'/images/imaad.jpg'}
-      name={'Hi, I am Imaad'}
-      description={'What is up'}
-    />
-  );
+  return <AboutCard />;
 }
 
-interface AboutCardProps {
-  image: string;
-  name: string;
-  description: string;
-}
-
-function AboutCard({
-  image,
-  name,
-  description,
-}: AboutCardProps) {
+function AboutCard() {
   const { classes } = useStyles();
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
-      <Card.Section>
-        <Image src={image} alt={name} height={300} fit="contain" />
-      </Card.Section>
+      {/* <Card.Section> */}
+        <Image
+          src={'/images/imaad.jpg'}
+          alt={'Imaad Junaidi'}
+          height={300}
+          fit="contain"
+          radius={120}
+          style={{ borderRadius: "50px"}}
+        />
+      {/* </Card.Section> */}
 
       <Card.Section className={classes.section} mt="md">
         <Group>
           <Text fz="lg" fw={500}>
-            {name}
+            {'Imaad Junaidi'}
           </Text>
           {/* <Badge size="sm">{year}</Badge> */}
         </Group>
         <Text fz="sm" mt="xs">
-          {description}
+          {'Imaad Junaidi'}
         </Text>
       </Card.Section>
     </Card>
