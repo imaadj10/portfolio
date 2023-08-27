@@ -5,7 +5,7 @@ const useStyles = createStyles((theme) => ({
     ref: getStylesRef('button'),
     transition: 'opacity 150ms ease',
     opacity: 0.5,
-    background: 'transparent'
+    background: 'transparent',
   },
 
   image: {

@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
 import { useContext, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
@@ -22,7 +22,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   const { moving, setMoving } = useContext(OrbitContext);
   const { position, setPosition } = useContext(PositionContext);
   const [currentPosition, setCurrentPosition] = useState(initialPosition);
-  const { page, setPage } = useContext(SelectedPageContext);
+  const { setPage } = useContext(SelectedPageContext);
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
@@ -79,11 +79,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     <>
       <mesh ref={meshRef} {...meshProps}>
         <meshStandardMaterial color="black" />
-        <primitive
-          scale={scale}
-          object={gltf.scene}
-          children-0-castShadow
-        />
+        <primitive scale={scale} object={gltf.scene} children-0-castShadow />
       </mesh>
       {isStar && (
         <pointLight position={[0, 0, 0]} intensity={1500} color="#edd59e" />

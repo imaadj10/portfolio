@@ -1,4 +1,4 @@
-import { Card, Image, Text, Button, Group, Flex } from '@mantine/core';
+import { Button, Card, Flex, Group, Image, Text } from '@mantine/core';
 import { IconBrandLinkedin, IconMailFilled } from '@tabler/icons-react';
 import { useStyles } from '../styles/ContactStyles';
 

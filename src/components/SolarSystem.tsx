@@ -1,18 +1,18 @@
 // @ts-nocheck
-import * as THREE from 'three';
-import { useContext } from 'react';
+import { Button, Image, Text } from '@mantine/core';
+import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars, Text3D, Center } from '@react-three/drei';
-import '../css/SolarSystem.css';
-import StellarObjectGeometry from './StellarObjectGeometry';
-import { OrbitContext, SelectedPageContext } from '../App';
-import About from './About';
-import Projects from './Projects';
-import Experience from './Experience';
-import Contact from './Contact';
-import { Button, Text, Image } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
+import { useContext } from 'react';
+import * as THREE from 'three';
+import { OrbitContext, SelectedPageContext } from '../App';
+import '../App.css';
 import { useStyles } from '../styles/SolarSystemStyles';
+import About from './About';
+import Contact from './Contact';
+import Experience from './Experience';
+import Projects from './Projects';
+import StellarObjectGeometry from './StellarObjectGeometry';
 
 interface StellarObject {
   page_name: string;
@@ -217,16 +217,9 @@ function SolarSystem() {
             <meshNormalMaterial />
           </Text3D>
         </Center>
+
         {moving && <CameraPos />}
 
-        <OrbitControls
-          enablePan={false}
-          enableZoom={false}
-          enableRotate={false}
-          enableDamping
-          dampingFactor={0.1}
-          rotateSpeed={0.5}
-        />
         <Stars factor={6} fade speed={0} />
         <ambientLight intensity={1} />
         <StellarObjectGeometry

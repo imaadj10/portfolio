@@ -1,13 +1,6 @@
 import { Carousel } from '@mantine/carousel';
+import { Badge, Card, Group, Image, Text, rem } from '@mantine/core';
 import { useId } from '@mantine/hooks';
-import {
-  Card,
-  Image,
-  Text,
-  Badge,
-  Group,
-  rem,
-} from '@mantine/core';
 import { useStyles } from '../styles/ExperienceStyles';
 
 interface tool {

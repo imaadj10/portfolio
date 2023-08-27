@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { useState, useEffect, useRef } from 'react';
+import { Center, Line, Text3D } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Line, Text3D, Center } from '@react-three/drei';
 
 function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
   const [hovered, setHovered] = useState(false);
