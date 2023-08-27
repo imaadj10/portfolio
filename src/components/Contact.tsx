@@ -1,5 +1,7 @@
-import { Button, Card, Flex, Group, Image, Text } from '@mantine/core';
-import { IconBrandLinkedin, IconMailFilled } from '@tabler/icons-react';
+import { Button, Card, Flex, Group, Text } from '@mantine/core';
+import EmailIcon from '@mui/icons-material/Email';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { useStyles } from '../styles/ContactStyles';
 
 function Contact() {
@@ -30,12 +32,7 @@ function ContactCard() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Image
-                src={'images/github.png'}
-                height="20px"
-                radius="xl"
-                fit="contain"
-              />
+              <GitHubIcon />
               <Text ml="xs">imaadj10</Text>
             </Button>
           </Flex>
@@ -52,7 +49,7 @@ function ContactCard() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <IconBrandLinkedin />
+              <LinkedInIcon />
               <Text ml="xs">Imaad Junaidi</Text>
             </Button>
           </Flex>
@@ -69,7 +66,7 @@ function ContactCard() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <IconMailFilled />
+              <EmailIcon />
               <Text ml="xs">imaadjunaidi1011@gmail.com</Text>
             </Button>
           </Flex>

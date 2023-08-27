@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { Button, Image, Text } from '@mantine/core';
+import { Button, Text } from '@mantine/core';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { IconArrowLeft } from '@tabler/icons-react';
 import { useContext } from 'react';
 import * as THREE from 'three';
 import { OrbitContext, SelectedPageContext } from '../App';
@@ -129,7 +129,7 @@ function SolarSystem() {
             className={classes.button}
             classNames={classes}
           >
-            <IconArrowLeft />
+            <ArrowBackIcon />
             <Text color="white" ml={5}>
               Return to Homepage
             </Text>

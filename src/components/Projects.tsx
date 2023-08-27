@@ -1,6 +1,7 @@
 import { Carousel } from '@mantine/carousel';
 import { Badge, Button, Card, Group, Image, Text, rem } from '@mantine/core';
 import { useId } from '@mantine/hooks';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import { useStyles } from '../styles/ProjectsStyles';
 
 interface tool {
@@ -216,12 +217,7 @@ function ProjectCard({
             rel="noopener noreferrer"
           >
             <Text mr="xs">View Code</Text>
-            <Image
-              src={'images/github.png'}
-              height="20px"
-              radius="xl"
-              fit="contain"
-            />
+            <GitHubIcon />
           </Button>
         </Group>
         <Text fz="sm" mt="xs">
