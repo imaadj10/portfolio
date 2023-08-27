@@ -138,24 +138,6 @@ function SolarSystem() {
       </div>
       <div
         style={{
-          opacity: !moving ? 0 : 1,
-          transition: 'opacity 1s ease',
-        }}
-        class="repo-button"
-      >
-        <Image
-          src={'images/github.png'}
-          height={'35px'}
-          borderRadius="full"
-          classNames={classes}
-          component="a"
-          href="https://www.github.com/imaadj10/portfolio"
-          target="_blank"
-          rel="noopener noreferrer"
-        />
-      </div>
-      <div
-        style={{
           opacity: moving ? 0 : 1,
           transition: moving ? 'none' : 'opacity 1s ease 1.5s',
         }}

@@ -19,13 +19,6 @@ body {
   z-index: 999999999;
 }
 
-.repo-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  z-index: 999999999;
-}
-
 .info-container {
   width: 100%;
   position: absolute;
