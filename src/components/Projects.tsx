@@ -86,7 +86,7 @@ function Projects() {
         { name: 'Python', color: 'blue', id: useId() },
         { name: 'Jupyter', color: 'orange', id: useId() },
         { name: 'Scikit-Learn', color: 'blue', id: useId() },
-        { name: 'Pandas', color: 'gray', id: useId() },
+        { name: 'Pandas', color: 'indigo', id: useId() },
       ],
       color: '#000000',
       link: 'https://github.com/imaadj10/spam-text-classifier',
@@ -201,7 +201,7 @@ function ProjectCard({
       <Card.Section className={classes.section} mt="md">
         <Group position="apart">
           <Group>
-            <Text fz="lg" fw={500}>
+            <Text className={classes.title} fw={500}>
               {name}
             </Text>
             <Badge size="sm">{date}</Badge>
@@ -220,7 +220,7 @@ function ProjectCard({
             <GitHubIcon />
           </Button>
         </Group>
-        <Text fz="sm" mt="xs">
+        <Text className={classes.description} mt="xs">
           {description}
         </Text>
       </Card.Section>

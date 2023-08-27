@@ -2,6 +2,7 @@ import { Carousel } from '@mantine/carousel';
 import { Badge, Card, Group, Image, Text, rem } from '@mantine/core';
 import { useId } from '@mantine/hooks';
 import { useStyles } from '../styles/ExperienceStyles';
+import { isClassExpression } from 'typescript';
 
 interface tool {
   name: string;
@@ -143,15 +144,15 @@ function ExperienceCard({
 
       <Card.Section className={classes.section} mt="md">
         <Group>
-          <Text fz="lg" fw={500}>
+          <Text fw={500} className={classes.title}>
             {title}
           </Text>
           <Badge size="sm">{date}</Badge>
         </Group>
-        <Text italic fz="sm">
+        <Text italic className={classes.description}>
           {company}
         </Text>
-        <Text fz="sm" mt="xs">
+        <Text mt="xs" className={classes.description}>
           {description}
         </Text>
       </Card.Section>

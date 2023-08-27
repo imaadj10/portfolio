@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
 
   card: {
     backgroundColor: theme.colors.dark[8],
-    height: '50vh',
+    height: '52vh',
     overflowY: 'auto',
     [theme.fn.smallerThan('xl')]: {
       height: '85vh',
@@ -48,6 +48,20 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
+  },
+
+  title: {
+    fontSize: theme.fontSizes.xl,
+    [theme.fn.smallerThan('xl')]: {
+      fontSize: theme.fontSizes.lg,
+    },
+  },
+
+  description: {
+    fontSize: theme.fontSizes.md,
+    [theme.fn.smallerThan('xl')]: {
+      fontSize: theme.fontSizes.sm,
+    },
   },
 
   label: {
