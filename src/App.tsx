@@ -1,8 +1,8 @@
 //@ts-nocheck
 import { MantineProvider } from '@mantine/core';
 import { createContext, useEffect, useState } from 'react';
-import SolarSystem from './components/SolarSystem';
 import RotateScreen from './components/RotateScreen';
+import SolarSystem from './components/SolarSystem';
 
 type OrbitContextType = {
   moving: boolean;
@@ -73,7 +73,9 @@ function App() {
             </PositionContext.Provider>
           </OrbitContext.Provider>
         </MantineProvider>
-      ) : <RotateScreen />}
+      ) : (
+        <RotateScreen />
+      )}
     </>
   );
 }
