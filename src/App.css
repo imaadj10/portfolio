@@ -3,6 +3,10 @@ body {
     helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
 }
 
+body {
+  background: #000000f6;
+}
+
 .content-container {
   position: relative;
   width: 100vw;

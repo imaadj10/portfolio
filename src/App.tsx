@@ -1,6 +1,8 @@
+//@ts-nocheck
 import { MantineProvider } from '@mantine/core';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import SolarSystem from './components/SolarSystem';
+import RotateScreen from './components/RotateScreen';
 
 type OrbitContextType = {
   moving: boolean;
@@ -33,21 +35,46 @@ function App() {
   const [moving, setMoving] = useState(true);
   const [position, setPosition] = useState([0, 10, 0]);
   const [page, setPage] = useState('home');
+  const isLandscape = () =>
+      window.matchMedia('(orientation:landscape)').matches,
+    [orientation, setOrientation] = useState(
+      isLandscape() ? 'landscape' : 'portrait'
+    ),
+    onWindowResize = () => {
+      clearTimeout(window.resizeLag);
+      window.resizeLag = setTimeout(() => {
+        delete window.resizeLag;
+        setOrientation(isLandscape() ? 'landscape' : 'portrait');
+      }, 200);
+    };
+
+  useEffect(
+    () => (
+      onWindowResize(),
+      window.addEventListener('resize', onWindowResize),
+      () => window.removeEventListener('resize', onWindowResize)
+    ),
+    []
+  );
 
   return (
-    <MantineProvider
-      theme={{ colorScheme: 'dark' }}
-      withGlobalStyles
-      withNormalizeCSS
-    >
-      <OrbitContext.Provider value={{ moving, setMoving }}>
-        <PositionContext.Provider value={{ position, setPosition }}>
-          <SelectedPageContext.Provider value={{ page, setPage }}>
-            <SolarSystem />
-          </SelectedPageContext.Provider>
-        </PositionContext.Provider>
-      </OrbitContext.Provider>
-    </MantineProvider>
+    <>
+      {orientation === 'landscape' ? (
+        <MantineProvider
+          theme={{ colorScheme: 'dark' }}
+          withGlobalStyles
+          withNormalizeCSS
+        >
+          <OrbitContext.Provider value={{ moving, setMoving }}>
+            <PositionContext.Provider value={{ position, setPosition }}>
+              <SelectedPageContext.Provider value={{ page, setPage }}>
+                <SolarSystem />
+              </SelectedPageContext.Provider>
+            </PositionContext.Provider>
+          </OrbitContext.Provider>
+        </MantineProvider>
+      ) : <RotateScreen />}
+    </>
   );
 }
 
