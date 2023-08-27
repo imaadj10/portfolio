@@ -1,14 +1,12 @@
 import {
+  Flex,
   Card,
   Image,
   Text,
   Badge,
   Button,
   Group,
-  rem,
-  Flex,
-  createStyles,
-  getStylesRef,
+  Avatar, 
 } from '@mantine/core';
 import { useStyles } from '../styles/AboutStyles';
 
@@ -21,26 +19,19 @@ function AboutCard() {
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
-      {/* <Card.Section> */}
-        <Image
+      <Flex gap="lg" align={'center'} justify={'center'}>
+        <Text fz="50px" fw={500}>Hi, i'm Imaad</Text>
+        <Avatar
           src={'/images/imaad.jpg'}
           alt={'Imaad Junaidi'}
-          height={300}
-          fit="contain"
-          radius={120}
-          style={{ borderRadius: "50px"}}
+          size="150px"
+          radius={'300px'}
         />
-      {/* </Card.Section> */}
+      </Flex>
 
       <Card.Section className={classes.section} mt="md">
-        <Group>
-          <Text fz="lg" fw={500}>
-            {'Imaad Junaidi'}
-          </Text>
-          {/* <Badge size="sm">{year}</Badge> */}
-        </Group>
-        <Text fz="sm" mt="xs">
-          {'Imaad Junaidi'}
+        <Text fz="md" mt="xs">
+          {'I am currently a third year Computer Science student at the University of British Columbia.'}
         </Text>
       </Card.Section>
     </Card>

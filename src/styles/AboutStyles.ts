@@ -6,6 +6,7 @@ const useStyles = createStyles((theme) => ({
       height: '85vh',
       width: '35%',
       left: '55%',
+      overflowY: 'auto',
       [theme.fn.smallerThan('xl')]: {
         width: '40%',
         left: '55%',
