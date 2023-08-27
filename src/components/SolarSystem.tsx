@@ -10,8 +10,7 @@ import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
 import Contact from './Contact';
-import { Image } from '@mantine/core';
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Button, Text, Image } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
 interface StellarObject {
@@ -121,9 +120,10 @@ function SolarSystem() {
         {!moving && (
           <Button
             opacity={0.5}
-            _hover={{ opacity: 0.9 }} 
-            bg="transparent" 
+            _hover={{ opacity: 0.9 }}
+            bg="transparent"
             onClick={handleResume}
+            colorScheme="blackAlpha"
           >
             <ArrowBackIcon boxSize={6} color="white" />
             <Text color="white" ml={2}>
@@ -139,15 +139,20 @@ function SolarSystem() {
         }}
         class="repo-button"
       >
-        <Image
-          src={'images/github.png'}
-          height="35px"
-          radius="xl"
-          fit="contain"
-          component={moving ? 'a' : ''}
+        <a
           href="https://www.github.com/imaadj10/portfolio"
           target="_blank"
-        />
+          rel="noopener noreferrer"
+        >
+          <Image
+            src={'images/github.png'}
+            boxSize={'35px'}
+            borderRadius="full"
+            opacity={0.5}
+            transition="opacity 0.2s ease"
+            _hover={{ opacity: 1 }}
+          />
+        </a>
       </div>
       <div
         style={{
