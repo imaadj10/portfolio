@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@chakra-ui/icons": "^2.1.0",
-    "@chakra-ui/react": "^2.8.0",
     "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
     "@mantine/carousel": "^6.0.19",
     "@mantine/core": "^6.0.19",
     "@mantine/hooks": "^6.0.19",
@@ -22,7 +19,6 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@types/three": "^0.155.0",
-    "framer-motion": "^10.16.1",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",

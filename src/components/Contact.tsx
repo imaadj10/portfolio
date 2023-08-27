@@ -1,11 +1,4 @@
-import {
-  Card,
-  Image,
-  Text,
-  Button,
-  Group,
-  Flex,
-} from '@mantine/core';
+import { Card, Image, Text, Button, Group, Flex } from '@mantine/core';
 import { IconBrandLinkedin, IconMailFilled } from '@tabler/icons-react';
 import { useStyles } from '../styles/ContactStyles';
 
@@ -35,7 +28,7 @@ function ContactCard() {
               component="a"
               href={'https://www.github.com/imaadj10/'}
               target="_blank"
-              title="Code"
+              rel="noopener noreferrer"
             >
               <Image
                 src={'images/github.png'}
@@ -57,7 +50,7 @@ function ContactCard() {
               component="a"
               href={'https://www.linkedin.com/in/imaad-junaidi/'}
               target="_blank"
-              title="Code"
+              rel="noopener noreferrer"
             >
               <IconBrandLinkedin />
               <Text ml="xs">Imaad Junaidi</Text>
@@ -74,7 +67,7 @@ function ContactCard() {
               component="a"
               href={'mailto:imaadjunaidi1011@gmail.com'}
               target="_blank"
-              title="Code"
+              rel="noopener noreferrer"
             >
               <IconMailFilled />
               <Text ml="xs">imaadjunaidi1011@gmail.com</Text>

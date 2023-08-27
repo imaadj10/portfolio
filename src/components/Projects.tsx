@@ -1,14 +1,6 @@
 import { Carousel } from '@mantine/carousel';
 import { useId } from '@mantine/hooks';
-import {
-  Card,
-  Image,
-  Text,
-  Badge,
-  Button,
-  Group,
-  rem,
-} from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, rem } from '@mantine/core';
 import { useStyles } from '../styles/ProjectsStyles';
 
 interface tool {
@@ -221,7 +213,7 @@ function ProjectCard({
             component="a"
             href={link}
             target="_blank"
-            title="Code"
+            rel="noopener noreferrer"
           >
             <Text mr="xs">View Code</Text>
             <Image

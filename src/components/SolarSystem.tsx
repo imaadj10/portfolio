@@ -10,8 +10,9 @@ import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
 import Contact from './Contact';
-import { Button, Text, Image } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Button, Text, Image } from '@mantine/core';
+import { IconArrowLeft } from '@tabler/icons-react';
+import { useStyles } from '../styles/SolarSystemStyles';
 
 interface StellarObject {
   page_name: string;
@@ -102,6 +103,7 @@ const sun: StellarObject = {
 function SolarSystem() {
   const { moving, setMoving } = useContext(OrbitContext);
   const { page, setPage } = useContext(SelectedPageContext);
+  const { classes } = useStyles();
 
   const handleResume = () => {
     setMoving(true);
@@ -119,14 +121,16 @@ function SolarSystem() {
       >
         {!moving && (
           <Button
-            opacity={0.5}
-            _hover={{ opacity: 0.9 }}
-            bg="transparent"
+            variant="subtle"
+            color="gray"
+            radius="sm"
+            size="md"
             onClick={handleResume}
-            colorScheme="blackAlpha"
+            className={classes.button}
+            classNames={classes}
           >
-            <ArrowBackIcon boxSize={6} color="white" />
-            <Text color="white" ml={2}>
+            <IconArrowLeft />
+            <Text color="white" ml={5}>
               Return to Homepage
             </Text>
           </Button>
@@ -139,20 +143,16 @@ function SolarSystem() {
         }}
         class="repo-button"
       >
-        <a
+        <Image
+          src={'images/github.png'}
+          height={'35px'}
+          borderRadius="full"
+          classNames={classes}
+          component="a"
           href="https://www.github.com/imaadj10/portfolio"
           target="_blank"
           rel="noopener noreferrer"
-        >
-          <Image
-            src={'images/github.png'}
-            boxSize={'35px'}
-            borderRadius="full"
-            opacity={0.5}
-            transition="opacity 0.2s ease"
-            _hover={{ opacity: 1 }}
-          />
-        </a>
+        />
       </div>
       <div
         style={{

@@ -1,7 +1,6 @@
 import { useState, createContext } from 'react';
 import SolarSystem from './components/SolarSystem';
 import { MantineProvider } from '@mantine/core';
-import { ChakraProvider } from '@chakra-ui/react';
 
 type OrbitContextType = {
   moving: boolean;
@@ -37,7 +36,6 @@ function App() {
 
   return (
     <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
-      <ChakraProvider>
       <OrbitContext.Provider value={{ moving, setMoving }}>
         <PositionContext.Provider value={{ position, setPosition }}>
           <SelectedPageContext.Provider value={{ page, setPage }}>
@@ -45,7 +43,6 @@ function App() {
           </SelectedPageContext.Provider>
         </PositionContext.Provider>
       </OrbitContext.Provider>
-      </ChakraProvider>
     </MantineProvider>
   );
 }
