@@ -69,7 +69,7 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
           ref={textRef}
           letterSpacing={-0.06}
           size={1.5}
-          font="/EngraversGothic BT_Regular.json"
+          font="/fonts/EngraversGothic BT_Regular.json"
           material={textMaterial}
         >
           {current_page}

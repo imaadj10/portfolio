@@ -178,7 +178,7 @@ function SolarSystem() {
             lineHeight={0.5}
             letterSpacing={-0.06}
             size={1.5}
-            font="/ROCKETWILDNESS_Regular.json"
+            font="/fonts/ROCKETWILDNESS_Regular.json"
           >
             {`Welcome to`}
             <meshNormalMaterial />
@@ -194,7 +194,7 @@ function SolarSystem() {
             lineHeight={0.5}
             letterSpacing={-0.06}
             size={5}
-            font="/ROCKETWILDNESS_Regular.json"
+            font="/fonts/ROCKETWILDNESS_Regular.json"
           >
             {`Imaad Junaidi's`}
             <meshNormalMaterial />
@@ -211,7 +211,7 @@ function SolarSystem() {
             lineHeight={0.5}
             letterSpacing={-0.06}
             size={2}
-            font="/ROCKETWILDNESS_Regular.json"
+            font="/fonts/ROCKETWILDNESS_Regular.json"
           >
             {`Planetary System`}
             <meshNormalMaterial />
