@@ -10,8 +10,9 @@ import About from './About';
 import Projects from './Projects';
 import Experience from './Experience';
 import Contact from './Contact';
-import { Button, Group, Text, Image } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { Image } from '@mantine/core';
+import { Box, Button, Text } from '@chakra-ui/react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 interface StellarObject {
   page_name: string;
@@ -119,16 +120,15 @@ function SolarSystem() {
       >
         {!moving && (
           <Button
-            variant="subtle"
-            color="gray"
-            radius="sm"
-            size="lg"
+            opacity={0.5}
+            _hover={{ opacity: 0.9 }} 
+            bg="transparent" 
             onClick={handleResume}
           >
-            <Group>
-              <IconArrowLeft />
-              <Text>Return to Homepage</Text>
-            </Group>
+            <ArrowBackIcon boxSize={6} color="white" />
+            <Text color="white" ml={2}>
+              Return to Homepage
+            </Text>
           </Button>
         )}
       </div>
