@@ -3,14 +3,15 @@ import { Button, Text } from '@mantine/core';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useContext } from 'react';
+import { Suspense, useContext } from 'react';
 import * as THREE from 'three';
 import { OrbitContext, SelectedPageContext } from '../App';
-import '../App.css';
+import '../css/App.css';
 import { useStyles } from '../styles/SolarSystemStyles';
 import About from './About';
 import Contact from './Contact';
 import Experience from './Experience';
+import LoadingScreen from './LoadingScreen';
 import Projects from './Projects';
 import StellarObjectGeometry from './StellarObjectGeometry';
 
@@ -150,95 +151,98 @@ function SolarSystem() {
       </div>
 
       <Canvas>
-        <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
-          <Text3D
-            curveSegments={32}
-            bevelEnabled
-            bevelSize={0.04}
-            bevelThickness={0.1}
-            height={0.5}
-            lineHeight={0.5}
-            letterSpacing={-0.06}
-            size={1.5}
-            font="/fonts/ROCKETWILDNESS_Regular.json"
-          >
-            {`Welcome to`}
-            <meshNormalMaterial />
-          </Text3D>
-        </Center>
-        <Center position={[0, 25, 0]} rotation={[-0.5, 0, 0]}>
-          <Text3D
-            curveSegments={32}
-            bevelEnabled
-            bevelSize={0.04}
-            bevelThickness={0.1}
-            height={0.5}
-            lineHeight={0.5}
-            letterSpacing={-0.06}
-            size={5}
-            font="/fonts/ROCKETWILDNESS_Regular.json"
-          >
-            {`Imaad Junaidi's`}
-            <meshNormalMaterial />
-          </Text3D>
-        </Center>
+        <Suspense fallback={null}>
+          <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
+            <Text3D
+              curveSegments={32}
+              bevelEnabled
+              bevelSize={0.04}
+              bevelThickness={0.1}
+              height={0.5}
+              lineHeight={0.5}
+              letterSpacing={-0.06}
+              size={1.5}
+              font="/fonts/ROCKETWILDNESS_Regular.json"
+            >
+              {`Welcome to`}
+              <meshNormalMaterial />
+            </Text3D>
+          </Center>
+          <Center position={[0, 25, 0]} rotation={[-0.5, 0, 0]}>
+            <Text3D
+              curveSegments={32}
+              bevelEnabled
+              bevelSize={0.04}
+              bevelThickness={0.1}
+              height={0.5}
+              lineHeight={0.5}
+              letterSpacing={-0.06}
+              size={5}
+              font="/fonts/ROCKETWILDNESS_Regular.json"
+            >
+              {`Imaad Junaidi's`}
+              <meshNormalMaterial />
+            </Text3D>
+          </Center>
 
-        <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
-          <Text3D
-            curveSegments={32}
-            bevelEnabled
-            bevelSize={0.04}
-            bevelThickness={0.1}
-            height={0.5}
-            lineHeight={0.5}
-            letterSpacing={-0.06}
-            size={2}
-            font="/fonts/ROCKETWILDNESS_Regular.json"
-          >
-            {`Planetary System`}
-            <meshNormalMaterial />
-          </Text3D>
-        </Center>
+          <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
+            <Text3D
+              curveSegments={32}
+              bevelEnabled
+              bevelSize={0.04}
+              bevelThickness={0.1}
+              height={0.5}
+              lineHeight={0.5}
+              letterSpacing={-0.06}
+              size={2}
+              font="/fonts/ROCKETWILDNESS_Regular.json"
+            >
+              {`Planetary System`}
+              <meshNormalMaterial />
+            </Text3D>
+          </Center>
 
-        {moving && <CameraPos />}
+          {moving && <CameraPos />}
 
-        <Stars factor={6} fade speed={0} />
-        <ambientLight intensity={1} />
-        <StellarObjectGeometry
-          key={'sun'}
-          position={[0, 0, 0]}
-          isStar={true}
-          model={sun.model}
-          scale={sun.scale}
-          current_page={sun.page}
-        />
+          <Stars factor={6} fade speed={0} />
+          <ambientLight intensity={1} />
+          <StellarObjectGeometry
+            key={'sun'}
+            position={[0, 0, 0]}
+            isStar={true}
+            model={sun.model}
+            scale={sun.scale}
+            current_page={sun.page}
+          />
 
-        {sun.orbiters.map((planet, p_index) => (
-          <>
-            <StellarObjectGeometry
-              position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
-              key={p_index}
-              model={planet.model}
-              scale={planet.scale}
-              current_page={planet.page_name}
-            />
-            {planet.orbiters.map((moon, m_index) => (
+          {sun.orbiters.map((planet, p_index) => (
+            <>
               <StellarObjectGeometry
-                key={`${p_index}-${m_index}`}
-                position={[
-                  (p_index + 1) * 10 + 10,
-                  m_index + 1 + 3,
-                  (p_index + 1) * 10 + 10,
-                ]}
-                isMoon={true}
-                model={moon.model}
-                scale={moon.scale}
-                current_page={moon.page_name}
+                position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
+                key={p_index}
+                model={planet.model}
+                scale={planet.scale}
+                current_page={planet.page_name}
               />
-            ))}
-          </>
-        ))}
+              {planet.orbiters.map((moon, m_index) => (
+                <StellarObjectGeometry
+                  key={`${p_index}-${m_index}`}
+                  position={[
+                    (p_index + 1) * 10 + 10,
+                    m_index + 1 + 3,
+                    (p_index + 1) * 10 + 10,
+                  ]}
+                  isMoon={true}
+                  model={moon.model}
+                  scale={moon.scale}
+                  current_page={moon.page_name}
+                />
+              ))}
+            </>
+          ))}
+        </Suspense>
       </Canvas>
+      <LoadingScreen />
     </div>
   );
 }
