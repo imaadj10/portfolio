@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
 
   card: {
     backgroundColor: theme.colors.dark[8],
-    height: '54vh',
+    height: '53vh',
     overflowY: 'auto',
     [theme.fn.smallerThan('xl')]: {
       height: '85vh',
