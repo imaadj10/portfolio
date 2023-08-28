@@ -3,9 +3,9 @@ import { createStyles, rem } from '@mantine/core';
 const useStyles = createStyles((theme) => ({
   card: {
     backgroundColor: theme.colors.dark[8],
-    width: '35%',
-    left: '55%',
-    top: 155,
+    width: '25%',
+    left: '65%',
+    top: 200,
     overflowY: 'auto',
     [theme.fn.smallerThan('xl')]: {
       width: '40%',
@@ -24,6 +24,20 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
     paddingBottom: theme.spacing.md,
+  },
+
+  label: {
+    fontSize: theme.fontSizes.lg,
+    [theme.fn.smallerThan('xl')]: {
+      fontSize: theme.fontSizes.md,
+    },
+  },
+
+  buttonLabel: {
+    fontSize: theme.fontSizes.sm,
+    [theme.fn.smallerThan('xl')]: {
+      fontSize: theme.fontSizes.xs,
+    },
   },
 }));
 

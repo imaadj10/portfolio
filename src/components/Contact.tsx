@@ -21,7 +21,7 @@ function ContactCard() {
         </Group>
         <Flex direction="column" align={'center'} gap="xl">
           <Flex direction="column" align="center">
-            <Text>Follow me on GitHub:</Text>
+            <Text className={classes.label}>Follow me on GitHub:</Text>
             <Button
               size="xs"
               color="dark"
@@ -33,12 +33,12 @@ function ContactCard() {
               rel="noopener noreferrer"
             >
               <GitHubIcon />
-              <Text ml="xs">imaadj10</Text>
+              <Text className={classes.buttonLabel} ml="xs">imaadj10</Text>
             </Button>
           </Flex>
 
           <Flex direction="column" align="center">
-            <Text>Connect with me on LinkedIn:</Text>
+            <Text className={classes.label}>Connect with me on LinkedIn:</Text>
             <Button
               size="xs"
               color="blue"
@@ -50,12 +50,12 @@ function ContactCard() {
               rel="noopener noreferrer"
             >
               <LinkedInIcon />
-              <Text ml="xs">Imaad Junaidi</Text>
+              <Text className={classes.buttonLabel} ml="xs">Imaad Junaidi</Text>
             </Button>
           </Flex>
 
           <Flex direction="column" align="center" mb="sm">
-            <Text>Send me an email:</Text>
+            <Text className={classes.label}>Send me an email:</Text>
             <Button
               size="xs"
               color="green"
@@ -67,7 +67,7 @@ function ContactCard() {
               rel="noopener noreferrer"
             >
               <EmailIcon />
-              <Text ml="xs">imaadjunaidi1011@gmail.com</Text>
+              <Text className={classes.buttonLabel} ml="xs">imaadjunaidi1011@gmail.com</Text>
             </Button>
           </Flex>
         </Flex>
