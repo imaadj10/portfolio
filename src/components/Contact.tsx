@@ -33,7 +33,9 @@ function ContactCard() {
               rel="noopener noreferrer"
             >
               <GitHubIcon />
-              <Text className={classes.buttonLabel} ml="xs">imaadj10</Text>
+              <Text className={classes.buttonLabel} ml="xs">
+                imaadj10
+              </Text>
             </Button>
           </Flex>
 
@@ -50,7 +52,9 @@ function ContactCard() {
               rel="noopener noreferrer"
             >
               <LinkedInIcon />
-              <Text className={classes.buttonLabel} ml="xs">Imaad Junaidi</Text>
+              <Text className={classes.buttonLabel} ml="xs">
+                Imaad Junaidi
+              </Text>
             </Button>
           </Flex>
 
@@ -67,7 +71,9 @@ function ContactCard() {
               rel="noopener noreferrer"
             >
               <EmailIcon />
-              <Text className={classes.buttonLabel} ml="xs">imaadjunaidi1011@gmail.com</Text>
+              <Text className={classes.buttonLabel} ml="xs">
+                imaadjunaidi1011@gmail.com
+              </Text>
             </Button>
           </Flex>
         </Flex>

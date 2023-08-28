@@ -8,8 +8,10 @@ function ChangeScreen() {
 
   return (
     <div style={{ textAlign: 'center' }}>
-        <Lottie loop autoplay animationData={animationData} />
-      <h1 style={{ color: 'white' }}>{isMobile ? 'Please rotate your screen!' : 'Please expand your screen!'}</h1>
+      <Lottie loop autoplay animationData={animationData} />
+      <h1 style={{ color: 'white' }}>
+        {isMobile ? 'Please rotate your screen!' : 'Please expand your screen!'}
+      </h1>
     </div>
   );
 }

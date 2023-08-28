@@ -2,7 +2,6 @@ import { Carousel } from '@mantine/carousel';
 import { Badge, Card, Group, Image, Text, rem } from '@mantine/core';
 import { useId } from '@mantine/hooks';
 import { useStyles } from '../styles/ExperienceStyles';
-import { isClassExpression } from 'typescript';
 
 interface tool {
   name: string;
