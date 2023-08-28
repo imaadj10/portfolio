@@ -23,7 +23,7 @@ function AboutCard() {
       </Flex>
 
       <Card.Section className={classes.section} mt="md">
-        <Text fz="sm" mt="xs">
+        <Text mt="xs" className={classes.description}>
           {`I'm from Peoria, Illinois, and am currently a third year Computer Science student at the University of British Columbia.
             When I took my first introductory programming course in school, I instantly fell in love with the field.
             I knew that the combination of intense problem solving and creative freedom characteristic of software engineering

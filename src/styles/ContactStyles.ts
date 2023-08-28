@@ -12,7 +12,7 @@ const useStyles = createStyles((theme) => ({
       left: '55%',
       top: 100,
     },
-    [theme.fn.smallerThan('lg')]: {
+    [theme.fn.smallerThan('md')]: {
       width: '40%',
       left: '55%',
       top: 0,

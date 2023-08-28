@@ -10,7 +10,7 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    [theme.fn.smallerThan('lg')]: {
+    [theme.fn.smallerThan('md')]: {
       width: '130%',
       left: '-15%',
     },

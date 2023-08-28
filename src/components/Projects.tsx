@@ -201,7 +201,7 @@ function ProjectCard({
       <Card.Section className={classes.section} mt="md">
         <Group position="apart">
           <Group>
-            <Text className={classes.title} fw={500}>
+            <Text fw={500} className={classes.title}>
               {name}
             </Text>
             <Badge size="sm">{date}</Badge>
@@ -220,7 +220,7 @@ function ProjectCard({
             <GitHubIcon />
           </Button>
         </Group>
-        <Text className={classes.description} mt="xs">
+        <Text mt="xs" className={classes.description}>
           {description}
         </Text>
       </Card.Section>
