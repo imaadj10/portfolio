@@ -24,3 +24,8 @@ yarn-error.log*
 
 # models
 /public/planet_models
+
+#firebase
+firebase.json
+.firebaserc
+.firebase
