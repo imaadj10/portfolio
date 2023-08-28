@@ -1,7 +1,7 @@
 # Imaad Junaidi Portfolio Website
 #### Built Using TypeScript, React.js, React-Three-Fiber, and Mantine
 
-![Imaad Junaidi's Portfolio Homepage]('./portfolio.png)
+![Imaad Junaidi's Portfolio Homepage]('portfolio.png)
 
 ### About the Project
 
