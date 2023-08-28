@@ -54,7 +54,7 @@ function ContactCard() {
             </Button>
           </Flex>
 
-          <Flex direction="column" align="center">
+          <Flex direction="column" align="center" mb="sm">
             <Text>Send me an email:</Text>
             <Button
               size="xs"
