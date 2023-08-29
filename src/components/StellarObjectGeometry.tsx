@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
+import { isMobile } from 'react-device-detect';
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -26,7 +27,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
-    mesh.rotation.y -= 0.004;
+    mesh.rotation.y -= isMobile ? 0.01 : 0.004;
 
     if (!moving) return;
 
@@ -64,7 +65,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   useFrame((state, delta) => {
     if (!moving) {
       const dummy = new THREE.Vector3();
-      const step = 0.001;
+      const step = isMobile ? 0.0025 : 0.001;
       state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
       state.camera.position.lerp(
         dummy.set(position[0] - 10, 0, position[2]),
