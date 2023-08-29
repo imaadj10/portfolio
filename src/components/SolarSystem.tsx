@@ -4,6 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense, useContext } from 'react';
+import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { OrbitContext, SelectedPageContext } from '../App';
 import '../css/App.css';
@@ -14,7 +15,6 @@ import Experience from './Experience';
 import LoadingScreen from './LoadingScreen';
 import Projects from './Projects';
 import StellarObjectGeometry from './StellarObjectGeometry';
-import { isMobile } from 'react-device-detect';
 
 interface StellarObject {
   page_name: string;
@@ -251,7 +251,7 @@ function SolarSystem() {
 function CameraPos() {
   useFrame((state, delta) => {
     const dummy = new THREE.Vector3();
-    const step = isMobile ? 0.03 : 0.01;
+    const step = isMobile ? 0.025 : 0.01;
     state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
     state.camera.position.lerp(dummy.set(0, 25, 85), step);
     state.camera.lookAt(0, 0, 0);
