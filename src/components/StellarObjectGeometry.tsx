@@ -27,7 +27,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
-    mesh.rotation.y -= isMobile ? 0.01 : 0.004;
+    mesh.rotation.y -= isMobile ? 0.012 : 0.004;
 
     if (!moving) return;
 
@@ -65,7 +65,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   useFrame((state, delta) => {
     if (!moving) {
       const dummy = new THREE.Vector3();
-      const step = isMobile ? 0.0025 : 0.001;
+      const step = isMobile ? 0.003 : 0.001;
       state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
       state.camera.position.lerp(
         dummy.set(position[0] - 10, 0, position[2]),

@@ -251,7 +251,7 @@ function SolarSystem() {
 function CameraPos() {
   useFrame((state, delta) => {
     const dummy = new THREE.Vector3();
-    const step = isMobile ? 0.025 : 0.01;
+    const step = isMobile ? 0.03 : 0.01;
     state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
     state.camera.position.lerp(dummy.set(0, 25, 85), step);
     state.camera.lookAt(0, 0, 0);
