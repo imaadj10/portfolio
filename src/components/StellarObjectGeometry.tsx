@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -8,11 +8,31 @@ import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
 
 const ROTATION_SPEED = isMobile ? 0.6 : 0.24; // radians per second
+// Self-rotation varies per object within this factor range around
+// ROTATION_SPEED, so bodies don't all spin in perfect lockstep.
+const ROTATION_SPEED_VARIABILITY = 0.25;
+
+// Kepler's third law: orbital period² is proportional to radius³, so
+// angular speed (period is inversely proportional to speed) scales with
+// radius^-1.5. Bases are tuned so the innermost planet/moon keep roughly
+// the pace the old flat sqrt(radius) falloff gave them; farther bodies
+// fall off faster than before, same as real orbits do.
+const PLANET_ORBIT_SPEED_BASE = 30;
+const MOON_ORBIT_SPEED_BASE = 8;
+// Orbit speed also varies per body (planets share one factor with their
+// moons — see SolarSystem.tsx — moons additionally vary on top of that
+// for their own path around the planet).
+const ORBIT_SPEED_VARIABILITY = 0.3;
+
 // Caps a single frame's contribution to rotation/orbit advancement, so a
 // main-thread stall (e.g. a heavy React re-render elsewhere) doesn't show
 // up as one big visible teleport on the next frame — see SolarSystem.tsx's
 // MAX_FRAME_DELTA for the fuller explanation.
 const MAX_FRAME_DELTA = 0.05;
+
+// Random factor centered on 1, spread ± half of `variability`.
+const randomFactor = (variability: number) =>
+  1 - variability / 2 + Math.random() * variability;
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -20,10 +40,26 @@ type StellarObjectProps = {
   model: string;
   scale?: number;
   current_page: string;
+  // Shared with this planet's moons (see SolarSystem.tsx) so a moon's
+  // redundant recomputation of its parent planet's position — done this
+  // way instead of reading the planet's actual position, to avoid a
+  // cross-component dependency — lands on the same point the planet
+  // itself is actually orbiting to.
+  orbitPhase?: number;
+  orbitSpeedFactor?: number;
 } & ThreeElements['mesh'];
 
 function StellarObjectGeometry(props: StellarObjectProps) {
-  const { isStar, isMoon, model, scale, current_page, ...meshProps } = props;
+  const {
+    isStar,
+    isMoon,
+    model,
+    scale,
+    current_page,
+    orbitPhase = 0,
+    orbitSpeedFactor = 1,
+    ...meshProps
+  } = props;
   const initialPosition: number[] = meshProps.position as number[];
   const meshRef = useRef<THREE.Mesh>(null!);
   const gltf = useLoader(GLTFLoader, model);
@@ -37,10 +73,21 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   // regardless of `moving`, which caused a jump-cut on resume).
   const orbitTimeRef = useRef(0);
 
+  // Fixed once per mount (lazy initializer), not re-rolled every render.
+  const [rotationSpeedFactor] = useState(() =>
+    randomFactor(ROTATION_SPEED_VARIABILITY)
+  );
+  // Only meaningful for moons: their own path around the planet, on top
+  // of the phase/speed factor shared with the planet above.
+  const [moonPhase] = useState(() => Math.random() * Math.PI * 2);
+  const [moonSpeedFactor] = useState(() =>
+    randomFactor(ORBIT_SPEED_VARIABILITY)
+  );
+
   useFrame((_state, rawDelta) => {
     const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const mesh = meshRef.current;
-    mesh.rotation.y -= ROTATION_SPEED * delta;
+    mesh.rotation.y -= ROTATION_SPEED * rotationSpeedFactor * delta;
 
     if (!moving) return;
     orbitTimeRef.current += delta;
@@ -48,17 +95,23 @@ function StellarObjectGeometry(props: StellarObjectProps) {
     if (mesh && !isStar) {
       const time = orbitTimeRef.current;
       const planetRadius = initialPosition[0];
-      const planetSpeed = 1.5 / Math.sqrt(planetRadius);
+      const planetSpeed =
+        (PLANET_ORBIT_SPEED_BASE / Math.pow(planetRadius, 1.5)) *
+        orbitSpeedFactor;
+      const planetAngle = time * planetSpeed + orbitPhase;
 
-      const planetX = Math.cos(time * planetSpeed) * planetRadius;
-      const planetZ = Math.sin(time * planetSpeed) * planetRadius;
+      const planetX = Math.cos(planetAngle) * planetRadius;
+      const planetZ = Math.sin(planetAngle) * planetRadius;
 
       if (isMoon) {
         const moonRadius = initialPosition[1];
-        const moonSpeed = (planetSpeed * 7) / Math.sqrt(moonRadius);
+        const moonSpeed =
+          (MOON_ORBIT_SPEED_BASE / Math.pow(moonRadius, 1.5)) *
+          moonSpeedFactor;
+        const moonAngle = time * moonSpeed + moonPhase;
 
-        const moonY = Math.cos(time * moonSpeed) * moonRadius;
-        const moonZ = Math.sin(time * moonSpeed) * moonRadius + planetZ;
+        const moonY = Math.cos(moonAngle) * moonRadius;
+        const moonZ = Math.sin(moonAngle) * moonRadius + planetZ;
 
         mesh.position.set(planetX, moonY, moonZ);
       } else {

@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import '../css/GlassCard.css';
 import content from '../data/content';
-import CardCarousel from './CardCarousel';
+import CardList from './CardList';
 import GlassCard from './GlassCard';
 
 /**
@@ -17,16 +17,34 @@ const ENTER_DELAY = 1400;
  */
 export const EXIT_DURATION = 320;
 
+/**
+ * How big the panel gets, per section — the one thing that isn't shared
+ * across pages, since a scrolling list of projects and a three-link
+ * contact card want very different amounts of the screen. Read by
+ * GlassCard.css off `data-layout`.
+ */
+function layoutFor(page: string): string {
+  switch (page) {
+    case 'projects':
+    case 'experience':
+      return 'list';
+    case 'about me':
+      return 'split';
+    default:
+      return 'compact';
+  }
+}
+
 function cardFor(page: string): ReactNode {
   switch (page) {
     case 'about me':
-      return <GlassCard content={content.about} />;
+      return <GlassCard content={content.about} variant="split" />;
     case 'projects':
-      return <CardCarousel items={content.projects} />;
+      return <CardList items={content.projects} />;
     case 'experience':
-      return <CardCarousel items={content.experience} />;
+      return <CardList items={content.experience} />;
     case 'contact':
-      return <GlassCard content={content.contact} />;
+      return <GlassCard content={content.contact} variant="compact" />;
     default:
       return null;
   }
@@ -70,7 +88,11 @@ function ContentPanel({ page, active }: ContentPanelProps) {
   if (phase === 'hidden') return null;
 
   return (
-    <div className="content-panel" data-phase={phase}>
+    <div
+      className="content-panel"
+      data-phase={phase}
+      data-layout={layoutFor(shownPage)}
+    >
       {cardFor(shownPage)}
     </div>
   );

@@ -2,7 +2,15 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Fragment, Suspense, useContext, useEffect, useRef, useState } from 'react';
+import {
+  Fragment,
+  Suspense,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
@@ -18,65 +26,66 @@ interface StellarObject {
   orbiters: StellarObject[];
 }
 
+const moon_1: StellarObject = {
+  page_name: 'moon_1',
+  model: '/planet_models/Planet_47.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const moon_2: StellarObject = {
+  page_name: 'moon_2',
+  model: '/planet_models/Planet_48.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const moon_3: StellarObject = {
+  page_name: 'moon_3',
+  model: '/planet_models/Planet_5.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const moon_4: StellarObject = {
+  page_name: 'moon_4',
+  model: '/planet_models/Planet_46.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const moon_5: StellarObject = {
+  page_name: 'moon_5',
+  model: '/planet_models/Planet_44.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const moon_6: StellarObject = {
+  page_name: 'moon_6',
+  model: '/planet_models/Planet_31.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+const moon_7: StellarObject = {
+  page_name: 'moon_7',
+  model: '/planet_models/Planet_45.glb',
+  scale: 0.06,
+  orbiters: [],
+};
+
 const about: StellarObject = {
   page_name: 'about me',
   model: '/planet_models/Planet_20.glb',
   scale: 0.2,
   orbiters: [],
 };
-const subletter: StellarObject = {
-  page_name: 'subletter',
-  model: '/planet_models/Planet_47.glb',
-  scale: 0.06,
-  orbiters: [],
-};
-const right_angle: StellarObject = {
-  page_name: 'right_angle',
-  model: '/planet_models/Planet_48.glb',
-  scale: 0.06,
-  orbiters: [],
-};
-const spam_text_classifier: StellarObject = {
-  page_name: 'spam_text_classifier',
-  model: '/planet_models/Planet_5.glb',
-  scale: 0.06,
-  orbiters: [],
-};
-const spotify_collage: StellarObject = {
-  page_name: 'spotify_collage',
-  model: '/planet_models/Planet_46.glb',
-  scale: 0.06,
-  orbiters: [],
-};
-const virtual_drumset: StellarObject = {
-  page_name: 'virtual_drumset',
-  model: '/planet_models/Planet_44.glb',
-  scale: 0.06,
-  orbiters: [],
-};
 const projects: StellarObject = {
   page_name: 'projects',
   model: '/planet_models/Planet_12.glb',
   scale: 0.2,
-  orbiters: [subletter, right_angle, spam_text_classifier, spotify_collage],
-};
-const intel: StellarObject = {
-  page_name: 'intel',
-  model: '/planet_models/Planet_31.glb',
-  scale: 0.06,
-  orbiters: [],
-};
-const ubc: StellarObject = {
-  page_name: 'ubc',
-  model: '/planet_models/Planet_45.glb',
-  scale: 0.06,
-  orbiters: [],
+  orbiters: [moon_1, moon_2, moon_3, moon_4],
 };
 const experience: StellarObject = {
   page_name: 'experience',
   model: '/planet_models/Planet_34.glb',
   scale: 0.2,
-  orbiters: [intel, ubc, virtual_drumset],
+  orbiters: [moon_5, moon_6, moon_7],
 };
 const contact: StellarObject = {
   page_name: 'contact',
@@ -84,6 +93,7 @@ const contact: StellarObject = {
   scale: 0.2,
   orbiters: [],
 };
+
 const sun: StellarObject = {
   page_name: 'home',
   model: '/planet_models/Sun.glb',
@@ -103,6 +113,18 @@ function SolarSystem() {
   // camera) holds still until that animation has actually finished.
   const [returning, setReturning] = useState(false);
   const returnTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  // One random starting phase/speed per planet, rolled once and shared
+  // with its moons (StellarObjectGeometry's orbitPhase/orbitSpeedFactor)
+  // so planets don't all start aligned on the same line and orbit at an
+  // identical rate.
+  const planetOrbitVariability = useMemo(
+    () =>
+      sun.orbiters.map(() => ({
+        phase: Math.random() * Math.PI * 2,
+        speedFactor: 0.85 + Math.random() * 0.3,
+      })),
+    []
+  );
 
   const handleResume = () => {
     if (returning) return;
@@ -197,30 +219,37 @@ function SolarSystem() {
             current_page={sun.page_name}
           />
 
-          {sun.orbiters.map((planet, p_index) => (
-            <Fragment key={p_index}>
-              <StellarObjectGeometry
-                position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
-                model={planet.model}
-                scale={planet.scale}
-                current_page={planet.page_name}
-              />
-              {planet.orbiters.map((moon, m_index) => (
+          {sun.orbiters.map((planet, p_index) => {
+            const { phase, speedFactor } = planetOrbitVariability[p_index];
+            return (
+              <Fragment key={p_index}>
                 <StellarObjectGeometry
-                  key={`${p_index}-${m_index}`}
-                  position={[
-                    (p_index + 1) * 10 + 10,
-                    m_index + 1 + 3,
-                    (p_index + 1) * 10 + 10,
-                  ]}
-                  isMoon={true}
-                  model={moon.model}
-                  scale={moon.scale}
-                  current_page={moon.page_name}
+                  position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
+                  model={planet.model}
+                  scale={planet.scale}
+                  current_page={planet.page_name}
+                  orbitPhase={phase}
+                  orbitSpeedFactor={speedFactor}
                 />
-              ))}
-            </Fragment>
-          ))}
+                {planet.orbiters.map((moon, m_index) => (
+                  <StellarObjectGeometry
+                    key={`${p_index}-${m_index}`}
+                    position={[
+                      (p_index + 1) * 10 + 10,
+                      m_index + 1 + 3,
+                      (p_index + 1) * 10 + 10,
+                    ]}
+                    isMoon={true}
+                    model={moon.model}
+                    scale={moon.scale}
+                    current_page={moon.page_name}
+                    orbitPhase={phase}
+                    orbitSpeedFactor={speedFactor}
+                  />
+                ))}
+              </Fragment>
+            );
+          })}
         </Suspense>
       </Canvas>
       <LoadingScreen />
@@ -297,7 +326,7 @@ function CameraFocus({ lookTargetRef }) {
     const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
     const targetPosition = new THREE.Vector3(position[0] - 10, 0, position[2]);
-    const targetLook = new THREE.Vector3(position[0], 0, position[2] + 2.5);
+    const targetLook = new THREE.Vector3(position[0], 0, position[2]);
 
     state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, alpha);
     state.camera.position.lerp(targetPosition, alpha);

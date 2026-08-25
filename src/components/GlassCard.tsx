@@ -1,31 +1,24 @@
-import EmailIcon from '@mui/icons-material/Email';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import { ReactNode, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import '../css/GlassCard.css';
-import { CardContent, IconName } from '../data/content';
-
-const ICONS: Record<IconName, ReactNode> = {
-  github: <GitHubIcon fontSize="small" />,
-  linkedin: <LinkedInIcon fontSize="small" />,
-  email: <EmailIcon fontSize="small" />,
-};
+import { CardContent } from '../data/content';
+import { ICONS, tagHue } from './cardHelpers';
 
 /**
- * Deterministic hue for a tag pill, kept inside the cyan-to-violet band
- * (190-285) so the stack list reads as varied without ever leaving the
- * site's palette. Same input always yields the same colour.
+ * Which shape the card takes. The markup is identical across both — an
+ * optional image pane followed by a content column — so the variant only
+ * ever changes CSS, never which slots render.
+ *
+ * - `split`   About: portrait filling the full left edge, copy right.
+ * - `compact` Contact: no image, sized to its own contents.
+ *
+ * Projects and Experience don't use GlassCard directly; they render one
+ * `glass-card--list` shell full of CardPanels — see CardList.tsx.
  */
-function tagHue(name: string): number {
-  let hash = 0;
-  for (let i = 0; i < name.length; i += 1) {
-    hash = (hash * 31 + name.charCodeAt(i)) % 96;
-  }
-  return 190 + hash;
-}
+export type CardVariant = 'split' | 'compact';
 
 interface GlassCardProps {
   content: CardContent;
+  variant?: CardVariant;
 }
 
 /**
@@ -33,7 +26,7 @@ interface GlassCardProps {
  * entirely by which fields the content object carries, so adding a
  * project or reordering copy never means touching styling.
  */
-function GlassCard({ content }: GlassCardProps) {
+function GlassCard({ content, variant = 'compact' }: GlassCardProps) {
   const { title, subtitle, badge, avatar, media, body, action, tags, links } =
     content;
   const cardRef = useRef<HTMLElement>(null);
@@ -54,7 +47,7 @@ function GlassCard({ content }: GlassCardProps) {
   return (
     <article
       ref={cardRef}
-      className={`glass-card${avatar ? ' glass-card--portrait' : ''}`}
+      className={`glass-card glass-card--${variant}`}
       onPointerMove={handlePointerMove}
     >
       {media && (
@@ -66,75 +59,81 @@ function GlassCard({ content }: GlassCardProps) {
         </div>
       )}
 
-      <header className="glass-card__header">
-        <div className="glass-card__heading">
-          <div className="glass-card__title-row">
-            <h2 className="glass-card__title">{title}</h2>
-            {badge && <span className="glass-card__badge">{badge}</span>}
+      {avatar && (
+        <div className="glass-card__portrait">
+          <img src={avatar} alt={title} />
+        </div>
+      )}
+
+      <div className="glass-card__content">
+        <header className="glass-card__header">
+          <div className="glass-card__heading">
+            <div className="glass-card__title-row">
+              <h2 className="glass-card__title">{title}</h2>
+              {badge && <span className="glass-card__badge">{badge}</span>}
+            </div>
+            {subtitle && <p className="glass-card__subtitle">{subtitle}</p>}
           </div>
-          {subtitle && <p className="glass-card__subtitle">{subtitle}</p>}
+
+          {action && (
+            <a
+              className="glass-card__action"
+              href={action.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {action.label}
+              {action.icon && ICONS[action.icon]}
+            </a>
+          )}
+        </header>
+
+        <div
+          className={`glass-card__body${
+            links ? ' glass-card__body--links' : ''
+          }`}
+        >
+          {body?.map((paragraph) => (
+            <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+          ))}
+
+          {links && (
+            <ul className="glass-card__links">
+              {links.map((link) => (
+                <li className="glass-card__link" key={link.id}>
+                  <span className="glass-card__link-label">{link.label}</span>
+                  <a
+                    className="glass-card__action"
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {ICONS[link.icon]}
+                    {link.value}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {avatar && (
-          <img className="glass-card__avatar" src={avatar} alt={title} />
-        )}
-
-        {action && (
-          <a
-            className="glass-card__action"
-            href={action.href}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {action.label}
-            {action.icon && ICONS[action.icon]}
-          </a>
-        )}
-      </header>
-
-      <div
-        className={`glass-card__body${links ? ' glass-card__body--links' : ''}`}
-      >
-        {body?.map((paragraph) => (
-          <p key={paragraph.slice(0, 40)}>{paragraph}</p>
-        ))}
-
-        {links && (
-          <ul className="glass-card__links">
-            {links.map((link) => (
-              <li className="glass-card__link" key={link.id}>
-                <span className="glass-card__link-label">{link.label}</span>
-                <a
-                  className="glass-card__action"
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+        {tags && (
+          <footer className="glass-card__tags">
+            <span className="glass-card__tags-label">{tags.label}</span>
+            <div className="glass-card__tag-list">
+              {tags.items.map((item) => (
+                <span
+                  className="glass-card__tag"
+                  key={item}
+                  style={{ ['--tag-hue' as string]: String(tagHue(item)) }}
                 >
-                  {ICONS[link.icon]}
-                  {link.value}
-                </a>
-              </li>
-            ))}
-          </ul>
+                  {item}
+                </span>
+              ))}
+            </div>
+          </footer>
         )}
       </div>
-
-      {tags && (
-        <footer className="glass-card__tags">
-          <span className="glass-card__tags-label">{tags.label}</span>
-          <div className="glass-card__tag-list">
-            {tags.items.map((item) => (
-              <span
-                className="glass-card__tag"
-                key={item}
-                style={{ ['--tag-hue' as string]: String(tagHue(item)) }}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        </footer>
-      )}
     </article>
   );
 }

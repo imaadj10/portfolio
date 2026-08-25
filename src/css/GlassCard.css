@@ -26,16 +26,48 @@
 }
 
 /* ============================================================
-   Placement: one shared shell, identical on every page
+   Placement: centred on screen, sized per section
+   `data-layout` is set by ContentPanel.tsx.
    ============================================================ */
 .content-panel {
   position: absolute;
   top: 50%;
-  right: 6vw;
-  transform: translateY(-50%);
-  width: clamp(340px, 34vw, 560px);
-  height: min(78vh, 660px);
+  left: 50%;
+  transform: translate(-50%, -50%);
   pointer-events: auto;
+}
+
+/* Projects / Experience: a scrolling column of entries. Height is fixed
+   rather than content-driven — the card stays the same size from section
+   to section, and any overflow scrolls inside it instead of growing it
+   off-screen.
+
+   Pinned to the top rather than vertically centred like the other two
+   layouts. Centring ties the bottom gap to the top one, and the top has
+   to stay clear of the "Return to Homepage" button (which ends at 58px),
+   so centring forced that same generous margin along the bottom where it
+   just read as dead space. Anchoring holds the top steady at the 85px
+   the centred version happened to land on, and spends everything else on
+   height, leaving a much tighter 40px at the bottom. */
+.content-panel[data-layout='list'] {
+  top: 85px;
+  transform: translateX(-50%);
+  width: min(94vw, 1500px);
+  height: calc(100vh - 125px);
+  max-height: 1100px;
+}
+
+/* About: one wide card, portrait down the left edge. */
+.content-panel[data-layout='split'] {
+  width: min(90vw, 1240px);
+  height: min(78vh, 640px);
+}
+
+/* Contact: three links and a heading — no reason to be any taller than
+   its own contents, so height is left to the card. */
+.content-panel[data-layout='compact'] {
+  width: min(90vw, 470px);
+  height: auto;
 }
 
 /* ============================================================
@@ -119,7 +151,41 @@
   opacity: 1;
 }
 
-/* ---------- media ---------- */
+/* ============================================================
+   Layout variants
+   Same markup in each (optional image pane, then a content
+   column) — only the axis and the pane's sizing change.
+   ============================================================ */
+
+/* About: portrait fills the left edge corner to corner. */
+.glass-card--split {
+  flex-direction: row;
+}
+
+/* Contact: sized by its own contents rather than the panel. */
+.glass-card--compact {
+  height: auto;
+}
+
+/* Projects/Experience: a plain shell whose only job is to hold the
+   scrolling column of panels. Fills the panel (height: 100% from the
+   base rule) so the card keeps its size no matter how many entries
+   the section has. */
+.glass-card--list {
+  flex-direction: column;
+}
+
+/* The column holding header / body / tags, right of any image pane. */
+.glass-card__content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- media (project & experience screenshots) ---------- */
 .glass-card__media {
   position: relative;
   z-index: 1;
@@ -133,6 +199,26 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  display: block;
+}
+
+/* ---------- portrait (About) ---------- */
+.glass-card__portrait {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 38%;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--card-hairline);
+}
+
+/* `cover` so it fills the full-height pane regardless of the source
+   image's aspect ratio. */
+.glass-card__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
@@ -191,27 +277,13 @@
   white-space: nowrap;
 }
 
-/* ---------- avatar variant (About) ---------- */
-.glass-card--portrait .glass-card__header {
-  align-items: center;
-  padding: 26px 22px 20px;
+/* The split card has room to spare, so its title scales up to match. */
+.glass-card--split .glass-card__header {
+  padding: 34px 34px 22px;
 }
 
-.glass-card--portrait .glass-card__title {
-  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
-  font-weight: 600;
-}
-
-.glass-card__avatar {
-  flex: none;
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  order: 2;
-  border: 1px solid rgba(168, 85, 247, 0.55);
-  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08),
-    0 0 34px -6px var(--accent-glow);
+.glass-card--split .glass-card__title {
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
 }
 
 /* ---------- action button ---------- */
@@ -266,10 +338,16 @@
   margin-bottom: 0;
 }
 
+.glass-card--split .glass-card__body {
+  padding: 8px 34px 30px;
+  font-size: clamp(0.9rem, 1.05vw, 1.02rem);
+}
+
 /* Contact has no prose, so its body becomes a centering column. */
 .glass-card__body--links {
   display: flex;
   flex-direction: column;
+  padding: 22px 22px 26px;
 }
 
 /* ---------- contact links ---------- */
@@ -524,11 +602,15 @@
   }
 }
 
-/* `backwards`, not `both`: the animation's final keyframe matches the
+/* Targets the panel's direct child rather than `.glass-card`, so the
+   Projects/Experience list glitches in once as a whole instead of firing
+   five identical glitches side by side.
+
+   `backwards`, not `both`: the animation's final keyframe matches the
    card's resting style anyway, and holding it forwards would (a) leave
    `clip-path: inset(0)` in place, permanently clipping off the outer
    glow, and (b) pin `transform: none`, killing the hover lift. */
-.content-panel[data-phase='enter'] .glass-card {
+.content-panel[data-phase='enter'] > * {
   animation: cardGlitchIn var(--glitch-in) backwards;
 }
 
@@ -536,19 +618,21 @@
    reverse — same glitch, undoing itself. `forwards` holds on the
    reversed timeline's last frame (0%: collapsed/invisible), which is
    exactly the state we want it parked in until the panel unmounts. */
-.content-panel[data-phase='exit'] .glass-card {
+.content-panel[data-phase='exit'] > * {
   animation: cardGlitchExit var(--glitch-out) reverse both;
   pointer-events: none;
 }
 
 .content-panel[data-phase='enter'] .glass-card__media,
+.content-panel[data-phase='enter'] .glass-card__portrait,
 .content-panel[data-phase='enter'] .glass-card__header,
 .content-panel[data-phase='enter'] .glass-card__body,
 .content-panel[data-phase='enter'] .glass-card__tags {
   animation: cardContentIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.content-panel[data-phase='enter'] .glass-card__media {
+.content-panel[data-phase='enter'] .glass-card__media,
+.content-panel[data-phase='enter'] .glass-card__portrait {
   animation-delay: 400ms;
 }
 .content-panel[data-phase='enter'] .glass-card__header {
@@ -565,107 +649,228 @@
   animation: cardTitleGlitch 520ms steps(1, end) 470ms both;
 }
 
+/* Panels settle in top-to-bottom once the shell's glitch has landed. */
+.content-panel[data-phase='enter'] .card-panel {
+  animation: cardContentIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.content-panel[data-phase='enter'] .card-panel:nth-child(1) {
+  animation-delay: 420ms;
+}
+.content-panel[data-phase='enter'] .card-panel:nth-child(2) {
+  animation-delay: 490ms;
+}
+.content-panel[data-phase='enter'] .card-panel:nth-child(3) {
+  animation-delay: 560ms;
+}
+.content-panel[data-phase='enter'] .card-panel:nth-child(4) {
+  animation-delay: 630ms;
+}
+.content-panel[data-phase='enter'] .card-panel:nth-child(n + 5) {
+  animation-delay: 700ms;
+}
+
 /* ============================================================
-   Carousel
+   Card list (Projects / Experience)
+   The scrolling column of panels inside the one card.
    ============================================================ */
-.card-carousel {
+.card-list {
   position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.card-carousel__viewport {
-  width: 100%;
-  height: 100%;
-}
-
-.card-carousel__arrow {
-  position: absolute;
-  top: 50%;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  margin-top: -19px;
-  padding: 0;
-  border-radius: 50%;
-  color: var(--text);
-  background: rgba(14, 11, 24, 0.72);
-  border: 1px solid rgba(168, 85, 247, 0.32);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 260ms ease, background 220ms ease,
-    border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
-}
-
-.card-carousel:hover .card-carousel__arrow,
-.card-carousel__arrow:focus-visible {
-  opacity: 1;
-}
-
-.card-carousel__arrow:hover {
-  background: rgba(168, 85, 247, 0.22);
-  border-color: rgba(168, 85, 247, 0.8);
-  box-shadow: 0 0 26px -6px var(--accent-glow);
-}
-
-.card-carousel__arrow--prev {
-  left: -19px;
-}
-.card-carousel__arrow--prev:hover {
-  transform: translateX(-2px);
-}
-
-.card-carousel__arrow--next {
-  right: -19px;
-}
-.card-carousel__arrow--next:hover {
-  transform: translateX(2px);
-}
-
-.card-carousel__dots {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -22px;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
   display: flex;
-  justify-content: center;
-  gap: 7px;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+  padding: 24px;
 }
 
-.card-carousel__dot {
-  width: 12px;
-  height: 4px;
-  padding: 0;
-  border: none;
+/* ---------- one entry ----------
+   Every panel is this exact height regardless of how much copy it
+   carries, so the column reads as an even list rather than a ragged
+   stack. Overflow is absorbed by .card-panel__body's own scroller. */
+.card-panel {
+  flex: none;
+  height: 272px;
+  display: flex;
+  gap: 22px;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid var(--card-hairline);
+  transition: background 240ms ease, border-color 240ms ease;
+}
+
+.card-panel:hover {
+  background: rgba(168, 85, 247, 0.07);
+  border-color: rgba(168, 85, 247, 0.32);
+}
+
+.card-panel__media {
+  flex: none;
+  width: 34%;
+  align-self: stretch;
+  border-radius: 11px;
+  overflow: hidden;
+  background: var(--media-bg, #000);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-panel__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.card-panel__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-panel__header {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.card-panel__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-panel__title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card-panel__title {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.card-panel__subtitle {
+  margin: 5px 0 0;
+  font-size: 0.86rem;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+.card-panel__badge {
+  flex: none;
+  padding: 3px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.28);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #d8c9ff;
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  white-space: nowrap;
+}
+
+.card-panel__action {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: 11px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   cursor: pointer;
-  transition: width 250ms ease, background 250ms ease, box-shadow 250ms ease;
+  transition: color 220ms ease, border-color 220ms ease,
+    background 220ms ease, box-shadow 220ms ease;
 }
 
-.card-carousel__dot:hover {
-  background: rgba(255, 255, 255, 0.5);
+.card-panel__action:hover {
+  color: #fff;
+  background: rgba(168, 85, 247, 0.16);
+  border-color: rgba(168, 85, 247, 0.65);
+  box-shadow: 0 0 22px -6px var(--accent-glow);
 }
 
-.card-carousel__dot[data-active='true'] {
-  width: 40px;
-  background: var(--accent);
-  box-shadow: 0 0 14px -2px var(--accent-glow);
+/* Takes the slack in the fixed-height panel, and scrolls on the rare
+   entry whose copy runs past it. */
+.card-panel__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  font-size: clamp(0.82rem, 0.95vw, 0.93rem);
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.card-panel__body p {
+  margin: 0 0 0.9em;
+}
+
+.card-panel__body p:last-child {
+  margin-bottom: 0;
+}
+
+.card-panel__tags {
+  flex: none;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--card-hairline);
+}
+
+.card-panel__tags-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.card-panel__tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Hue is derived per-tag in cardHelpers.tsx and always lands inside the
+   violet-to-cyan range, so the pills vary without breaking the palette. */
+.card-panel__tag {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.67rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: hsl(var(--tag-hue, 265) 85% 82%);
+  background: hsl(var(--tag-hue, 265) 70% 60% / 0.13);
+  border: 1px solid hsl(var(--tag-hue, 265) 75% 65% / 0.42);
 }
 
 /* ============================================================
    Reduced motion: keep the look, drop the seizure
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .content-panel[data-phase='enter'] .glass-card,
+  .content-panel[data-phase='enter'] > *,
   .content-panel[data-phase='enter'] .glass-card__media,
+  .content-panel[data-phase='enter'] .glass-card__portrait,
   .content-panel[data-phase='enter'] .glass-card__header,
   .content-panel[data-phase='enter'] .glass-card__body,
-  .content-panel[data-phase='enter'] .glass-card__tags {
+  .content-panel[data-phase='enter'] .glass-card__tags,
+  .content-panel[data-phase='enter'] .card-panel {
     animation: cardContentIn 240ms ease both;
     animation-delay: 0ms;
     filter: none;
@@ -675,7 +880,7 @@
     animation: none;
   }
 
-  .content-panel[data-phase='exit'] .glass-card {
+  .content-panel[data-phase='exit'] > * {
     animation: cardContentIn 200ms ease reverse both;
   }
 
