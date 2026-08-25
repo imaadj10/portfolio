@@ -1,7 +1,13 @@
 //@ts-nocheck
 import { createContext, useEffect, useState } from 'react';
-import ChangeScreen from './components/ChangeScreen';
+import MobilePage from './components/MobilePage';
 import SolarSystem from './components/SolarSystem';
+
+// Below this width the 3D scene has nowhere near enough room for the
+// orbit rings/camera framing to read correctly, so the flat scrolling
+// page takes over instead — whether that's an actual phone or just a
+// narrow desktop window.
+const MIN_DESKTOP_WIDTH = 900;
 
 type OrbitContextType = {
   moving: boolean;
@@ -34,16 +40,14 @@ function App() {
   const [moving, setMoving] = useState(true);
   const [position, setPosition] = useState([0, 10, 0]);
   const [page, setPage] = useState('home');
-  const isLandscape = () =>
-      window.matchMedia('(orientation:landscape)').matches,
-    [orientation, setOrientation] = useState(
-      isLandscape() ? 'landscape' : 'portrait'
-    ),
+  const isWideEnough = () =>
+      window.matchMedia(`(min-width: ${MIN_DESKTOP_WIDTH}px)`).matches,
+    [wide, setWide] = useState(isWideEnough()),
     onWindowResize = () => {
       clearTimeout(window.resizeLag);
       window.resizeLag = setTimeout(() => {
         delete window.resizeLag;
-        setOrientation(isLandscape() ? 'landscape' : 'portrait');
+        setWide(isWideEnough());
       }, 200);
     };
 
@@ -56,20 +60,16 @@ function App() {
     []
   );
 
+  if (!wide) return <MobilePage />;
+
   return (
-    <>
-      {orientation === 'landscape' ? (
-        <OrbitContext.Provider value={{ moving, setMoving }}>
-          <PositionContext.Provider value={{ position, setPosition }}>
-            <SelectedPageContext.Provider value={{ page, setPage }}>
-              <SolarSystem />
-            </SelectedPageContext.Provider>
-          </PositionContext.Provider>
-        </OrbitContext.Provider>
-      ) : (
-        <ChangeScreen />
-      )}
-    </>
+    <OrbitContext.Provider value={{ moving, setMoving }}>
+      <PositionContext.Provider value={{ position, setPosition }}>
+        <SelectedPageContext.Provider value={{ page, setPage }}>
+          <SolarSystem />
+        </SelectedPageContext.Provider>
+      </PositionContext.Provider>
+    </OrbitContext.Provider>
   );
 }
 

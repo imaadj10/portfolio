@@ -1,0 +1,107 @@
+/* ============================================================
+   Mobile page shell
+   .content-container (App.css) supplies the nebula background and the
+   100vh scroll box; this just fixes its unset flex-direction (harmless
+   on desktop, where SolarSystem's children are all absolute-positioned
+   or a single Canvas) and lays out the sections/nav in normal flow.
+   ============================================================ */
+.mobile-page {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 48px;
+}
+
+.mobile-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 14px 10px;
+  background: rgba(12, 10, 22, 0.72);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.mobile-nav a {
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #cfc8e6;
+  text-decoration: none;
+  transition: color 200ms ease, background 200ms ease;
+}
+
+.mobile-nav a:hover,
+.mobile-nav a:focus-visible {
+  color: #fff;
+  background: rgba(168, 85, 247, 0.16);
+}
+
+.mobile-hero {
+  padding: 40px 24px 8px;
+  text-align: center;
+}
+
+.mobile-hero h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 7vw, 2.1rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6fae, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mobile-hero p {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.mobile-section {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 640px;
+  padding: 20px 16px;
+  /* Clears the sticky nav when a nav link jumps straight to this section. */
+  scroll-margin-top: 58px;
+  animation: mobileSectionIn 480ms ease both;
+}
+
+.mobile-section:nth-of-type(1) {
+  animation-delay: 0ms;
+}
+.mobile-section:nth-of-type(2) {
+  animation-delay: 80ms;
+}
+.mobile-section:nth-of-type(3) {
+  animation-delay: 160ms;
+}
+.mobile-section:nth-of-type(4) {
+  animation-delay: 240ms;
+}
+
+@keyframes mobileSectionIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-section {
+    animation: none;
+  }
+}

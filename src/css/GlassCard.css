@@ -889,3 +889,35 @@
     transform: none;
   }
 }
+
+/* ============================================================
+   Mobile (see MobilePage.tsx)
+   Scoped under `.mobile-page` rather than a viewport-width media
+   query, since "mobile" here means the `isMobile` branch in App.tsx —
+   a phone in landscape is often wider than a typical breakpoint but
+   should still get this layout. Everything else in this file (colour,
+   radius, hover, spotlight, typography) applies unchanged; only the
+   row-direction/fixed-size rules that assumed sitting inside the
+   desktop `.content-panel` need overriding here.
+   ============================================================ */
+.mobile-page .glass-card--split {
+  flex-direction: column;
+}
+
+.mobile-page .glass-card__portrait {
+  width: 100%;
+  height: 220px;
+  border-right: none;
+  border-bottom: 1px solid var(--card-hairline);
+}
+
+.mobile-page .card-panel {
+  flex-direction: column;
+  height: auto;
+}
+
+.mobile-page .card-panel__media {
+  width: 100%;
+  height: 180px;
+  align-self: auto;
+}
