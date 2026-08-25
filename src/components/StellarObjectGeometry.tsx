@@ -1,10 +1,11 @@
-// @ts-nocheck
 import { useGLTF } from '@react-three/drei';
 import { ThreeElements, useFrame } from '@react-three/fiber';
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
+import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
-import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
+import { useOrbitContext, usePositionContext, useSelectedPageContext } from '../App';
+import { slugFor } from '../routes';
 import OrbitLine from './OrbitLine';
 
 const ROTATION_SPEED = isMobile ? 0.6 : 0.24; // radians per second
@@ -68,10 +69,11 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   // actually decode; useGLTF transparently passes through
   // non-Draco-compressed .glb files too.
   const gltf = useGLTF(model, '/draco/');
-  const { moving, setMoving } = useContext(OrbitContext);
-  const { setPosition } = useContext(PositionContext);
+  const { moving, setMoving } = useOrbitContext();
+  const { setPosition } = usePositionContext();
   const currentPositionRef = useRef(initialPosition);
-  const { setPage } = useContext(SelectedPageContext);
+  const { setPage } = useSelectedPageContext();
+  const navigate = useNavigate();
   // Accumulates only while moving, so orbit position freezes on pause and
   // resumes from exactly where it left off instead of jumping ahead by
   // however long the planet was paused (performance.now() keeps ticking
@@ -131,6 +133,8 @@ function StellarObjectGeometry(props: StellarObjectProps) {
       setMoving(false);
       setPosition(currentPositionRef.current);
       setPage(current_page);
+      const slug = slugFor(current_page);
+      if (slug) navigate(`/${slug}`);
     }
   };
 

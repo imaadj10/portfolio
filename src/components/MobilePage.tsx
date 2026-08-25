@@ -1,14 +1,10 @@
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/App.css';
 import '../css/GlassCard.css';
 import '../css/MobilePage.css';
+import { pageForSlug, SECTIONS } from '../routes';
 import { cardFor, layoutFor } from './contentRouting';
-
-const SECTIONS: { id: string; label: string; page: string }[] = [
-  { id: 'about', label: 'About', page: 'about me' },
-  { id: 'experience', label: 'Experience', page: 'experience' },
-  { id: 'projects', label: 'Projects', page: 'projects' },
-  { id: 'contact', label: 'Contact', page: 'contact' },
-];
 
 /**
  * The phone/tablet entry point (see App.tsx's `isMobile` branch). A plain
@@ -19,12 +15,35 @@ const SECTIONS: { id: string; label: string; page: string }[] = [
  * the same GlassCard/CardList/CardPanel components) and none of that.
  */
 function MobilePage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Deep link support: opening /projects directly on a narrow viewport
+  // scrolls straight to that section instead of landing at the top.
+  useEffect(() => {
+    const slug = location.pathname.replace(/^\//, '');
+    if (!pageForSlug(slug)) return;
+    document.getElementById(slug)?.scrollIntoView();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Routed nav links (real /about, /projects, ... paths, matching desktop's
+  // deep links) rather than #about fragment anchors — a plain <a href="#id">
+  // is what was putting the # in the address bar; scrolling is now done by
+  // hand so the route can update without one.
+  const handleNavClick =
+    (slug: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth' });
+      navigate(`/${slug}`, { replace: true });
+    };
+
   return (
     <div className="content-container mobile-page">
       <nav className="mobile-nav">
-        {SECTIONS.map((section) => (
-          <a key={section.id} href={`#${section.id}`}>
-            {section.label}
+        {SECTIONS.map(({ slug, label }) => (
+          <a key={slug} href={`/${slug}`} onClick={handleNavClick(slug)}>
+            {label}
           </a>
         ))}
       </nav>
@@ -34,17 +53,20 @@ function MobilePage() {
         <p>Portfolio</p>
       </header>
 
-      {SECTIONS.map((section) => (
-        <section
-          key={section.id}
-          id={section.id}
-          className="mobile-section"
-          data-layout={layoutFor(section.page)}
-        >
-          <h2 className="mobile-section__label">{section.label}</h2>
-          {cardFor(section.page)}
-        </section>
-      ))}
+      {SECTIONS.map(({ slug, label }) => {
+        const page = pageForSlug(slug) as string;
+        return (
+          <section
+            key={slug}
+            id={slug}
+            className="mobile-section"
+            data-layout={layoutFor(page)}
+          >
+            <h2 className="mobile-section__label">{label}</h2>
+            {cardFor(page)}
+          </section>
+        );
+      })}
     </div>
   );
 }

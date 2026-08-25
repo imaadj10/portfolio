@@ -1,8 +1,8 @@
-// @ts-nocheck
 import { Center, Line, Text3D } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import type { Line2 } from 'three/examples/jsm/lines/Line2';
 
 // Convergence-per-second rates for the ring/label fade — bump these up for
 // a snappier reappearance, down for a slower one. Text fades in a bit
@@ -25,12 +25,19 @@ const LETTER_SPACING_EPSILON = 0.001;
 const ACCENT_VIOLET = new THREE.Color('#a855f7');
 const ACCENT_CYAN = new THREE.Color('#22d3ee');
 
-function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
+type OrbitLineProps = {
+  radius?: number;
+  handleClick: () => void;
+  moving: boolean;
+  current_page: string;
+};
+
+function OrbitLine({ radius = 1, handleClick, moving, current_page }: OrbitLineProps) {
   const [hovered, setHovered] = useState(false);
   const [letterSpacing, setLetterSpacing] = useState(LETTER_SPACING_REST);
-  const textRef = useRef();
-  const lineRef = useRef();
-  const gradientLineRef = useRef();
+  const textRef = useRef<THREE.Mesh>(null!);
+  const lineRef = useRef<Line2>(null!);
+  const gradientLineRef = useRef<Line2>(null!);
   const visible = moving;
 
   useEffect(() => {
@@ -55,8 +62,11 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
       lineTarget,
       1 - Math.exp(-LINE_OPACITY_RATE * delta)
     );
-    textRef.current.material.opacity = THREE.MathUtils.lerp(
-      textRef.current.material.opacity,
+    // Text3D's material prop is typed as Material | Material[] generically,
+    // but this instance is always given the single textMaterial below.
+    const textMat = textRef.current.material as THREE.Material;
+    textMat.opacity = THREE.MathUtils.lerp(
+      textMat.opacity,
       visible ? 1 : 0,
       1 - Math.exp(-TEXT_OPACITY_RATE * delta)
     );
@@ -91,7 +101,7 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
   // the hover transition instead of being rebuilt on every frame that
   // moves letterSpacing.
   const points = useMemo(() => {
-    const circle = [];
+    const circle: THREE.Vector3[] = [];
     for (let index = 0; index < 256; index++) {
       const angle = (index / 256) * 2 * Math.PI;
       const x = radius * Math.cos(angle);
@@ -116,7 +126,7 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
   const extraArcLength = spacingGrowth * Math.max(0, current_page.length - 1);
   const targetArcLength = current_page.length * 1 + 1 + extraArcLength;
   const gapAngle = Math.min(1.2, targetArcLength / radius);
-  const visiblePoints = [];
+  const visiblePoints: THREE.Vector3[] = [];
   for (let index = 0; index <= 256; index++) {
     const angle =
       labelAngle + gapAngle / 2 + (index / 256) * (2 * Math.PI - gapAngle);
@@ -134,7 +144,7 @@ function OrbitLine({ radius = 1, handleClick, moving, current_page }) {
       const t = index / (visiblePoints.length - 1);
       const mix = t <= 0.5 ? t * 2 : (1 - t) * 2;
       mixColor.copy(ACCENT_VIOLET).lerp(ACCENT_CYAN, mix);
-      return mixColor.toArray();
+      return mixColor.toArray() as [number, number, number];
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [radius, gapAngle]);

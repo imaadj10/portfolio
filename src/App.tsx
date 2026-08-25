@@ -1,5 +1,4 @@
-//@ts-nocheck
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import MobilePage from './components/MobilePage';
 import SolarSystem from './components/SolarSystem';
 
@@ -36,17 +35,39 @@ export const SelectedPageContext = createContext<
   SelectedPageContextType | undefined
 >(undefined);
 
+// Each hook narrows past the `| undefined` a bare useContext() call would
+// carry (providers always wrap the tree below, but createContext has no way
+// to encode that) and gives a clear error instead of a silent runtime crash
+// if a consumer is ever rendered outside its provider.
+export function useOrbitContext(): OrbitContextType {
+  const context = useContext(OrbitContext);
+  if (!context) throw new Error('useOrbitContext must be used within OrbitContext.Provider');
+  return context;
+}
+
+export function usePositionContext(): PositionContextType {
+  const context = useContext(PositionContext);
+  if (!context) throw new Error('usePositionContext must be used within PositionContext.Provider');
+  return context;
+}
+
+export function useSelectedPageContext(): SelectedPageContextType {
+  const context = useContext(SelectedPageContext);
+  if (!context) throw new Error('useSelectedPageContext must be used within SelectedPageContext.Provider');
+  return context;
+}
+
 function App() {
   const [moving, setMoving] = useState(true);
   const [position, setPosition] = useState([0, 10, 0]);
   const [page, setPage] = useState('home');
+  const resizeLagRef = useRef<ReturnType<typeof setTimeout>>();
   const isWideEnough = () =>
       window.matchMedia(`(min-width: ${MIN_DESKTOP_WIDTH}px)`).matches,
     [wide, setWide] = useState(isWideEnough()),
     onWindowResize = () => {
-      clearTimeout(window.resizeLag);
-      window.resizeLag = setTimeout(() => {
-        delete window.resizeLag;
+      clearTimeout(resizeLagRef.current);
+      resizeLagRef.current = setTimeout(() => {
         setWide(isWideEnough());
       }, 200);
     };

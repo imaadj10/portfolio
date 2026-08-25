@@ -1,20 +1,22 @@
-// @ts-nocheck
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import {
   Fragment,
+  MutableRefObject,
+  ReactNode,
   Suspense,
-  useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import { isMobile } from 'react-device-detect';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
-import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
+import { useOrbitContext, usePositionContext, useSelectedPageContext } from '../App';
 import '../css/App.css';
+import { pageForSlug, SECTIONS } from '../routes';
 import ContentPanel, { EXIT_DURATION } from './ContentPanel';
 import LoadingScreen from './LoadingScreen';
 import StellarObjectGeometry from './StellarObjectGeometry';
@@ -102,8 +104,11 @@ const sun: StellarObject = {
 };
 
 function SolarSystem() {
-  const { moving, setMoving } = useContext(OrbitContext);
-  const { page, setPage } = useContext(SelectedPageContext);
+  const { moving, setMoving } = useOrbitContext();
+  const { setPosition } = usePositionContext();
+  const { page, setPage } = useSelectedPageContext();
+  const location = useLocation();
+  const navigate = useNavigate();
   // Shared across CameraPos/CameraFocus (which mount/unmount as `moving`
   // flips) so the camera's look direction eases continuously between them
   // instead of snapping the instant one takes over from the other.
@@ -126,6 +131,23 @@ function SolarSystem() {
     []
   );
 
+  // Mirrors the (p_index + 1) * 10 + 10 placement each planet's
+  // StellarObjectGeometry is given below — a page's starting position,
+  // available before any orbit animation has run, so a deep link (e.g.
+  // opening /projects directly) can land the camera on the right spot
+  // without waiting for a click.
+  const initialPositionsByPage = useMemo(() => {
+    const positions: Record<string, number[]> = {};
+    sun.orbiters.forEach((planet, p_index) => {
+      positions[planet.page_name] = [
+        (p_index + 1) * 10 + 10,
+        0,
+        (p_index + 1) * 10 + 10,
+      ];
+    });
+    return positions;
+  }, []);
+
   const handleResume = () => {
     if (returning) return;
     setReturning(true);
@@ -133,10 +155,51 @@ function SolarSystem() {
       setMoving(true);
       setPage('home');
       setReturning(false);
+      navigate('/');
     }, EXIT_DURATION);
   };
 
   useEffect(() => () => clearTimeout(returnTimerRef.current), []);
+
+  // Deep link support: land already focused on the linked planet instead
+  // of playing the home flythrough first. Slug -> position/page is a
+  // one-time read of the URL this component mounted with — subsequent
+  // in-app navigation (planet clicks, Return to Homepage) drives the URL
+  // via navigate() instead, so this doesn't need to react to route changes.
+  useEffect(() => {
+    const slug = location.pathname.replace(/^\//, '');
+    const linkedPage = pageForSlug(slug);
+    const initialPosition = linkedPage && initialPositionsByPage[linkedPage];
+    if (linkedPage && initialPosition) {
+      setMoving(false);
+      setPosition(initialPosition);
+      setPage(linkedPage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Lets "focus a section" be reached from the keyboard skip-nav below,
+  // not just by clicking a planet — same effect as StellarObjectGeometry's
+  // handlePause, just triggered by a link instead of a pointer click.
+  const focusPage = (pageName: string) => {
+    const initialPosition = initialPositionsByPage[pageName];
+    if (!initialPosition) return;
+    setMoving(false);
+    setPosition(initialPosition);
+    setPage(pageName);
+  };
+
+  // Escape returns home from a focused planet, mirroring the "Return to
+  // Homepage" button — the natural keyboard equivalent since there's no
+  // other keyboard-reachable way back once a section is focused.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !moving) handleResume();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moving, returning]);
 
   return (
     <div className="content-container">
@@ -146,6 +209,24 @@ function SolarSystem() {
           Return to Homepage
         </button>
       )}
+
+      {/* Keyboard-only path to a section: the 3D scene otherwise requires
+          clicking a planet, which a keyboard-only visitor can't do.
+          Off-screen until a link inside receives focus (App.css). */}
+      <nav className="skip-nav" aria-label="Jump to section">
+        {SECTIONS.map(({ slug, label }) => (
+          <Link
+            key={slug}
+            to={`/${slug}`}
+            onClick={() => {
+              const linkedPage = pageForSlug(slug);
+              if (linkedPage) focusPage(linkedPage);
+            }}
+          >
+            {label}
+          </Link>
+        ))}
+      </nav>
 
       <div className="info-container">
         <ContentPanel page={page} active={!moving && !returning} />
@@ -266,8 +347,8 @@ const BANNER_BOB_ROLL = 0.015;
 // X/Y/roll each use a different period and phase offset (not simple
 // in-phase back-and-forth), so the motion traces a loose, organic drift
 // rather than a metronome swing.
-function FloatingBanner({ children }) {
-  const groupRef = useRef();
+function FloatingBanner({ children }: { children: ReactNode }) {
+  const groupRef = useRef<THREE.Group>(null!);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
@@ -299,19 +380,27 @@ const HOME_POSITION = new THREE.Vector3(0, 25, 85);
 const HOME_LOOK = new THREE.Vector3(0, 0, 0);
 const HOME_FOV = 50;
 
-function CameraPos({ lookTargetRef }) {
+type CameraProps = {
+  lookTargetRef: MutableRefObject<THREE.Vector3>;
+};
+
+function CameraPos({ lookTargetRef }: CameraProps) {
   useFrame((state, rawDelta) => {
     const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
-    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, HOME_FOV, alpha);
-    state.camera.position.lerp(HOME_POSITION, alpha);
+    // The scene never switches to an orthographic camera, so this cast is
+    // always safe — R3F only types state.camera as the broader union
+    // because a scene theoretically could.
+    const camera = state.camera as THREE.PerspectiveCamera;
+    camera.fov = THREE.MathUtils.lerp(camera.fov, HOME_FOV, alpha);
+    camera.position.lerp(HOME_POSITION, alpha);
     // Ease the look direction too, instead of snapping lookAt() straight to
     // its final target every frame — that instant reorientation (while
     // position/fov were still easing in) is what made the return trip look
     // like it "snapped to the middle" before pulling back.
     lookTargetRef.current.lerp(HOME_LOOK, alpha);
-    state.camera.lookAt(lookTargetRef.current);
-    state.camera.updateProjectionMatrix();
+    camera.lookAt(lookTargetRef.current);
+    camera.updateProjectionMatrix();
   });
   return null;
 }
@@ -319,20 +408,21 @@ function CameraPos({ lookTargetRef }) {
 // Centralizes the camera-follow logic that used to be duplicated inside
 // every StellarObjectGeometry instance (one redundant useFrame + point
 // light per planet/moon, all fighting over the same shared camera).
-function CameraFocus({ lookTargetRef }) {
-  const { position } = useContext(PositionContext);
+function CameraFocus({ lookTargetRef }: CameraProps) {
+  const { position } = usePositionContext();
 
   useFrame((state, rawDelta) => {
     const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
     const targetPosition = new THREE.Vector3(position[0] - 10, 0, position[2]);
     const targetLook = new THREE.Vector3(position[0], 0, position[2]);
+    const camera = state.camera as THREE.PerspectiveCamera;
 
-    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, alpha);
-    state.camera.position.lerp(targetPosition, alpha);
+    camera.fov = THREE.MathUtils.lerp(camera.fov, 25, alpha);
+    camera.position.lerp(targetPosition, alpha);
     lookTargetRef.current.lerp(targetLook, alpha);
-    state.camera.lookAt(lookTargetRef.current);
-    state.camera.updateProjectionMatrix();
+    camera.lookAt(lookTargetRef.current);
+    camera.updateProjectionMatrix();
   });
 
   return (
