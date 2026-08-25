@@ -58,13 +58,7 @@ const projects: StellarObject = {
   page_name: 'projects',
   model: '/planet_models/Planet_12.glb',
   scale: 0.2,
-  orbiters: [
-    subletter,
-    right_angle,
-    spam_text_classifier,
-    spotify_collage,
-    virtual_drumset,
-  ],
+  orbiters: [subletter, right_angle, spam_text_classifier, spotify_collage],
 };
 const intel: StellarObject = {
   page_name: 'intel',
@@ -82,7 +76,7 @@ const experience: StellarObject = {
   page_name: 'experience',
   model: '/planet_models/Planet_34.glb',
   scale: 0.2,
-  orbiters: [intel, ubc],
+  orbiters: [intel, ubc, virtual_drumset],
 };
 const contact: StellarObject = {
   page_name: 'contact',
