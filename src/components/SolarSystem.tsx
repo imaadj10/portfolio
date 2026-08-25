@@ -289,7 +289,7 @@ function SolarSystem() {
           {moving && <CameraPos lookTargetRef={lookTargetRef} />}
           {!moving && <CameraFocus lookTargetRef={lookTargetRef} />}
 
-          <Stars factor={4} depth={40} saturation={2} count={10000} fade speed={0.75} />
+          <Stars factor={4} fade speed={0.5} />
           <ambientLight intensity={1} />
           <StellarObjectGeometry
             key={'sun'}
