@@ -149,9 +149,8 @@ function Projects() {
       classNames={{ root: classes.root, controls: classes.controls }}
     >
       {projects.map((project) => (
-        <Carousel.Slide>
+        <Carousel.Slide key={project.id}>
           <ProjectCard
-            key={project.id}
             image={project.image}
             name={project.name}
             description={project.description}

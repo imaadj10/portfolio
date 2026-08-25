@@ -7,13 +7,14 @@ const useStyles = createStyles((theme) => ({
     left: '55%',
     overflowY: 'auto',
     top: '20vh',
+    maxHeight: 'clamp(320px, 60vh, 620px)',
     [theme.fn.smallerThan('xl')]: {
       width: '40%',
       left: '55%',
       top: 0,
     },
     [theme.fn.smallerThan('lg')]: {
-      height: '85vh',
+      maxHeight: 'clamp(280px, 80vh, 620px)',
     },
   },
 

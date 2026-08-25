@@ -91,9 +91,8 @@ function Experience() {
       classNames={{ root: classes.root, controls: classes.controls }}
     >
       {experiences.map((experience) => (
-        <Carousel.Slide>
+        <Carousel.Slide key={experience.id}>
           <ExperienceCard
-            key={experience.id}
             image={experience.image}
             title={experience.title}
             company={experience.company}

@@ -1,11 +1,13 @@
 // @ts-nocheck
 import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
+
+const ROTATION_SPEED = isMobile ? 0.6 : 0.24; // radians per second
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -21,13 +23,13 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const gltf = useLoader(GLTFLoader, model);
   const { moving, setMoving } = useContext(OrbitContext);
-  const { position, setPosition } = useContext(PositionContext);
-  const [currentPosition, setCurrentPosition] = useState(initialPosition);
+  const { setPosition } = useContext(PositionContext);
+  const currentPositionRef = useRef(initialPosition);
   const { setPage } = useContext(SelectedPageContext);
 
   useFrame((_state, delta) => {
     const mesh = meshRef.current;
-    mesh.rotation.y -= isMobile ? 0.01 : 0.004;
+    mesh.rotation.y -= ROTATION_SPEED * delta;
 
     if (!moving) return;
 
@@ -49,7 +51,7 @@ function StellarObjectGeometry(props: StellarObjectProps) {
         mesh.position.set(planetX, moonY, moonZ);
       } else {
         mesh.position.set(planetX, initialPosition[1], planetZ);
-        setCurrentPosition([planetX, initialPosition[1], planetZ]);
+        currentPositionRef.current = [planetX, initialPosition[1], planetZ];
       }
     }
   });
@@ -57,47 +59,25 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   const handlePause = () => {
     if (!isStar && !isMoon && moving) {
       setMoving(false);
-      setPosition(currentPosition);
+      setPosition(currentPositionRef.current);
       setPage(current_page);
     }
   };
 
-  useFrame((state, delta) => {
-    if (!moving) {
-      const dummy = new THREE.Vector3();
-      const step = isMobile ? 0.0025 : 0.001;
-      state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, step);
-      state.camera.position.lerp(
-        dummy.set(position[0] - 10, 0, position[2]),
-        step
-      );
-      state.camera.lookAt(position[0], 0, position[2] + 2.5);
-      state.camera.updateProjectionMatrix();
-    }
-  });
-
   return (
     <>
       <mesh ref={meshRef} {...meshProps}>
-        <meshStandardMaterial color="black" />
         <primitive scale={scale} object={gltf.scene} children-0-castShadow />
       </mesh>
       {isStar && (
         <pointLight position={[0, 0, 0]} intensity={1500} color="#edd59e" />
       )}
-      {!isMoon && (
+      {!isMoon && !isStar && (
         <OrbitLine
           handleClick={handlePause}
           radius={initialPosition[0]}
           moving={moving}
           current_page={current_page}
-        />
-      )}
-      {!moving && (
-        <pointLight
-          position={[position[0] - 10, 0, position[2]]}
-          intensity={5}
-          color="#edd59e"
         />
       )}
     </>

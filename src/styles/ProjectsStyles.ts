@@ -36,10 +36,10 @@ const useStyles = createStyles((theme) => ({
 
   card: {
     backgroundColor: theme.colors.dark[8],
-    height: '52vh',
+    maxHeight: 'clamp(320px, 65vh, 620px)',
     overflowY: 'auto',
     [theme.fn.smallerThan('xl')]: {
-      height: '85vh',
+      maxHeight: 'clamp(280px, 80vh, 620px)',
     },
   },
 

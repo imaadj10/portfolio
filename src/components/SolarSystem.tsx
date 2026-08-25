@@ -3,10 +3,10 @@ import { Button, Text } from '@mantine/core';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Suspense, useContext } from 'react';
+import { Fragment, Suspense, useContext } from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
-import { OrbitContext, SelectedPageContext } from '../App';
+import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import '../css/App.css';
 import { useStyles } from '../styles/SolarSystemStyles';
 import About from './About';
@@ -119,7 +119,7 @@ function SolarSystem() {
           opacity: moving ? 0 : 1,
           transition: moving ? 'none' : 'opacity 0.5s ease 2s',
         }}
-        class="back-button"
+        className="back-button"
       >
         {!moving && (
           <Button
@@ -151,7 +151,7 @@ function SolarSystem() {
         {page === 'contact' && <Contact />}
       </div>
 
-      <Canvas>
+      <Canvas dpr={[1, 2]}>
         <Suspense fallback={null}>
           <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
             <Text3D
@@ -186,7 +186,7 @@ function SolarSystem() {
             </Text3D>
           </Center>
 
-          <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
+          <Center position={[4, 20, 0]} rotation={[-0.5, 0, 0]}>
             <Text3D
               curveSegments={32}
               bevelEnabled
@@ -198,12 +198,13 @@ function SolarSystem() {
               size={2}
               font="/fonts/ROCKETWILDNESS_Regular.json"
             >
-              {`Planetary System`}
+              {`Solar System`}
               <meshNormalMaterial />
             </Text3D>
           </Center>
 
           {moving && <CameraPos />}
+          {!moving && <CameraFocus />}
 
           <Stars factor={6} fade speed={0} />
           <ambientLight intensity={1} />
@@ -213,14 +214,13 @@ function SolarSystem() {
             isStar={true}
             model={sun.model}
             scale={sun.scale}
-            current_page={sun.page}
+            current_page={sun.page_name}
           />
 
           {sun.orbiters.map((planet, p_index) => (
-            <>
+            <Fragment key={p_index}>
               <StellarObjectGeometry
                 position={[(p_index + 1) * 10 + 10, 0, (p_index + 1) * 10 + 10]}
-                key={p_index}
                 model={planet.model}
                 scale={planet.scale}
                 current_page={planet.page_name}
@@ -239,7 +239,7 @@ function SolarSystem() {
                   current_page={moon.page_name}
                 />
               ))}
-            </>
+            </Fragment>
           ))}
         </Suspense>
       </Canvas>
@@ -248,15 +248,47 @@ function SolarSystem() {
   );
 }
 
+// Rate is tuned in units of "convergence per second" so the camera eases
+// toward its target at the same real-world speed regardless of frame rate.
+const CAMERA_RATE = isMobile ? 4.5 : 1.8;
+
 function CameraPos() {
   useFrame((state, delta) => {
     const dummy = new THREE.Vector3();
-    const step = isMobile ? 0.025 : 0.01;
-    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, step);
-    state.camera.position.lerp(dummy.set(0, 25, 85), step);
+    const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
+    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, alpha);
+    state.camera.position.lerp(dummy.set(0, 25, 85), alpha);
     state.camera.lookAt(0, 0, 0);
     state.camera.updateProjectionMatrix();
   });
+  return null;
+}
+
+// Centralizes the camera-follow logic that used to be duplicated inside
+// every StellarObjectGeometry instance (one redundant useFrame + point
+// light per planet/moon, all fighting over the same shared camera).
+function CameraFocus() {
+  const { position } = useContext(PositionContext);
+
+  useFrame((state, delta) => {
+    const dummy = new THREE.Vector3();
+    const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
+    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, alpha);
+    state.camera.position.lerp(
+      dummy.set(position[0] - 10, 0, position[2]),
+      alpha
+    );
+    state.camera.lookAt(position[0], 0, position[2] + 2.5);
+    state.camera.updateProjectionMatrix();
+  });
+
+  return (
+    <pointLight
+      position={[position[0] - 10, 0, position[2]]}
+      intensity={5}
+      color="#edd59e"
+    />
+  );
 }
 
 export default SolarSystem;
