@@ -137,60 +137,62 @@ function SolarSystem() {
 
       <Canvas dpr={[1, 2]}>
         <Suspense fallback={null}>
-          <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
-            <Text3D
-              curveSegments={32}
-              bevelEnabled
-              bevelSize={0.04}
-              bevelThickness={0.1}
-              height={0.5}
-              lineHeight={0.5}
-              letterSpacing={-0.06}
-              size={1.5}
-              font="/fonts/ROCKETWILDNESS_Regular.json"
-            >
-              {`Welcome to`}
-              <meshNormalMaterial />
-            </Text3D>
-          </Center>
-          <Center position={[0, 25, 0]} rotation={[-0.5, 0, 0]}>
-            <Text3D
-              curveSegments={32}
-              bevelEnabled
-              bevelSize={0.04}
-              bevelThickness={0.1}
-              height={0.5}
-              lineHeight={0.5}
-              letterSpacing={-0.06}
-              size={5}
-              font="/fonts/ROCKETWILDNESS_Regular.json"
-            >
-              {`Imaad Junaidi's`}
-              <meshNormalMaterial />
-            </Text3D>
-          </Center>
+          <FloatingBanner>
+            <Center position={[0, 29, 0]} rotation={[-0.5, 0, 0]}>
+              <Text3D
+                curveSegments={32}
+                bevelEnabled
+                bevelSize={0.04}
+                bevelThickness={0.1}
+                height={0.5}
+                lineHeight={0.5}
+                letterSpacing={-0.06}
+                size={1.5}
+                font="/fonts/ROCKETWILDNESS_Regular.json"
+              >
+                {`Welcome to`}
+                <meshNormalMaterial />
+              </Text3D>
+            </Center>
+            <Center position={[0, 25, 0]} rotation={[-0.5, 0, 0]}>
+              <Text3D
+                curveSegments={32}
+                bevelEnabled
+                bevelSize={0.04}
+                bevelThickness={0.1}
+                height={0.5}
+                lineHeight={0.5}
+                letterSpacing={-0.06}
+                size={5}
+                font="/fonts/ROCKETWILDNESS_Regular.json"
+              >
+                {`Imaad Junaidi's`}
+                <meshNormalMaterial />
+              </Text3D>
+            </Center>
 
-          <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
-            <Text3D
-              curveSegments={32}
-              bevelEnabled
-              bevelSize={0.04}
-              bevelThickness={0.1}
-              height={0.5}
-              lineHeight={0.5}
-              letterSpacing={-0.06}
-              size={2}
-              font="/fonts/ROCKETWILDNESS_Regular.json"
-            >
-              {`Solar System`}
-              <meshNormalMaterial />
-            </Text3D>
-          </Center>
+            <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
+              <Text3D
+                curveSegments={32}
+                bevelEnabled
+                bevelSize={0.04}
+                bevelThickness={0.1}
+                height={0.5}
+                lineHeight={0.5}
+                letterSpacing={-0.06}
+                size={2}
+                font="/fonts/ROCKETWILDNESS_Regular.json"
+              >
+                {`Solar System`}
+                <meshNormalMaterial />
+              </Text3D>
+            </Center>
+          </FloatingBanner>
 
           {moving && <CameraPos lookTargetRef={lookTargetRef} />}
           {!moving && <CameraFocus lookTargetRef={lookTargetRef} />}
 
-          <Stars factor={6} fade speed={0} />
+          <Stars factor={4} fade speed={0.5} />
           <ambientLight intensity={1} />
           <StellarObjectGeometry
             key={'sun'}
@@ -230,6 +232,28 @@ function SolarSystem() {
       <LoadingScreen />
     </div>
   );
+}
+
+// Amplitudes for the welcome banner's idle drift, in scene units.
+const BANNER_BOB_Y = 0.45;
+const BANNER_BOB_X = 0.3;
+const BANNER_BOB_ROLL = 0.015;
+
+// Bobs the whole welcome banner gently, like it's drifting in zero-g.
+// X/Y/roll each use a different period and phase offset (not simple
+// in-phase back-and-forth), so the motion traces a loose, organic drift
+// rather than a metronome swing.
+function FloatingBanner({ children }) {
+  const groupRef = useRef();
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    groupRef.current.position.y = Math.sin(t * 0.6) * BANNER_BOB_Y;
+    groupRef.current.position.x = Math.sin(t * 0.42 + 1.3) * BANNER_BOB_X;
+    groupRef.current.rotation.z = Math.sin(t * 0.5 + 0.7) * BANNER_BOB_ROLL;
+  });
+
+  return <group ref={groupRef}>{children}</group>;
 }
 
 // Rate is tuned in units of "convergence per second" so the camera eases
