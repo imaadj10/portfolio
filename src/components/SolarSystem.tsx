@@ -1,19 +1,14 @@
 // @ts-nocheck
-import { Button, Text } from '@mantine/core';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Fragment, Suspense, useContext } from 'react';
+import { Fragment, Suspense, useContext, useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import '../css/App.css';
-import { useStyles } from '../styles/SolarSystemStyles';
-import About from './About';
-import Contact from './Contact';
-import Experience from './Experience';
+import ContentPanel, { EXIT_DURATION } from './ContentPanel';
 import LoadingScreen from './LoadingScreen';
-import Projects from './Projects';
 import StellarObjectGeometry from './StellarObjectGeometry';
 
 interface StellarObject {
@@ -105,50 +100,39 @@ const sun: StellarObject = {
 function SolarSystem() {
   const { moving, setMoving } = useContext(OrbitContext);
   const { page, setPage } = useContext(SelectedPageContext);
-  const { classes } = useStyles();
+  // Shared across CameraPos/CameraFocus (which mount/unmount as `moving`
+  // flips) so the camera's look direction eases continuously between them
+  // instead of snapping the instant one takes over from the other.
+  const lookTargetRef = useRef(new THREE.Vector3(0, 0, 0));
+  // True the instant "Return to Homepage" is clicked, so the card can
+  // start its glitch-out right away while `moving` (and therefore the
+  // camera) holds still until that animation has actually finished.
+  const [returning, setReturning] = useState(false);
+  const returnTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const handleResume = () => {
-    setMoving(true);
-    setPage('home');
+    if (returning) return;
+    setReturning(true);
+    returnTimerRef.current = setTimeout(() => {
+      setMoving(true);
+      setPage('home');
+      setReturning(false);
+    }, EXIT_DURATION);
   };
+
+  useEffect(() => () => clearTimeout(returnTimerRef.current), []);
 
   return (
     <div className="content-container">
-      <div
-        style={{
-          opacity: moving ? 0 : 1,
-          transition: moving ? 'none' : 'opacity 0.5s ease 2s',
-        }}
-        className="back-button"
-      >
-        {!moving && (
-          <Button
-            variant="subtle"
-            color="gray"
-            radius="sm"
-            size="md"
-            onClick={handleResume}
-            className={classes.button}
-            classNames={classes}
-          >
-            <ArrowBackIcon />
-            <Text color="white" ml={5}>
-              Return to Homepage
-            </Text>
-          </Button>
-        )}
-      </div>
-      <div
-        style={{
-          opacity: moving ? 0 : 1,
-          transition: moving ? 'none' : 'opacity 1s ease 1.5s',
-        }}
-        className="info-container"
-      >
-        {page === 'about me' && <About />}
-        {page === 'projects' && <Projects />}
-        {page === 'experience' && <Experience />}
-        {page === 'contact' && <Contact />}
+      {!moving && (
+        <button type="button" className="back-button" onClick={handleResume}>
+          <ArrowBackIcon fontSize="small" />
+          Return to Homepage
+        </button>
+      )}
+
+      <div className="info-container">
+        <ContentPanel page={page} active={!moving && !returning} />
       </div>
 
       <Canvas dpr={[1, 2]}>
@@ -186,7 +170,7 @@ function SolarSystem() {
             </Text3D>
           </Center>
 
-          <Center position={[4, 20, 0]} rotation={[-0.5, 0, 0]}>
+          <Center position={[0, 20, 0]} rotation={[-0.5, 0, 0]}>
             <Text3D
               curveSegments={32}
               bevelEnabled
@@ -203,8 +187,8 @@ function SolarSystem() {
             </Text3D>
           </Center>
 
-          {moving && <CameraPos />}
-          {!moving && <CameraFocus />}
+          {moving && <CameraPos lookTargetRef={lookTargetRef} />}
+          {!moving && <CameraFocus lookTargetRef={lookTargetRef} />}
 
           <Stars factor={6} fade speed={0} />
           <ambientLight intensity={1} />
@@ -252,13 +236,34 @@ function SolarSystem() {
 // toward its target at the same real-world speed regardless of frame rate.
 const CAMERA_RATE = isMobile ? 4.5 : 1.8;
 
-function CameraPos() {
-  useFrame((state, delta) => {
-    const dummy = new THREE.Vector3();
+// Caps how much elapsed time a single frame's easing step is allowed to
+// account for. Clicking "Return to Homepage" triggers a fairly heavy React
+// commit (unmounting the focused planet's info card/carousel, mounting the
+// home camera rig), which can stall the main thread for a few hundred ms.
+// Without this cap, the next frame's `delta` reflects that whole stall and
+// the exponential-ease formula (correctly, but undesirably) converts it
+// into one huge catch-up jump — which is what read as the camera "snapping"
+// to the middle before zooming out. Clamping spreads that catch-up over
+// several frames instead, so a stall costs a little extra real time rather
+// than a visible teleport.
+const MAX_FRAME_DELTA = 0.05;
+
+const HOME_POSITION = new THREE.Vector3(0, 25, 85);
+const HOME_LOOK = new THREE.Vector3(0, 0, 0);
+const HOME_FOV = 50;
+
+function CameraPos({ lookTargetRef }) {
+  useFrame((state, rawDelta) => {
+    const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
-    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 50, alpha);
-    state.camera.position.lerp(dummy.set(0, 25, 85), alpha);
-    state.camera.lookAt(0, 0, 0);
+    state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, HOME_FOV, alpha);
+    state.camera.position.lerp(HOME_POSITION, alpha);
+    // Ease the look direction too, instead of snapping lookAt() straight to
+    // its final target every frame — that instant reorientation (while
+    // position/fov were still easing in) is what made the return trip look
+    // like it "snapped to the middle" before pulling back.
+    lookTargetRef.current.lerp(HOME_LOOK, alpha);
+    state.camera.lookAt(lookTargetRef.current);
     state.camera.updateProjectionMatrix();
   });
   return null;
@@ -267,18 +272,19 @@ function CameraPos() {
 // Centralizes the camera-follow logic that used to be duplicated inside
 // every StellarObjectGeometry instance (one redundant useFrame + point
 // light per planet/moon, all fighting over the same shared camera).
-function CameraFocus() {
+function CameraFocus({ lookTargetRef }) {
   const { position } = useContext(PositionContext);
 
-  useFrame((state, delta) => {
-    const dummy = new THREE.Vector3();
+  useFrame((state, rawDelta) => {
+    const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
+    const targetPosition = new THREE.Vector3(position[0] - 10, 0, position[2]);
+    const targetLook = new THREE.Vector3(position[0], 0, position[2] + 2.5);
+
     state.camera.fov = THREE.MathUtils.lerp(state.camera.fov, 25, alpha);
-    state.camera.position.lerp(
-      dummy.set(position[0] - 10, 0, position[2]),
-      alpha
-    );
-    state.camera.lookAt(position[0], 0, position[2] + 2.5);
+    state.camera.position.lerp(targetPosition, alpha);
+    lookTargetRef.current.lerp(targetLook, alpha);
+    state.camera.lookAt(lookTargetRef.current);
     state.camera.updateProjectionMatrix();
   });
 

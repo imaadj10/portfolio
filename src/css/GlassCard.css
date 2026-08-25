@@ -1,0 +1,686 @@
+/* ============================================================
+   Design tokens
+   Every card on the site draws from these, so re-theming the
+   whole thing is a matter of editing this one block.
+   ============================================================ */
+:root {
+  --accent: #a855f7;
+  --accent-2: #22d3ee;
+  --accent-glow: rgba(168, 85, 247, 0.45);
+  --accent-glow-2: rgba(34, 211, 238, 0.35);
+
+  --card-bg: rgba(11, 9, 20, 0.86);
+  --card-bg-top: rgba(28, 22, 48, 0.9);
+  --card-hairline: rgba(255, 255, 255, 0.07);
+
+  --text: #ece9f7;
+  --text-dim: #a09bba;
+  --text-faint: #6f6a86;
+
+  --card-radius: 22px;
+
+  /* Timing referenced from ContentPanel.tsx's ENTER/EXIT constants so
+     the JS mount timing and the CSS stay in step. */
+  --glitch-in: 620ms;
+  --glitch-out: 320ms;
+}
+
+/* ============================================================
+   Placement: one shared shell, identical on every page
+   ============================================================ */
+.content-panel {
+  position: absolute;
+  top: 50%;
+  right: 6vw;
+  transform: translateY(-50%);
+  width: clamp(340px, 34vw, 560px);
+  height: min(78vh, 660px);
+  pointer-events: auto;
+}
+
+/* ============================================================
+   The card itself
+   ============================================================ */
+.glass-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--card-radius);
+  background: linear-gradient(
+    165deg,
+    var(--card-bg-top) 0%,
+    var(--card-bg) 42%,
+    var(--card-bg) 100%
+  );
+  backdrop-filter: blur(12px) saturate(135%);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  color: var(--text);
+  /* Layered shadows are what sell the "3D" read: an inner top
+     highlight for the lit edge, an accent bloom washing up from
+     the bottom, a deep ambient drop shadow, and an outer halo. */
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 -70px 90px -60px var(--accent-glow) inset,
+    0 24px 60px -18px rgba(0, 0, 0, 0.92), 0 0 46px -14px var(--accent-glow);
+  transition: box-shadow 420ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 -70px 90px -55px var(--accent-glow) inset,
+    0 34px 70px -18px rgba(0, 0, 0, 0.95), 0 0 70px -10px var(--accent-glow);
+}
+
+/* Gradient hairline border, drawn as a masked ring so the border
+   itself can carry the violet-to-cyan sweep. */
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    rgba(168, 85, 247, 0.9) 0%,
+    rgba(34, 211, 238, 0.5) 42%,
+    rgba(255, 255, 255, 0.06) 72%,
+    rgba(168, 85, 247, 0.35) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Cursor-tracked spotlight. --mx/--my are written by GlassCard.tsx. */
+.glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(168, 85, 247, 0.16),
+    rgba(34, 211, 238, 0.06) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 380ms ease;
+  pointer-events: none;
+}
+
+.glass-card:hover::after {
+  opacity: 1;
+}
+
+/* ---------- media ---------- */
+.glass-card__media {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  height: 168px;
+  background: var(--media-bg, #000);
+  border-bottom: 1px solid var(--card-hairline);
+}
+
+.glass-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ---------- header ---------- */
+.glass-card__header {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--card-hairline);
+}
+
+.glass-card__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.glass-card__title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.glass-card__title {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.45vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.glass-card__subtitle {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+.glass-card__badge {
+  flex: none;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #d8c9ff;
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 18px -6px var(--accent-glow) inset;
+  white-space: nowrap;
+}
+
+/* ---------- avatar variant (About) ---------- */
+.glass-card--portrait .glass-card__header {
+  align-items: center;
+  padding: 26px 22px 20px;
+}
+
+.glass-card--portrait .glass-card__title {
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  font-weight: 600;
+}
+
+.glass-card__avatar {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  order: 2;
+  border: 1px solid rgba(168, 85, 247, 0.55);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08),
+    0 0 34px -6px var(--accent-glow);
+}
+
+/* ---------- action button ---------- */
+.glass-card__action {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: color 220ms ease, border-color 220ms ease,
+    background 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.glass-card__action:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  background: rgba(168, 85, 247, 0.16);
+  border-color: rgba(168, 85, 247, 0.65);
+  box-shadow: 0 0 24px -6px var(--accent-glow);
+}
+
+.glass-card__action svg {
+  font-size: 1.05rem;
+}
+
+/* ---------- body ---------- */
+.glass-card__body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 22px 20px;
+  font-size: clamp(0.85rem, 1vw, 0.98rem);
+  line-height: 1.62;
+  color: var(--text-dim);
+}
+
+.glass-card__body p {
+  margin: 0 0 1em;
+}
+
+.glass-card__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Contact has no prose, so its body becomes a centering column. */
+.glass-card__body--links {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- contact links ---------- */
+.glass-card__links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.glass-card__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.glass-card__link-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+/* ---------- tags ---------- */
+.glass-card__tags {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  padding: 14px 22px 18px;
+  border-top: 1px solid var(--card-hairline);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.glass-card__tags-label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.glass-card__tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+/* Hue is derived per-tag in GlassCard.tsx and always lands inside the
+   violet-to-cyan range, so the pills vary without breaking the palette. */
+.glass-card__tag {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: hsl(var(--tag-hue, 265) 85% 82%);
+  background: hsl(var(--tag-hue, 265) 70% 60% / 0.13);
+  border: 1px solid hsl(var(--tag-hue, 265) 75% 65% / 0.42);
+}
+
+/* ============================================================
+   Glitch entrance / exit
+   Early keyframes hard-cut with steps(1) so the card snaps
+   between slice states; the tail eases so it settles cleanly.
+   ============================================================ */
+@keyframes cardGlitchIn {
+  0% {
+    opacity: 0;
+    clip-path: inset(48% 0 48% 0);
+    transform: translate3d(0, 0, 0) scaleY(0.3);
+    filter: brightness(3) saturate(0.2);
+    animation-timing-function: steps(1, end);
+  }
+  8% {
+    opacity: 1;
+    clip-path: inset(48% 0 48% 0);
+    transform: translate3d(-9px, 0, 0) scaleY(0.3);
+    filter: brightness(2.4) saturate(0.4);
+    animation-timing-function: steps(1, end);
+  }
+  16% {
+    opacity: 1;
+    clip-path: inset(11% 0 56% 0);
+    transform: translate3d(7px, 0, 0) scaleY(1);
+    filter: none;
+    animation-timing-function: steps(1, end);
+  }
+  24% {
+    opacity: 1;
+    clip-path: inset(63% 0 7% 0);
+    transform: translate3d(-6px, 0, 0);
+    animation-timing-function: steps(1, end);
+  }
+  32% {
+    opacity: 0.3;
+    clip-path: inset(0 0 0 0);
+    transform: translate3d(4px, 0, 0);
+    animation-timing-function: steps(1, end);
+  }
+  40% {
+    opacity: 1;
+    clip-path: inset(28% 0 33% 0);
+    transform: translate3d(-4px, 0, 0);
+    filter: drop-shadow(3px 0 0 rgba(255, 0, 110, 0.75))
+      drop-shadow(-3px 0 0 rgba(34, 211, 238, 0.75));
+    animation-timing-function: steps(1, end);
+  }
+  48% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translate3d(3px, 0, 0);
+    filter: drop-shadow(3px 0 0 rgba(255, 0, 110, 0.75))
+      drop-shadow(-3px 0 0 rgba(34, 211, 238, 0.75));
+    animation-timing-function: steps(1, end);
+  }
+  56% {
+    opacity: 0.55;
+    transform: translate3d(-2px, 0, 0);
+    animation-timing-function: steps(1, end);
+  }
+  64% {
+    opacity: 1;
+    transform: translate3d(2px, 0, 0);
+    filter: drop-shadow(2px 0 0 rgba(255, 0, 110, 0.45))
+      drop-shadow(-2px 0 0 rgba(34, 211, 238, 0.45));
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Byte-for-byte the same as cardGlitchIn, played with `direction: reverse`
+   below. Kept as a separate @keyframes (rather than reusing cardGlitchIn
+   by name) because a CSS animation only restarts when animation-name
+   actually changes — reusing the same name here left it treated as a
+   continuation of the (already-finished) enter animation, so it just
+   snapped to the reversed end state instead of replaying. */
+@keyframes cardGlitchExit {
+  0% {
+    opacity: 0;
+    clip-path: inset(48% 0 48% 0);
+    transform: translate3d(0, 0, 0) scaleY(0.3);
+    filter: brightness(3) saturate(0.2);
+    animation-timing-function: steps(1, end);
+  }
+  8% {
+    opacity: 1;
+    clip-path: inset(48% 0 48% 0);
+    transform: translate3d(-9px, 0, 0) scaleY(0.3);
+    filter: brightness(2.4) saturate(0.4);
+    animation-timing-function: steps(1, end);
+  }
+  16% {
+    opacity: 1;
+    clip-path: inset(11% 0 56% 0);
+    transform: translate3d(7px, 0, 0) scaleY(1);
+    filter: none;
+    animation-timing-function: steps(1, end);
+  }
+  24% {
+    opacity: 1;
+    clip-path: inset(63% 0 7% 0);
+    transform: translate3d(-6px, 0, 0);
+    animation-timing-function: steps(1, end);
+  }
+  32% {
+    opacity: 0.3;
+    clip-path: inset(0 0 0 0);
+    transform: translate3d(4px, 0, 0);
+    animation-timing-function: steps(1, end);
+  }
+  40% {
+    opacity: 1;
+    clip-path: inset(28% 0 33% 0);
+    transform: translate3d(-4px, 0, 0);
+    filter: drop-shadow(3px 0 0 rgba(255, 0, 110, 0.75))
+      drop-shadow(-3px 0 0 rgba(34, 211, 238, 0.75));
+    animation-timing-function: steps(1, end);
+  }
+  48% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translate3d(3px, 0, 0);
+    filter: drop-shadow(3px 0 0 rgba(255, 0, 110, 0.75))
+      drop-shadow(-3px 0 0 rgba(34, 211, 238, 0.75));
+    animation-timing-function: steps(1, end);
+  }
+  56% {
+    opacity: 0.55;
+    transform: translate3d(-2px, 0, 0);
+    animation-timing-function: steps(1, end);
+  }
+  64% {
+    opacity: 1;
+    transform: translate3d(2px, 0, 0);
+    filter: drop-shadow(2px 0 0 rgba(255, 0, 110, 0.45))
+      drop-shadow(-2px 0 0 rgba(34, 211, 238, 0.45));
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Content fizzles in behind the frame, staggered top-to-bottom. */
+@keyframes cardContentIn {
+  0% {
+    opacity: 0;
+    transform: translateY(9px);
+    filter: blur(7px);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes cardTitleGlitch {
+  0%,
+  100% {
+    text-shadow: none;
+  }
+  15% {
+    text-shadow: -2px 0 rgba(255, 0, 110, 0.9), 2px 0 rgba(34, 211, 238, 0.9);
+  }
+  30% {
+    text-shadow: 2px 0 rgba(255, 0, 110, 0.7), -2px 0 rgba(34, 211, 238, 0.7);
+  }
+  45% {
+    text-shadow: -1px 0 rgba(255, 0, 110, 0.6), 1px 0 rgba(34, 211, 238, 0.6);
+  }
+  70% {
+    text-shadow: 1px 0 rgba(255, 0, 110, 0.35), -1px 0 rgba(34, 211, 238, 0.35);
+  }
+}
+
+/* `backwards`, not `both`: the animation's final keyframe matches the
+   card's resting style anyway, and holding it forwards would (a) leave
+   `clip-path: inset(0)` in place, permanently clipping off the outer
+   glow, and (b) pin `transform: none`, killing the hover lift. */
+.content-panel[data-phase='enter'] .glass-card {
+  animation: cardGlitchIn var(--glitch-in) backwards;
+}
+
+/* cardGlitchExit's keyframes are identical to cardGlitchIn's, played in
+   reverse — same glitch, undoing itself. `forwards` holds on the
+   reversed timeline's last frame (0%: collapsed/invisible), which is
+   exactly the state we want it parked in until the panel unmounts. */
+.content-panel[data-phase='exit'] .glass-card {
+  animation: cardGlitchExit var(--glitch-out) reverse both;
+  pointer-events: none;
+}
+
+.content-panel[data-phase='enter'] .glass-card__media,
+.content-panel[data-phase='enter'] .glass-card__header,
+.content-panel[data-phase='enter'] .glass-card__body,
+.content-panel[data-phase='enter'] .glass-card__tags {
+  animation: cardContentIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.content-panel[data-phase='enter'] .glass-card__media {
+  animation-delay: 400ms;
+}
+.content-panel[data-phase='enter'] .glass-card__header {
+  animation-delay: 470ms;
+}
+.content-panel[data-phase='enter'] .glass-card__body {
+  animation-delay: 540ms;
+}
+.content-panel[data-phase='enter'] .glass-card__tags {
+  animation-delay: 610ms;
+}
+
+.content-panel[data-phase='enter'] .glass-card__title {
+  animation: cardTitleGlitch 520ms steps(1, end) 470ms both;
+}
+
+/* ============================================================
+   Carousel
+   ============================================================ */
+.card-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.card-carousel__viewport {
+  width: 100%;
+  height: 100%;
+}
+
+.card-carousel__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-top: -19px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--text);
+  background: rgba(14, 11, 24, 0.72);
+  border: 1px solid rgba(168, 85, 247, 0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 260ms ease, background 220ms ease,
+    border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.card-carousel:hover .card-carousel__arrow,
+.card-carousel__arrow:focus-visible {
+  opacity: 1;
+}
+
+.card-carousel__arrow:hover {
+  background: rgba(168, 85, 247, 0.22);
+  border-color: rgba(168, 85, 247, 0.8);
+  box-shadow: 0 0 26px -6px var(--accent-glow);
+}
+
+.card-carousel__arrow--prev {
+  left: -19px;
+}
+.card-carousel__arrow--prev:hover {
+  transform: translateX(-2px);
+}
+
+.card-carousel__arrow--next {
+  right: -19px;
+}
+.card-carousel__arrow--next:hover {
+  transform: translateX(2px);
+}
+
+.card-carousel__dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -22px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}
+
+.card-carousel__dot {
+  width: 12px;
+  height: 4px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+  transition: width 250ms ease, background 250ms ease, box-shadow 250ms ease;
+}
+
+.card-carousel__dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.card-carousel__dot[data-active='true'] {
+  width: 40px;
+  background: var(--accent);
+  box-shadow: 0 0 14px -2px var(--accent-glow);
+}
+
+/* ============================================================
+   Reduced motion: keep the look, drop the seizure
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .content-panel[data-phase='enter'] .glass-card,
+  .content-panel[data-phase='enter'] .glass-card__media,
+  .content-panel[data-phase='enter'] .glass-card__header,
+  .content-panel[data-phase='enter'] .glass-card__body,
+  .content-panel[data-phase='enter'] .glass-card__tags {
+    animation: cardContentIn 240ms ease both;
+    animation-delay: 0ms;
+    filter: none;
+  }
+
+  .content-panel[data-phase='enter'] .glass-card__title {
+    animation: none;
+  }
+
+  .content-panel[data-phase='exit'] .glass-card {
+    animation: cardContentIn 200ms ease reverse both;
+  }
+
+  .glass-card,
+  .glass-card:hover {
+    transform: none;
+  }
+}

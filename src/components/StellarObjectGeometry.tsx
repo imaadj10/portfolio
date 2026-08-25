@@ -8,6 +8,11 @@ import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
 
 const ROTATION_SPEED = isMobile ? 0.6 : 0.24; // radians per second
+// Caps a single frame's contribution to rotation/orbit advancement, so a
+// main-thread stall (e.g. a heavy React re-render elsewhere) doesn't show
+// up as one big visible teleport on the next frame — see SolarSystem.tsx's
+// MAX_FRAME_DELTA for the fuller explanation.
+const MAX_FRAME_DELTA = 0.05;
 
 type StellarObjectProps = {
   isStar?: boolean;
@@ -26,15 +31,22 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   const { setPosition } = useContext(PositionContext);
   const currentPositionRef = useRef(initialPosition);
   const { setPage } = useContext(SelectedPageContext);
+  // Accumulates only while moving, so orbit position freezes on pause and
+  // resumes from exactly where it left off instead of jumping ahead by
+  // however long the planet was paused (performance.now() keeps ticking
+  // regardless of `moving`, which caused a jump-cut on resume).
+  const orbitTimeRef = useRef(0);
 
-  useFrame((_state, delta) => {
+  useFrame((_state, rawDelta) => {
+    const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const mesh = meshRef.current;
     mesh.rotation.y -= ROTATION_SPEED * delta;
 
     if (!moving) return;
+    orbitTimeRef.current += delta;
 
     if (mesh && !isStar) {
-      const time = performance.now() * 0.001;
+      const time = orbitTimeRef.current;
       const planetRadius = initialPosition[0];
       const planetSpeed = 1.5 / Math.sqrt(planetRadius);
 

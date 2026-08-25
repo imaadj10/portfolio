@@ -1,0 +1,214 @@
+{
+  "about": {
+    "id": "about",
+    "title": "Hi, I'm Imaad",
+    "avatar": "/images/imaad.jpg",
+    "body": [
+      "I'm from Peoria, Illinois, and am currently a third year Computer Science student at the University of British Columbia. When I took my first introductory programming course in school, I instantly fell in love with the field. I knew that the combination of intense problem solving and creative freedom characteristic of software engineering was perfect for me. Now I spend my days working on projects, learning new technologies, and just enjoying everything programming has to offer.",
+      "When I'm not typing away at a computer I love to play the drums, hyperanalyze TV shows (I could talk for days about Succession), and, if you couldn't tell by the website, learn about space.",
+      "I'm always looking for new internship opportunities, so please feel free to message me if you're interested, or if you'd just like to chat!"
+    ]
+  },
+
+  "contact": {
+    "id": "contact",
+    "title": "Reach out to me!",
+    "links": [
+      {
+        "id": "github",
+        "label": "Follow me on GitHub",
+        "value": "imaadj10",
+        "href": "https://www.github.com/imaadj10/",
+        "icon": "github"
+      },
+      {
+        "id": "linkedin",
+        "label": "Connect with me on LinkedIn",
+        "value": "Imaad Junaidi",
+        "href": "https://www.linkedin.com/in/imaad-junaidi/",
+        "icon": "linkedin"
+      },
+      {
+        "id": "email",
+        "label": "Send me an email",
+        "value": "imaadjunaidi1011@gmail.com",
+        "href": "mailto:imaadjunaidi1011@gmail.com",
+        "icon": "email"
+      }
+    ]
+  },
+
+  "projects": [
+    {
+      "id": "subletter",
+      "title": "Subletter",
+      "badge": "Jul - Aug 2023",
+      "media": {
+        "src": "/images/subletter.png",
+        "alt": "Subletter",
+        "background": "#ffffff"
+      },
+      "body": [
+        "Subletter is a virtual marketplace for university students created to ensure that only fellow students respond to a student's listings. This project allowed me to branch out and truly develop my full-stack ability, especially since it was the first project in which I designed and implemented a database. In this project, I am most proud that I implemented a live messaging interface, designed using Socket.IO. I also fully developed the login system, leveraging tools such as JSON Web Tokens and bcrypt to securely authenticate users."
+      ],
+      "action": {
+        "label": "View Code",
+        "href": "https://github.com/imaadj10/subletter",
+        "icon": "github"
+      },
+      "tags": {
+        "label": "Tech Stack",
+        "items": [
+          "JavaScript",
+          "Node.js",
+          "Express.js",
+          "React.js",
+          "ChakraUI",
+          "MySQL"
+        ]
+      }
+    },
+    {
+      "id": "right-angle",
+      "title": "Right Angle",
+      "badge": "Oct 2022",
+      "media": {
+        "src": "/images/right-angle.png",
+        "alt": "Right Angle",
+        "background": "#B39EFC"
+      },
+      "body": [
+        "Born from the constant discomfort of an intern sitting at a desk for 8 hours a day, Right Angle is a web application that helps users correct their posture. It works by using OpenCV with MediaPipe to calculate whether or not a user is slouching, and if they are, the program alerts them. I worked on the backend of this application, with a special focus on enabling a livestream from OpenCV to the browser."
+      ],
+      "action": {
+        "label": "View Code",
+        "href": "https://github.com/imaadj10/right-angle",
+        "icon": "github"
+      },
+      "tags": {
+        "label": "Tech Stack",
+        "items": [
+          "JavaScript",
+          "Python",
+          "Flask",
+          "React.js",
+          "OpenCV",
+          "Tailwind CSS"
+        ]
+      }
+    },
+    {
+      "id": "spam-text-classifier",
+      "title": "Spam Text Classifier",
+      "badge": "Aug 2022",
+      "media": {
+        "src": "/images/spam-text-classifier.png",
+        "alt": "Spam Text Classifier",
+        "background": "#000000"
+      },
+      "body": [
+        "This was my first end-to-end machine learning project, where I trained and tested my own classification model to determine whether or not a text was spam. The project involved developing my own custom transformer to clean and process the data, refining the model with cross validation, and finally testing it on the test data. The model ended up performing with 100% precision, 94% recall, and 97% accuracy; an impressive showing!"
+      ],
+      "action": {
+        "label": "View Code",
+        "href": "https://github.com/imaadj10/spam-text-classifier",
+        "icon": "github"
+      },
+      "tags": {
+        "label": "Tech Stack",
+        "items": ["Python", "Jupyter", "Scikit-Learn", "Pandas"]
+      }
+    },
+    {
+      "id": "spotify-collage",
+      "title": "Spotify Collage",
+      "badge": "Jan - Feb 2022",
+      "media": {
+        "src": "/images/spotify-collage.png",
+        "alt": "Spotify Collage",
+        "background": "#15110E"
+      },
+      "body": [
+        "Spotify Collage is a web application I developed during a hackathon that gives users a clean and stylish interface with which they can interact with a variety of different playlists. The application makes use of the Spotify Web API and was built entirely in Flask. All styling in the application was done by me in vanilla CSS, long after the hackathon was complete so I could develop my frontend skills."
+      ],
+      "action": {
+        "label": "View Code",
+        "href": "https://github.com/imaadj10/spotify-collage",
+        "icon": "github"
+      },
+      "tags": {
+        "label": "Tech Stack",
+        "items": ["Python", "Flask", "HTML", "CSS"]
+      }
+    },
+    {
+      "id": "virtual-drumset",
+      "title": "Virtual Drumset",
+      "badge": "Oct - Nov 2021",
+      "media": {
+        "src": "/images/virtual-drumset.png",
+        "alt": "Virtual Drumset",
+        "background": "#C0C0C0"
+      },
+      "body": [
+        "The Virtual Drumset is just as it sounds, an object-oriented virtual drumset built entirely with Java. The program features 9 instruments that make up a complete drumset, and allows users to record, save, and play tracks! JUnit testing was used throughout the development of the project to ensure code quality, and led to a streamlined design process."
+      ],
+      "action": {
+        "label": "View Code",
+        "href": "https://github.com/imaadj10/virtual-drumset",
+        "icon": "github"
+      },
+      "tags": {
+        "label": "Tech Stack",
+        "items": ["Java"]
+      }
+    }
+  ],
+
+  "experience": [
+    {
+      "id": "intel",
+      "title": "Software Engineer Intern",
+      "subtitle": "Intel",
+      "badge": "Sep 2022 - Apr 2023",
+      "media": {
+        "src": "/images/intel.png",
+        "alt": "Intel",
+        "background": "#ffffff"
+      },
+      "body": [
+        "As a software engineer intern at Intel, I had the opportunity to work on embedded software for network interface cards and infrastructure processing units. Some of my accomplishments include increasing code coverage by 40% for device reset unit tests, embedding a new manageability feature and adding over 500 tests to CI, and refactoring various tests written in C# to adhere to object-oriented design principles."
+      ],
+      "tags": {
+        "label": "Applicable Skills",
+        "items": [
+          "C",
+          "C#",
+          ".NET",
+          "Jira",
+          "Scrum/Agile",
+          "Debugging",
+          "Problem Solving"
+        ]
+      }
+    },
+    {
+      "id": "ubc",
+      "title": "Computer Science Teaching Assistant",
+      "subtitle": "University of British Columbia",
+      "badge": "Sep 2021 - Present",
+      "media": {
+        "src": "/images/ubc.png",
+        "alt": "University of British Columbia",
+        "background": "#0C2344"
+      },
+      "body": [
+        "Being a TA for an introductory programming course has allowed me to strengthen the foundation of my computer science education through helping others learn. As a TA I support the learning of over 30 students in weekly labs, and am available for all students in weekly office hours. I have recently taken on a more administrative role and have helped plan different elements of the course and provided assistance on redefining it's structure."
+      ],
+      "tags": {
+        "label": "Applicable Skills",
+        "items": ["C", "Teaching", "Teamwork", "Communication"]
+      }
+    }
+  ]
+}

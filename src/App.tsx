@@ -1,5 +1,4 @@
 //@ts-nocheck
-import { MantineProvider } from '@mantine/core';
 import { createContext, useEffect, useState } from 'react';
 import ChangeScreen from './components/ChangeScreen';
 import SolarSystem from './components/SolarSystem';
@@ -60,19 +59,13 @@ function App() {
   return (
     <>
       {orientation === 'landscape' ? (
-        <MantineProvider
-          theme={{ colorScheme: 'dark' }}
-          withGlobalStyles
-          withNormalizeCSS
-        >
-          <OrbitContext.Provider value={{ moving, setMoving }}>
-            <PositionContext.Provider value={{ position, setPosition }}>
-              <SelectedPageContext.Provider value={{ page, setPage }}>
-                <SolarSystem />
-              </SelectedPageContext.Provider>
-            </PositionContext.Provider>
-          </OrbitContext.Provider>
-        </MantineProvider>
+        <OrbitContext.Provider value={{ moving, setMoving }}>
+          <PositionContext.Provider value={{ position, setPosition }}>
+            <SelectedPageContext.Provider value={{ page, setPage }}>
+              <SolarSystem />
+            </SelectedPageContext.Provider>
+          </PositionContext.Provider>
+        </OrbitContext.Provider>
       ) : (
         <ChangeScreen />
       )}
