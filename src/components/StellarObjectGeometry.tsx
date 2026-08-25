@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { ThreeElements, useFrame, useLoader } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
+import { ThreeElements, useFrame } from '@react-three/fiber';
 import { useContext, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitContext, PositionContext, SelectedPageContext } from '../App';
 import OrbitLine from './OrbitLine';
 
@@ -62,7 +62,12 @@ function StellarObjectGeometry(props: StellarObjectProps) {
   } = props;
   const initialPosition: number[] = meshProps.position as number[];
   const meshRef = useRef<THREE.Mesh>(null!);
-  const gltf = useLoader(GLTFLoader, model);
+  // '/draco/' matches where copy-draco-decoder.js (run via the
+  // "postinstall" npm script) places the decoder — needed so
+  // Draco-compressed models (see the "compress-models" npm script)
+  // actually decode; useGLTF transparently passes through
+  // non-Draco-compressed .glb files too.
+  const gltf = useGLTF(model, '/draco/');
   const { moving, setMoving } = useContext(OrbitContext);
   const { setPosition } = useContext(PositionContext);
   const currentPositionRef = useRef(initialPosition);

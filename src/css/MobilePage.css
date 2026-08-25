@@ -10,6 +10,10 @@
   align-items: center;
   width: 100%;
   padding-bottom: 48px;
+  /* content-container's own overflow-y:auto is what actually scrolls, so
+     this (rather than html/body) is where scroll-behavior needs to live
+     for the nav's #anchor links to animate instead of snapping. */
+  scroll-behavior: smooth;
 }
 
 .mobile-nav {
@@ -76,6 +80,20 @@
   animation: mobileSectionIn 480ms ease both;
 }
 
+/* Names the section on scroll-arrival — About/Contact's cards already
+   carry their own title, but Projects/Experience are otherwise just a
+   wall of panels with nothing marking which section you're in. Styled
+   as a small label (matching .card-panel__tags-label) rather than a
+   second, competing headline. */
+.mobile-section__label {
+  margin: 0 0 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
 .mobile-section:nth-of-type(1) {
   animation-delay: 0ms;
 }
@@ -101,6 +119,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .mobile-page {
+    scroll-behavior: auto;
+  }
+
   .mobile-section {
     animation: none;
   }

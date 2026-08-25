@@ -5,8 +5,8 @@ import { cardFor, layoutFor } from './contentRouting';
 
 const SECTIONS: { id: string; label: string; page: string }[] = [
   { id: 'about', label: 'About', page: 'about me' },
-  { id: 'projects', label: 'Projects', page: 'projects' },
   { id: 'experience', label: 'Experience', page: 'experience' },
+  { id: 'projects', label: 'Projects', page: 'projects' },
   { id: 'contact', label: 'Contact', page: 'contact' },
 ];
 
@@ -41,6 +41,7 @@ function MobilePage() {
           className="mobile-section"
           data-layout={layoutFor(section.page)}
         >
+          <h2 className="mobile-section__label">{section.label}</h2>
           {cardFor(section.page)}
         </section>
       ))}
