@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import '../css/App.css';
 import '../css/GlassCard.css';
 import '../css/MobilePage.css';
@@ -16,7 +16,6 @@ import { cardFor, layoutFor } from './contentRouting';
  */
 function MobilePage() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   // Deep link support: opening /projects directly on a narrow viewport
   // scrolls straight to that section instead of landing at the top.
@@ -27,15 +26,12 @@ function MobilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Routed nav links (real /about, /projects, ... paths, matching desktop's
-  // deep links) rather than #about fragment anchors — a plain <a href="#id">
-  // is what was putting the # in the address bar; scrolling is now done by
-  // hand so the route can update without one.
+  // Nav links scroll to the section by hand instead of navigating, so the
+  // URL stays put on mobile (unlike the desktop deep links).
   const handleNavClick =
     (slug: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth' });
-      navigate(`/${slug}`, { replace: true });
     };
 
   return (

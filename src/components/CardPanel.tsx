@@ -23,7 +23,10 @@ function CardPanel({ content }: CardPanelProps) {
       {media && (
         <div
           className="card-panel__media"
-          style={{ ['--media-bg' as string]: media.background }}
+          style={{
+            ['--media-bg' as string]: media.background,
+            ['--media-fit' as string]: media.fit,
+          }}
         >
           <img src={media.src} alt={media.alt} />
         </div>

@@ -195,7 +195,8 @@
       "media": {
         "src": "/images/intel.png",
         "alt": "Intel",
-        "background": "#ffffff"
+        "background": "#ffffff",
+        "fit": "cover"
       },
       "body": [
         "As a software engineer intern with Intel's NEX Cloud Networking Group, I developed and validated software for network interface cards, and refactored legacy procedural C#/.NET test suites into an object-oriented design, reducing the occurrence of test conflicts by 95-99%. I also implemented a new manageability feature and added over 500 automated tests to the regression and CI pipelines, enhancing test coverage and reliability."

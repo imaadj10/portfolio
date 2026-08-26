@@ -12,6 +12,8 @@ export interface CardMedia {
   alt: string;
   /** Backdrop behind the (contained) screenshot, usually the app's own bg. */
   background: string;
+  /** How the image fills its box; defaults to 'contain'. */
+  fit?: 'contain' | 'cover';
 }
 
 export interface CardAction {
