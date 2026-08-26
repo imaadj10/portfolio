@@ -117,10 +117,22 @@ function StellarObjectGeometry(props: StellarObjectProps) {
           moonSpeedFactor;
         const moonAngle = time * moonSpeed + moonPhase;
 
-        const moonY = Math.cos(moonAngle) * moonRadius;
-        const moonZ = Math.sin(moonAngle) * moonRadius + planetZ;
+        // Circle in the moon's own orbital plane (flat, coplanar with the
+        // planet's own orbit), then tilted 90° around the planet's
+        // direction of travel — so the moon moves on all three axes
+        // around the planet.
+        const localX = Math.cos(moonAngle) * moonRadius;
+        const localZ = Math.sin(moonAngle) * moonRadius;
 
-        mesh.position.set(planetX, moonY, moonZ);
+        // 90° from flat: perpendicular to the plane the planets orbit in,
+        // standing the moon's orbit up rather than laying it in the
+        // ecliptic.
+        const tilt = Math.PI / 2;
+        const moonX = planetX + localX;
+        const moonY = -localZ * Math.sin(tilt);
+        const moonZ = planetZ + localZ * Math.cos(tilt);
+
+        mesh.position.set(moonX, moonY, moonZ);
       } else {
         mesh.position.set(planetX, initialPosition[1], planetZ);
         currentPositionRef.current = [planetX, initialPosition[1], planetZ];

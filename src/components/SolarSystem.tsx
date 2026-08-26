@@ -1,12 +1,14 @@
+import '../css/App.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Center, Stars, Text3D } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   Fragment,
   MutableRefObject,
   ReactNode,
   Suspense,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -15,7 +17,6 @@ import { isMobile } from 'react-device-detect';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { useOrbitContext, usePositionContext, useSelectedPageContext } from '../App';
-import '../css/App.css';
 import { pageForSlug, SECTIONS } from '../routes';
 import ContentPanel, { EXIT_DURATION } from './ContentPanel';
 import LoadingScreen from './LoadingScreen';
@@ -31,43 +32,31 @@ interface StellarObject {
 const moon_1: StellarObject = {
   page_name: 'moon_1',
   model: '/planet_models/Planet_47.glb',
-  scale: 0.06,
+  scale: 0.045,
   orbiters: [],
 };
 const moon_2: StellarObject = {
   page_name: 'moon_2',
   model: '/planet_models/Planet_48.glb',
-  scale: 0.06,
+  scale: 0.045,
   orbiters: [],
 };
 const moon_3: StellarObject = {
   page_name: 'moon_3',
-  model: '/planet_models/Planet_5.glb',
-  scale: 0.06,
+  model: '/planet_models/Planet_05.glb',
+  scale: 0.045,
   orbiters: [],
 };
 const moon_4: StellarObject = {
   page_name: 'moon_4',
-  model: '/planet_models/Planet_46.glb',
-  scale: 0.06,
+  model: '/planet_models/Planet_44.glb',
+  scale: 0.045,
   orbiters: [],
 };
 const moon_5: StellarObject = {
   page_name: 'moon_5',
-  model: '/planet_models/Planet_44.glb',
-  scale: 0.06,
-  orbiters: [],
-};
-const moon_6: StellarObject = {
-  page_name: 'moon_6',
-  model: '/planet_models/Planet_31.glb',
-  scale: 0.06,
-  orbiters: [],
-};
-const moon_7: StellarObject = {
-  page_name: 'moon_7',
   model: '/planet_models/Planet_45.glb',
-  scale: 0.06,
+  scale: 0.045,
   orbiters: [],
 };
 
@@ -81,13 +70,13 @@ const projects: StellarObject = {
   page_name: 'projects',
   model: '/planet_models/Planet_12.glb',
   scale: 0.2,
-  orbiters: [moon_1, moon_2, moon_3, moon_4],
+  orbiters: [moon_1, moon_2, moon_3],
 };
 const experience: StellarObject = {
   page_name: 'experience',
   model: '/planet_models/Planet_34.glb',
   scale: 0.2,
-  orbiters: [moon_5, moon_6, moon_7],
+  orbiters: [moon_4, moon_5],
 };
 const contact: StellarObject = {
   page_name: 'contact',
@@ -102,6 +91,12 @@ const sun: StellarObject = {
   scale: 10,
   orbiters: [about, projects, experience, contact],
 };
+
+// A moon's distance from its planet: the first moon sits at BASE (matches
+// the original, untightened radius), each later one only STEP further out
+// instead of the original spacing of 1.
+const MOON_ORBIT_RADIUS_BASE = 4;
+const MOON_ORBIT_RADIUS_STEP = 0.75;
 
 function SolarSystem() {
   const { moving, setMoving } = useOrbitContext();
@@ -317,7 +312,7 @@ function SolarSystem() {
                     key={`${p_index}-${m_index}`}
                     position={[
                       (p_index + 1) * 10 + 10,
-                      m_index + 1 + 3,
+                      MOON_ORBIT_RADIUS_BASE + m_index * MOON_ORBIT_RADIUS_STEP,
                       (p_index + 1) * 10 + 10,
                     ]}
                     isMoon={true}
@@ -380,6 +375,10 @@ const HOME_POSITION = new THREE.Vector3(0, 25, 85);
 const HOME_LOOK = new THREE.Vector3(0, 0, 0);
 const HOME_FOV = 50;
 
+// How far back from the focused planet the camera sits, along whichever
+// horizontal direction it approaches from.
+const CAMERA_APPROACH_DISTANCE = 10;
+
 type CameraProps = {
   lookTargetRef: MutableRefObject<THREE.Vector3>;
 };
@@ -410,11 +409,34 @@ function CameraPos({ lookTargetRef }: CameraProps) {
 // light per planet/moon, all fighting over the same shared camera).
 function CameraFocus({ lookTargetRef }: CameraProps) {
   const { position } = usePositionContext();
+  const { camera } = useThree();
+
+  // Which horizontal side of the planet to sit on while approaching it.
+  // Captured once per focused planet, from wherever the camera actually was
+  // the instant it was clicked, and held fixed for the rest of the
+  // approach — so the camera dollies straight in along the line it was
+  // already on instead of cutting across to a fixed side (e.g. always
+  // toward the sun), which could mean crossing right over the planet when
+  // it was already on the near side.
+  const [approachDir, setApproachDir] = useState({ x: 1, z: 0 });
+  useLayoutEffect(() => {
+    const dx = camera.position.x - position[0];
+    const dz = camera.position.z - position[2];
+    const len = Math.hypot(dx, dz);
+    setApproachDir(len > 1e-6 ? { x: dx / len, z: dz / len } : { x: 1, z: 0 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [position]);
+
+  const approachPosition: [number, number, number] = [
+    position[0] + approachDir.x * CAMERA_APPROACH_DISTANCE,
+    0,
+    position[2] + approachDir.z * CAMERA_APPROACH_DISTANCE,
+  ];
 
   useFrame((state, rawDelta) => {
     const delta = Math.min(rawDelta, MAX_FRAME_DELTA);
     const alpha = 1 - Math.exp(-CAMERA_RATE * delta);
-    const targetPosition = new THREE.Vector3(position[0] - 10, 0, position[2]);
+    const targetPosition = new THREE.Vector3(...approachPosition);
     const targetLook = new THREE.Vector3(position[0], 0, position[2]);
     const camera = state.camera as THREE.PerspectiveCamera;
 
@@ -426,11 +448,7 @@ function CameraFocus({ lookTargetRef }: CameraProps) {
   });
 
   return (
-    <pointLight
-      position={[position[0] - 10, 0, position[2]]}
-      intensity={5}
-      color="#edd59e"
-    />
+    <pointLight position={approachPosition} intensity={5} color="#edd59e" />
   );
 }
 
