@@ -19,6 +19,7 @@ import { useOrbitContext, usePositionContext, useSelectedPageContext } from '../
 import { pageForSlug, SECTIONS } from '../routes';
 import ContentPanel, { EXIT_DURATION } from './ContentPanel';
 import LoadingScreen from './LoadingScreen';
+import Satellite from './Satellite';
 import StellarObjectGeometry from './StellarObjectGeometry';
 
 interface StellarObject {
@@ -279,6 +280,8 @@ function SolarSystem() {
               </Text3D>
             </Center>
           </FloatingBanner>
+
+          <Satellite />
 
           {moving && <CameraPos lookTargetRef={lookTargetRef} />}
           {!moving && <CameraFocus lookTargetRef={lookTargetRef} />}
