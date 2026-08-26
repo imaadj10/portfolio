@@ -7,7 +7,7 @@ import { pageForSlug, SECTIONS } from '../routes';
 import { cardFor, layoutFor } from './contentRouting';
 
 /**
- * The phone/tablet entry point (see App.tsx's `isMobile` branch). A plain
+ * The phone/tablet entry point. A plain
  * scrolling page rather than an overlay on the 3D scene — orbits, camera
  * flight, and the glitch choreography in ContentPanel all assume a canvas
  * and a mouse-driven click-to-focus interaction that doesn't translate to

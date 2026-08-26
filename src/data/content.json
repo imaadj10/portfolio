@@ -4,9 +4,9 @@
     "title": "Hi, I'm Imaad",
     "avatar": "/images/imaad.jpg",
     "body": [
-      "I'm from Peoria, Illinois, and am currently a third year Computer Science student at the University of British Columbia. When I took my first introductory programming course in school, I instantly fell in love with the field. I knew that the combination of intense problem solving and creative freedom characteristic of software engineering was perfect for me. Now I spend my days working on projects, learning new technologies, and just enjoying everything programming has to offer.",
+      "I'm from Peoria, Illinois, and studied Computer Science at the University of British Columbia, graduating in 2025. When I took my first introductory programming course in school, I instantly fell in love with the field. I knew that the combination of intense problem solving and creative freedom characteristic of software engineering was perfect for me. Now I work as a full-stack software engineer at Tesla, building web applications for the Global Financing Engineering team, and I still spend my time learning new technologies and enjoying everything programming has to offer.",
       "When I'm not typing away at a computer I love to play the drums, hyperanalyze TV shows (I could talk for days about Succession), and, if you couldn't tell by the website, learn about space.",
-      "I'm always looking for new internship opportunities, so please feel free to message me if you're interested, or if you'd just like to chat!"
+      "I'm always happy to connect, so please feel free to message me if you'd like to chat!"
     ]
   },
 
@@ -140,32 +140,53 @@
         "label": "Tech Stack",
         "items": ["Python", "Flask", "HTML", "CSS"]
       }
-    },
-    {
-      "id": "virtual-drumset",
-      "title": "Virtual Drumset",
-      "badge": "Oct - Nov 2021",
-      "media": {
-        "src": "/images/virtual-drumset.png",
-        "alt": "Virtual Drumset",
-        "background": "#C0C0C0"
-      },
-      "body": [
-        "The Virtual Drumset is just as it sounds, an object-oriented virtual drumset built entirely with Java. The program features 9 instruments that make up a complete drumset, and allows users to record, save, and play tracks! JUnit testing was used throughout the development of the project to ensure code quality, and led to a streamlined design process."
-      ],
-      "action": {
-        "label": "View Code",
-        "href": "https://github.com/imaadj10/virtual-drumset",
-        "icon": "github"
-      },
-      "tags": {
-        "label": "Tech Stack",
-        "items": ["Java"]
-      }
     }
   ],
 
   "experience": [
+    {
+      "id": "tesla-fulltime",
+      "title": "Full-Stack Software Engineer",
+      "subtitle": "Tesla",
+      "badge": "Jun 2025 - Present",
+      "media": {
+        "src": "/images/tesla.jpg",
+        "alt": "Tesla",
+        "background": "#e31937"
+      },
+      "body": [
+        "As a full-stack software engineer on Tesla's Global Financing Engineering team, I lead the end-to-end development of internal and customer-facing web applications, including the Payment Estimator now used across 400+ Tesla stores in North America. I optimized a high-traffic bulk order retrieval API, cutting data load times by 83% and meaningfully improving system responsiveness, and led a re-architecture of our access control system, redesigning permission flows and onboarding to a new authorization framework for better security, scalability, and maintainability. I also designed an automated stipulation-notification workflow that lets 16 external banking partners review and decision customer documents directly within Tesla's platform, eliminating manual email-based processing and significantly cutting turnaround time."
+      ],
+      "tags": {
+        "label": "Applicable Skills",
+        "items": [
+          "React",
+          "TypeScript",
+          "System Design",
+          "API Development",
+          "Security",
+          "Leadership"
+        ]
+      }
+    },
+    {
+      "id": "tesla-intern",
+      "title": "Software Engineer Intern",
+      "subtitle": "Tesla",
+      "badge": "Jan 2024 - Aug 2024",
+      "media": {
+        "src": "/images/tesla.jpg",
+        "alt": "Tesla",
+        "background": "#e31937"
+      },
+      "body": [
+        "As a software engineer intern on Tesla's Fintech Services team, I used schema-driven development to architect modular React and TypeScript components, and redesigned and refactored over 25 UI components as part of a major design overhaul of internal business tools. I also developed and deployed a new API route integrating with LaunchDarkly to enable controlled rollouts for 12+ feature launches, and built scalable backend APIs in C#/.NET using an MVC approach to support new finance workflows and data pipelines."
+      ],
+      "tags": {
+        "label": "Applicable Skills",
+        "items": ["React", "TypeScript", "C#", ".NET", "LaunchDarkly", "UI/UX"]
+      }
+    },
     {
       "id": "intel",
       "title": "Software Engineer Intern",
@@ -177,7 +198,7 @@
         "background": "#ffffff"
       },
       "body": [
-        "As a software engineer intern at Intel, I had the opportunity to work on embedded software for network interface cards and infrastructure processing units. Some of my accomplishments include increasing code coverage by 40% for device reset unit tests, embedding a new manageability feature and adding over 500 tests to CI, and refactoring various tests written in C# to adhere to object-oriented design principles."
+        "As a software engineer intern with Intel's NEX Cloud Networking Group, I developed and validated software for network interface cards, and refactored legacy procedural C#/.NET test suites into an object-oriented design, reducing the occurrence of test conflicts by 95-99%. I also implemented a new manageability feature and added over 500 automated tests to the regression and CI pipelines, enhancing test coverage and reliability."
       ],
       "tags": {
         "label": "Applicable Skills",

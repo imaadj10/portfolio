@@ -13,7 +13,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { isMobile } from 'react-device-detect';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { useOrbitContext, usePositionContext, useSelectedPageContext } from '../App';
@@ -357,7 +356,7 @@ function FloatingBanner({ children }: { children: ReactNode }) {
 
 // Rate is tuned in units of "convergence per second" so the camera eases
 // toward its target at the same real-world speed regardless of frame rate.
-const CAMERA_RATE = isMobile ? 4.5 : 1.8;
+const CAMERA_RATE = 1.8;
 
 // Caps how much elapsed time a single frame's easing step is allowed to
 // account for. Clicking "Return to Homepage" triggers a fairly heavy React

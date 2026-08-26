@@ -1,14 +1,13 @@
 import { useGLTF } from '@react-three/drei';
 import { ThreeElements, useFrame } from '@react-three/fiber';
 import { useRef, useState } from 'react';
-import { isMobile } from 'react-device-detect';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { useOrbitContext, usePositionContext, useSelectedPageContext } from '../App';
 import { slugFor } from '../routes';
 import OrbitLine from './OrbitLine';
 
-const ROTATION_SPEED = isMobile ? 0.6 : 0.24; // radians per second
+const ROTATION_SPEED = 0.24; // radians per second
 // Self-rotation varies per object within this factor range around
 // ROTATION_SPEED, so bodies don't all spin in perfect lockstep.
 const ROTATION_SPEED_VARIABILITY = 0.25;
