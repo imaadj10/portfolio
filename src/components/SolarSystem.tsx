@@ -63,13 +63,13 @@ const moon_5: StellarObject = {
 const about: StellarObject = {
   page_name: 'about me',
   model: '/planet_models/Planet_20.glb',
-  scale: 0.2,
+  scale: 0.1,
   orbiters: [],
 };
 const projects: StellarObject = {
   page_name: 'projects',
   model: '/planet_models/Planet_12.glb',
-  scale: 0.2,
+  scale: 0.15,
   orbiters: [moon_1, moon_2, moon_3],
 };
 const experience: StellarObject = {
@@ -81,7 +81,7 @@ const experience: StellarObject = {
 const contact: StellarObject = {
   page_name: 'contact',
   model: '/planet_models/Planet_43.glb',
-  scale: 0.2,
+  scale: 0.18,
   orbiters: [],
 };
 
