@@ -212,24 +212,6 @@
           "Problem Solving"
         ]
       }
-    },
-    {
-      "id": "ubc",
-      "title": "Computer Science Teaching Assistant",
-      "subtitle": "University of British Columbia",
-      "badge": "Sep 2021 - Present",
-      "media": {
-        "src": "/images/ubc.png",
-        "alt": "University of British Columbia",
-        "background": "#0C2344"
-      },
-      "body": [
-        "Being a TA for an introductory programming course has allowed me to strengthen the foundation of my computer science education through helping others learn. As a TA I support the learning of over 30 students in weekly labs, and am available for all students in weekly office hours. I have recently taken on a more administrative role and have helped plan different elements of the course and provided assistance on redefining it's structure."
-      ],
-      "tags": {
-        "label": "Applicable Skills",
-        "items": ["C", "Teaching", "Teamwork", "Communication"]
-      }
     }
   ]
 }
