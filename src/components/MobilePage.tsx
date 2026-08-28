@@ -6,6 +6,9 @@ import '../css/MobilePage.css';
 import { pageForSlug, SECTIONS } from '../routes';
 import { cardFor, layoutFor } from './contentRouting';
 
+// Matches Satellite.tsx's desktop resume link — same file, same target.
+const RESUME_URL = '/resume.pdf';
+
 /**
  * The phone/tablet entry point. A plain
  * scrolling page rather than an overlay on the 3D scene — orbits, camera
@@ -42,6 +45,9 @@ function MobilePage() {
             {label}
           </a>
         ))}
+        <a href={RESUME_URL} target="_blank" rel="noopener noreferrer">
+          Resume
+        </a>
       </nav>
 
       <header className="mobile-hero">

@@ -117,7 +117,7 @@ function Satellite() {
           font="/fonts/EngraversGothic BT_Regular.json"
           material={textMaterial}
         >
-          {'résumé'}
+          {'resume'}
         </Text3D>
         <pointLight position={[0, 0, 2]} intensity={175} color="#edd59e" />
       </Center>
